@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Buttons</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Augmented Reality</h1>
+        <div class="nav-container">
+            <button class="nav-button start" onclick="navigateTo('starts.html')">Start</button>
+            <button class="nav-button pilih-gambar" onclick="navigateTo('guides.html')">Guides</button>
+            <button class="nav-button guide" onclick="navigateTo('ar_markers.html')">AR Markers</button>
+            <button class="nav-button source" onclick="navigateTo('about.html')">About</button>
+        </div>
+    </div>
+</body>
+</html>
