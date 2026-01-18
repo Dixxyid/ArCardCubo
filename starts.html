@@ -35,7 +35,7 @@
                 // 1. Muncul perlahan saat marker terdeteksi
                 this.el.parentNode.addEventListener("targetFound", () => {
                     this.isVisible = true;
-                    status.innerHTML = "Objek Terdeteksi";
+                    status.innerHTML = "✅ Objek Terdeteksi";
                     status.style.borderColor = "#28a745";
                     
                     el.setAttribute('animation__scale', {
@@ -138,7 +138,7 @@
 
     </a-scene>
 
-    <div id="Status-Notif">🔍 Scan Markers 3...</div>
+    <div id="Status-Notif">🔍 Scan Markers 5 ...</div>
     <a href="dashboard.html" class="back-btn">Back</a>
 </body>
 </html>
