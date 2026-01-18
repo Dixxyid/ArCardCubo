@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/fcor/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
     
     <style>
         .back-btn {
@@ -21,22 +22,78 @@
             padding: 12px 25px; border-radius: 30px;
             font-family: sans-serif; text-align: center;
             border: 2px solid #20aaee; z-index: 1000;
-            display: block;
         }
     </style>
 
     <script>
+        // Komponen Custom untuk Gesture Handling
+        AFRAME.registerComponent('gesture-handler', {
+            schema: {
+                enabled: {default: true},
+                rotationFactor: {default: 5},
+                minScale: {default: 0.1},
+                maxScale: {default: 2}
+            },
+            init: function () {
+                this.handleScale = this.handleScale.bind(this);
+                this.handleRotation = this.handleRotation.bind(this);
+                this.isVisible = false;
+                this.initialScale = this.el.object3D.scale.x;
+
+                this.el.sceneEl.addEventListener('touchstart', (e) => {
+                    this.touchStart = e.touches;
+                });
+
+                this.el.sceneEl.addEventListener('touchmove', (e) => {
+                    if (!this.isVisible) return;
+                    
+                    if (e.touches.length === 1) {
+                        this.handleRotation(e);
+                    } else if (e.touches.length === 2) {
+                        this.handleScale(e);
+                    }
+                });
+                
+                this.el.parentNode.addEventListener("targetFound", () => { this.isVisible = true; });
+                this.el.parentNode.addEventListener("targetLost", () => { this.isVisible = false; });
+            },
+
+            handleRotation: function (e) {
+                const deltaX = e.touches[0].pageX - this.touchStart[0].pageX;
+                this.el.object3D.rotation.y += deltaX * (Math.PI / 180) * 0.1;
+                this.touchStart = e.touches;
+            },
+
+            handleScale: function (e) {
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const dist = Math.hypot(touch1.pageX - touch2.pageX, touch1.pageY - touch2.pageY);
+                
+                if (!this.lastDist) {
+                    this.lastDist = dist;
+                    return;
+                }
+
+                const ratio = dist / this.lastDist;
+                let newScale = this.el.object3D.scale.x * ratio;
+                
+                // Batasi zoom in & out
+                newScale = Math.min(Math.max(newScale, this.data.minScale), this.data.maxScale);
+                
+                this.el.object3D.scale.set(newScale, newScale, newScale);
+                this.lastDist = dist;
+            }
+        });
+
         AFRAME.registerComponent('smooth-appear', {
             init: function () {
                 const el = this.el;
                 const status = document.querySelector('#Status-Notif');
 
-                // Event saat marker terlihat
                 this.el.parentNode.addEventListener("targetFound", () => {
-                    status.innerHTML = "Objek Ditampilkan ";
+                    status.innerHTML = "Objek Ditampilkan";
                     status.style.borderColor = "#28a745";
                     
-                    // Efek Timbul (Scale dari 0 ke 0.5)
                     el.setAttribute('animation__scale', {
                         property: 'scale',
                         from: '0 0 0',
@@ -46,9 +103,8 @@
                     });
                 });
 
-                // Event saat marker hilang
                 this.el.parentNode.addEventListener("targetLost", () => {
-                    status.innerHTML = "🔍 Scan Kartu...";
+                    status.innerHTML = "🔍 Scan Kartu ...";
                     status.style.borderColor = "#20aaee";
                 });
             }
@@ -80,6 +136,7 @@
                 scale="0 0 0" 
                 animation-mixer
                 smooth-appear
+                gesture-handler
                 animation__rotate="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear">
             </a-gltf-model>
         </a-entity>
@@ -90,6 +147,3 @@
     <a href="dashboard.html" class="back-btn">Back</a>
 </body>
 </html>
-
-
-
