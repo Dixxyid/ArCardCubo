@@ -57,11 +57,21 @@ h1 {
 }
 
 .learning {
-    background-color: #d14bcd;
+    background-color: #e6ba39; 
+    color: white;
+
+.quiz {
+    background-color: #913df2;
     color: white;
 }
+    
 .source {
     background-color: #f44336;
+    color: white;
+}
+
+.feedback {
+    background-color: #eb44b9;
     color: white;
 }
 
@@ -75,4 +85,5 @@ h1 {
     transform: translateY(1px);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
+
 
