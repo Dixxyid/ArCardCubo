@@ -34,58 +34,53 @@
     </style>
 
     <script>
-        AFRAME.registerComponent('hybrid-controller', {
+        AFRAME.registerComponent('hybrid-manager', {
             init: function () {
-                const el = this.el;
-                const statusText = document.querySelector('#Status');
-                const lockBtn = document.querySelector('#LockBtn');
-                const targetEntity = document.querySelector('[mindar-image-target]');
-                this.isLocked = false;
-
-                // Saat Marker Terdeteksi
-                targetEntity.addEventListener("targetFound", () => {
-                    if (!this.isLocked) {
-                        statusText.innerHTML = "✅ Objek Terdeteksi!";
-                        lockBtn.style.display = "block";
-                    }
+                this.el.addEventListener("targetFound", () => {
+                    document.querySelector('#Status').innerHTML = "✅ Marker Terdeteksi!";
+                    document.querySelector('#LockBtn').style.display = "block";
                 });
-
-                // Fungsi Kunci Posisi
-                window.lockToWorld = () => {
-                    if(this.isLocked) return;
-                    
-                    // 1. Ambil Posisi & Rotasi Dunia saat ini
-                    const worldPos = new THREE.Vector3();
-                    const worldQuat = new THREE.Quaternion();
-                    const worldScale = new THREE.Vector3();
-                    el.object3D.getWorldPosition(worldPos);
-                    el.object3D.getWorldQuaternion(worldQuat);
-                    el.object3D.getWorldScale(worldScale);
-
-                    // 2. Pindahkan objek ke 'a-scene' agar tidak lagi mengikuti marker
-                    el.sceneEl.appendChild(el);
-
-                    // 3. Terapkan koordinat yang sudah diambil
-                    el.object3D.position.copy(worldPos);
-                    el.object3D.quaternion.copy(worldQuat);
-                    el.object3D.scale.copy(worldScale);
-
-                    // 4. Paksa tetap visible
-                    el.setAttribute('visible', true);
-
-                    // 5. Matikan tracking pada entity marker (bukan mematikan scene)
-                    targetEntity.setAttribute("mindar-image-target", "enabled: false");
-                    
-                    this.isLocked = true;
-                    statusText.innerHTML = "🚀 POSISI TERKUNCI (Markerless Mode)";
-                    lockBtn.style.display = "none";
-                    
-                    // Aktifkan Look Controls agar kamera tetap sinkron dengan sensor HP
-                    const camera = document.querySelector('a-camera');
-                    camera.setAttribute('look-controls', 'enabled: true');
-                };
             }
         });
+
+        window.lockToWorld = () => {
+            const model = document.querySelector('#earthModel');
+            const targetEntity = document.querySelector('[mindar-image-target]');
+            const statusText = document.querySelector('#Status');
+            const lockBtn = document.querySelector('#LockBtn');
+            const camera = document.querySelector('a-camera');
+
+            if (!model) return;
+
+            // 1. Ambil posisi DUNIA (World Position) model saat ini
+            const worldPos = new THREE.Vector3();
+            const worldQuat = new THREE.Quaternion();
+            const worldScale = new THREE.Vector3();
+            
+            model.object3D.getWorldPosition(worldPos);
+            model.object3D.getWorldQuaternion(worldQuat);
+            model.object3D.getWorldScale(worldScale);
+
+            // 2. Pindahkan model dari 'Anak Marker' menjadi 'Anak Scene'
+            // Ini kunci agar objek tidak hilang saat marker tidak terlihat
+            model.sceneEl.appendChild(model);
+
+            // 3. Terapkan koordinat dunia ke model
+            model.object3D.position.copy(worldPos);
+            model.object3D.quaternion.copy(worldQuat);
+            model.object3D.scale.copy(worldScale);
+
+            // 4. Paksa tetap terlihat & matikan tracking MindAR
+            model.setAttribute('visible', true);
+            targetEntity.setAttribute("mindar-image-target", "enabled: false");
+            
+            // 5. AKTIFKAN Look-Controls & Gyroscope
+            // Supaya saat HP digerakkan, objek tetap terasa ada di posisi nyata tadi
+            camera.setAttribute('look-controls', 'enabled: true; magicWindowTrackingEnabled: true');
+
+            statusText.innerHTML = "🚀 OBJEK TERKUNCI DI DUNIA NYATA!";
+            lockBtn.style.display = "none";
+        };
     </script>
 </head>
 
@@ -97,22 +92,21 @@
         device-orientation-permission-ui="enabled: false">
         
         <a-assets>
-            <a-asset-item id="model1" src="assets/model1/model1.glb"></a-asset-item>
+            <a-asset-item id="modelEarth" src="assets/model1/model1.glb"></a-asset-item>
         </a-assets>
 
-        <a-camera id="mainCamera" position="0 0 0" look-controls="enabled: false"></a-camera>
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
         <a-light type="ambient" intensity="1.5"></a-light>
         <a-light type="directional" position="0 10 5" intensity="1"></a-light>
 
-        <a-entity mindar-image-target="targetIndex: 0">
+        <a-entity mindar-image-target="targetIndex: 0" hybrid-manager>
             <a-gltf-model 
-                id="earth"
-                src="#model1" 
+                id="earthModel"
+                src="#modelEarth" 
                 position="0 0 0.1" 
                 scale="0.5 0.5 0.5" 
-                animation-mixer
-                hybrid-controller>
+                animation-mixer>
             </a-gltf-model>
         </a-entity>
 
