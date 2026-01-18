@@ -14,60 +14,29 @@
             text-decoration: none; font-family: Arial, sans-serif;
             z-index: 1000;
         }
-        /* Style untuk Notifikasi */
         #UI {
             position: fixed; bottom: 2rem; left: 50%;
             transform: translateX(-50%);
             color: white; background: rgba(0, 0, 0, 0.7);
             padding: 15px 25px; z-index: 1000; 
             border-radius: 50px; font-family: sans-serif;
-            text-align: center; min-width: 200px;
-            transition: all 0.3s ease;
+            text-align: center; min-width: 220px;
             border: 2px solid #20aaee;
-        }
-        .success-notif {
-            background-color: #28a745 !important;
-            border-color: white !important;
-            transform: translateX(-50%) scale(1.1);
         }
     </style>
 
     <script>
-        AFRAME.registerComponent('freeze-on-found', {
+        // Script sederhana untuk notifikasi tanpa menghilangkan objek
+        AFRAME.registerComponent('marker-handler', {
             init: function () {
-                const el = this.el;
-                const uiElement = document.querySelector('#UI');
-                const targetEntity = document.querySelector('[mindar-image-target]');
-
-                targetEntity.addEventListener("targetFound", event => {
-                    // 1. Ubah Tampilan UI
-                    uiElement.innerHTML = "✅ Marker Terdeteksi! Menaruh Objek...";
-                    uiElement.classList.add("success-notif");
-
-                    setTimeout(() => {
-                        const worldPos = new THREE.Vector3();
-                        const worldQuat = new THREE.Quaternion();
-                        const worldScale = new THREE.Vector3();
-
-                        el.object3D.getWorldPosition(worldPos);
-                        el.object3D.getWorldQuaternion(worldQuat);
-                        el.object3D.getWorldScale(worldScale);
-
-                        el.sceneEl.appendChild(el);
-
-                        el.object3D.position.copy(worldPos);
-                        el.object3D.quaternion.copy(worldQuat);
-                        el.object3D.scale.copy(worldScale);
-
-                        // 2. Beri tahu user bahwa kartu boleh dilepas
-                        uiElement.innerHTML = "🚀 Objek Terkunci di Dunia Nyata!";
-                        
-                        // Hilangkan notif setelah 3 detik agar layar bersih
-                        setTimeout(() => {
-                            uiElement.style.opacity = "0";
-                        }, 3000);
-
-                    }, 800); 
+                const ui = document.querySelector('#UI');
+                this.el.addEventListener('targetFound', () => {
+                    ui.innerHTML = "✅ Objek Terdeteksi!";
+                    ui.style.backgroundColor = "rgba(40, 167, 69, 0.8)"; // Hijau
+                });
+                this.el.addEventListener('targetLost', () => {
+                    ui.innerHTML = "🔍 Mencari Marker...";
+                    ui.style.backgroundColor = "rgba(0, 0, 0, 0.7)"; // Hitam
                 });
             }
         });
@@ -76,9 +45,9 @@
 
 <body>
     <a-scene 
-        mindar-image="imageTargetSrc: ./markers/targets.mind; maxTrack: 1;" 
+        mindar-image="imageTargetSrc: ./markers/targets.mind; maxTrack: 1; filterMinCF:0.0001; filterBeta: 0.001;" 
         color-space="sRGB" 
-        renderer="colorManagement: true, physicallyCorrectLights" 
+        renderer="colorManagement: true, physicallyCorrectLights: true" 
         vr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false">
         
@@ -89,19 +58,24 @@
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        <a-entity mindar-image-target="targetIndex: 0">
+        <a-light type="ambient" intensity="1.5"></a-light>
+        <a-light type="directional" position="0 10 5" intensity="1"></a-light>
+
+        <a-entity mindar-image-target="targetIndex: 0" marker-handler>
+            <a-plane src="#card1" position="0 0 0" height="0.5" width="0.5" rotation="0 0 0" opacity="0.5"></a-plane>
+
             <a-gltf-model 
                 src="#model1" 
                 position="0 0 0.1" 
-                scale="0.02 0.02 0.02" 
-                animation-mixer
-                freeze-on-found>
+                rotation="0 0 0" 
+                scale="0.05 0.05 0.05" 
+                animation-mixer>
             </a-gltf-model>
         </a-entity>
+
     </a-scene>
 
     <a href="dashboard.html" class="back-btn">Back</a>
-    
-    <div id="UI">🔍 Cari Marker di Kartu...</div>
+    <div id="UI">🔍 Mencari Marker...</div>
 </body>
 </html>
