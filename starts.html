@@ -5,7 +5,6 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/fcor/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
     
     <style>
         .back-btn {
@@ -26,19 +25,16 @@
     </style>
 
     <script>
-        // Komponen Custom untuk Gesture Handling
         AFRAME.registerComponent('gesture-handler', {
             schema: {
-                enabled: {default: true},
-                rotationFactor: {default: 5},
+                rotationFactor: {default: 0.5},
                 minScale: {default: 0.1},
-                maxScale: {default: 2}
+                maxScale: {default: 3}
             },
             init: function () {
                 this.handleScale = this.handleScale.bind(this);
                 this.handleRotation = this.handleRotation.bind(this);
                 this.isVisible = false;
-                this.initialScale = this.el.object3D.scale.x;
 
                 this.el.sceneEl.addEventListener('touchstart', (e) => {
                     this.touchStart = e.touches;
@@ -53,6 +49,11 @@
                         this.handleScale(e);
                     }
                 });
+
+                // Reset jarak cubit saat jari diangkat
+                this.el.sceneEl.addEventListener('touchend', () => {
+                    this.lastDist = null;
+                });
                 
                 this.el.parentNode.addEventListener("targetFound", () => { this.isVisible = true; });
                 this.el.parentNode.addEventListener("targetLost", () => { this.isVisible = false; });
@@ -60,7 +61,13 @@
 
             handleRotation: function (e) {
                 const deltaX = e.touches[0].pageX - this.touchStart[0].pageX;
-                this.el.object3D.rotation.y += deltaX * (Math.PI / 180) * 0.1;
+                const deltaY = e.touches[0].pageY - this.touchStart[0].pageY;
+
+                // Rotasi Y (Kiri-Kanan)
+                this.el.object3D.rotation.y += deltaX * 0.01;
+                // Rotasi X (Atas-Bawah) - Opsional jika ingin lebih bebas
+                this.el.object3D.rotation.x += deltaY * 0.01;
+
                 this.touchStart = e.touches;
             },
 
@@ -76,8 +83,6 @@
 
                 const ratio = dist / this.lastDist;
                 let newScale = this.el.object3D.scale.x * ratio;
-                
-                // Batasi zoom in & out
                 newScale = Math.min(Math.max(newScale, this.data.minScale), this.data.maxScale);
                 
                 this.el.object3D.scale.set(newScale, newScale, newScale);
@@ -104,7 +109,7 @@
                 });
 
                 this.el.parentNode.addEventListener("targetLost", () => {
-                    status.innerHTML = "🔍 Scan Kartu ...";
+                    status.innerHTML = "🔍 Scan Markers ...";
                     status.style.borderColor = "#20aaee";
                 });
             }
@@ -129,16 +134,20 @@
         <a-light type="directional" position="0 10 5" intensity="1"></a-light>
 
         <a-entity mindar-image-target="targetIndex: 0">
-            <a-gltf-model 
-                id="earthModel"
-                src="#modelEarth" 
-                position="0 0 0.1" 
-                scale="0 0 0" 
-                animation-mixer
-                smooth-appear
-                gesture-handler
-                animation__rotate="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear">
-            </a-gltf-model>
+            <a-entity 
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 30000; easing: linear">
+                
+                <a-gltf-model 
+                    id="earthModel"
+                    src="#modelEarth" 
+                    position="0 0 0.1" 
+                    scale="0 0 0" 
+                    animation-mixer
+                    smooth-appear
+                    gesture-handler>
+                </a-gltf-model>
+
+            </a-entity>
         </a-entity>
 
     </a-scene>
@@ -147,4 +156,3 @@
     <a href="dashboard.html" class="back-btn">Back</a>
 </body>
 </html>
-
