@@ -29,7 +29,7 @@
         #LockBtn {
             display: none; background-color: #28a745; color: white;
             border: none; padding: 15px 30px; border-radius: 10px;
-            font-weight: bold; font-size: 1rem;
+            font-weight: bold; font-size: 1rem; cursor: pointer;
         }
     </style>
 
@@ -37,12 +37,12 @@
         AFRAME.registerComponent('hybrid-controller', {
             init: function () {
                 const el = this.el;
-                const sceneEl = this.el.sceneEl;
                 const statusText = document.querySelector('#Status');
                 const lockBtn = document.querySelector('#LockBtn');
                 const targetEntity = document.querySelector('[mindar-image-target]');
+                this.isLocked = false;
 
-                // Detect Marker
+                // Saat Marker Terdeteksi
                 targetEntity.addEventListener("targetFound", () => {
                     if (!this.isLocked) {
                         statusText.innerHTML = "✅ Objek Terdeteksi!";
@@ -50,29 +50,39 @@
                     }
                 });
 
+                // Fungsi Kunci Posisi
                 window.lockToWorld = () => {
-                    this.isLocked = true;
+                    if(this.isLocked) return;
                     
-                    // 1. Ambil Posisi & Rotasi Dunia
+                    // 1. Ambil Posisi & Rotasi Dunia saat ini
                     const worldPos = new THREE.Vector3();
                     const worldQuat = new THREE.Quaternion();
+                    const worldScale = new THREE.Vector3();
                     el.object3D.getWorldPosition(worldPos);
                     el.object3D.getWorldQuaternion(worldQuat);
+                    el.object3D.getWorldScale(worldScale);
 
-                    // 2. SWITCH: Pindahkan ke root scene (Markerless Area)
-                    sceneEl.appendChild(el);
+                    // 2. Pindahkan objek ke 'a-scene' agar tidak lagi mengikuti marker
+                    el.sceneEl.appendChild(el);
+
+                    // 3. Terapkan koordinat yang sudah diambil
                     el.object3D.position.copy(worldPos);
                     el.object3D.quaternion.copy(worldQuat);
+                    el.object3D.scale.copy(worldScale);
 
-                    // 3. MATIKAN MINDAR (Agar tidak mengganggu sensor)
-                    sceneEl.systems['mindar-image-system'].stop(); 
+                    // 4. Paksa tetap visible
+                    el.setAttribute('visible', true);
+
+                    // 5. Matikan tracking pada entity marker (bukan mematikan scene)
+                    targetEntity.setAttribute("mindar-image-target", "enabled: false");
                     
-                    // 4. AKTIFKAN LOOK-CONTROLS (Agar bisa diputar manual setelah dikunci)
+                    this.isLocked = true;
+                    statusText.innerHTML = "🚀 POSISI TERKUNCI (Markerless Mode)";
+                    lockBtn.style.display = "none";
+                    
+                    // Aktifkan Look Controls agar kamera tetap sinkron dengan sensor HP
                     const camera = document.querySelector('a-camera');
                     camera.setAttribute('look-controls', 'enabled: true');
-
-                    statusText.innerHTML = "🚀 OBJEK TERKUNCI PADA DUNIA NYATA";
-                    lockBtn.style.display = "none";
                 };
             }
         });
@@ -83,13 +93,14 @@
     <a-scene 
         mindar-image="imageTargetSrc: ./markers/targets.mind; autoStart: true; maxTrack: 1;" 
         renderer="colorManagement: true, physicallyCorrectLights: true"
-        vr-mode-ui="enabled: false">
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false">
         
         <a-assets>
             <a-asset-item id="model1" src="assets/model1/model1.glb"></a-asset-item>
         </a-assets>
 
-        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        <a-camera id="mainCamera" position="0 0 0" look-controls="enabled: false"></a-camera>
 
         <a-light type="ambient" intensity="1.5"></a-light>
         <a-light type="directional" position="0 10 5" intensity="1"></a-light>
@@ -99,7 +110,7 @@
                 id="earth"
                 src="#model1" 
                 position="0 0 0.1" 
-                scale="0.05 0.05 0.05" 
+                scale="0.5 0.5 0.5" 
                 animation-mixer
                 hybrid-controller>
             </a-gltf-model>
@@ -109,7 +120,9 @@
 
     <div id="UI-Container">
         <div id="Status">🔍 Scan Kartu/Marker...</div>
-        <button id="LockBtn" onclick="lockToWorld()">KUNCI POSISI (SWITCH KE WORLD)</button>
+        <button id="LockBtn" onclick="lockToWorld()">KUNCI POSISI</button>
     </div>
+
+    <a href="dashboard.html" class="back-btn">Back</a>
 </body>
 </html>
