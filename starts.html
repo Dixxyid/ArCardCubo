@@ -14,79 +14,51 @@
             text-decoration: none; font-family: sans-serif;
             z-index: 1000;
         }
-        #UI-Container {
+        #Status-Notif {
             position: fixed; bottom: 2rem; left: 50%;
             transform: translateX(-50%);
-            display: flex; flex-direction: column; align-items: center;
-            gap: 10px; z-index: 1000; width: 90%;
-        }
-        #Status {
             color: white; background: rgba(0, 0, 0, 0.7);
-            padding: 12px 20px; border-radius: 30px;
+            padding: 12px 25px; border-radius: 30px;
             font-family: sans-serif; text-align: center;
-            border: 2px solid #20aaee;
-        }
-        #LockBtn {
-            display: none; background-color: #28a745; color: white;
-            border: none; padding: 15px 30px; border-radius: 10px;
-            font-weight: bold; font-size: 1rem; cursor: pointer;
+            border: 2px solid #20aaee; z-index: 1000;
+            display: block;
         }
     </style>
 
     <script>
-        AFRAME.registerComponent('hybrid-manager', {
+        AFRAME.registerComponent('smooth-appear', {
             init: function () {
-                this.el.addEventListener("targetFound", () => {
-                    document.querySelector('#Status').innerHTML = "✅ Marker Terdeteksi!";
-                    document.querySelector('#LockBtn').style.display = "block";
+                const el = this.el;
+                const status = document.querySelector('#Status-Notif');
+
+                // Event saat marker terlihat
+                this.el.parentNode.addEventListener("targetFound", () => {
+                    status.innerHTML = "✅ Objek Ditampilkan";
+                    status.style.borderColor = "#28a745";
+                    
+                    // Efek Timbul (Scale dari 0 ke 0.5)
+                    el.setAttribute('animation__scale', {
+                        property: 'scale',
+                        from: '0 0 0',
+                        to: '0.5 0.5 0.5',
+                        dur: 1200,
+                        easing: 'easeOutBack'
+                    });
+                });
+
+                // Event saat marker hilang
+                this.el.parentNode.addEventListener("targetLost", () => {
+                    status.innerHTML = "🔍 Scan Kartu...";
+                    status.style.borderColor = "#20aaee";
                 });
             }
         });
-
-        window.lockToWorld = () => {
-            const model = document.querySelector('#earthModel');
-            const targetEntity = document.querySelector('[mindar-image-target]');
-            const statusText = document.querySelector('#Status');
-            const lockBtn = document.querySelector('#LockBtn');
-            const camera = document.querySelector('a-camera');
-
-            if (!model) return;
-
-            // 1. Ambil posisi DUNIA (World Position) model saat ini
-            const worldPos = new THREE.Vector3();
-            const worldQuat = new THREE.Quaternion();
-            const worldScale = new THREE.Vector3();
-            
-            model.object3D.getWorldPosition(worldPos);
-            model.object3D.getWorldQuaternion(worldQuat);
-            model.object3D.getWorldScale(worldScale);
-
-            // 2. Pindahkan model dari 'Anak Marker' menjadi 'Anak Scene'
-            // Ini kunci agar objek tidak hilang saat marker tidak terlihat
-            model.sceneEl.appendChild(model);
-
-            // 3. Terapkan koordinat dunia ke model
-            model.object3D.position.copy(worldPos);
-            model.object3D.quaternion.copy(worldQuat);
-            model.object3D.scale.copy(worldScale);
-
-            // 4. Paksa tetap terlihat & matikan tracking MindAR
-            model.setAttribute('visible', true);
-            targetEntity.setAttribute("mindar-image-target", "enabled: false");
-            
-            // 5. AKTIFKAN Look-Controls & Gyroscope
-            // Supaya saat HP digerakkan, objek tetap terasa ada di posisi nyata tadi
-            camera.setAttribute('look-controls', 'enabled: true; magicWindowTrackingEnabled: true');
-
-            statusText.innerHTML = "🚀 OBJEK TERKUNCI DI DUNIA NYATA!";
-            lockBtn.style.display = "none";
-        };
     </script>
 </head>
 
 <body>
     <a-scene 
-        mindar-image="imageTargetSrc: ./markers/targets.mind; autoStart: true; maxTrack: 1;" 
+        mindar-image="imageTargetSrc: ./markers/targets.mind; autoStart: true; maxTrack: 1; filterMinCF: 0.0001; filterBeta: 0.005; missTolerance: 5;" 
         renderer="colorManagement: true, physicallyCorrectLights: true"
         vr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false">
@@ -97,26 +69,24 @@
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        <a-light type="ambient" intensity="1.5"></a-light>
+        <a-light type="ambient" intensity="1.2"></a-light>
         <a-light type="directional" position="0 10 5" intensity="1"></a-light>
 
-        <a-entity mindar-image-target="targetIndex: 0" hybrid-manager>
+        <a-entity mindar-image-target="targetIndex: 0">
             <a-gltf-model 
                 id="earthModel"
                 src="#modelEarth" 
                 position="0 0 0.1" 
-                scale="0.5 0.5 0.5" 
-                animation-mixer>
+                scale="0 0 0" 
+                animation-mixer
+                smooth-appear
+                animation__rotate="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear">
             </a-gltf-model>
         </a-entity>
 
     </a-scene>
 
-    <div id="UI-Container">
-        <div id="Status">🔍 Scan Kartu/Marker...</div>
-        <button id="LockBtn" onclick="lockToWorld()">KUNCI POSISI</button>
-    </div>
-
+    <div id="Status-Notif">🔍 Scan Kartu/Marker...</div>
     <a href="dashboard.html" class="back-btn">Back</a>
 </body>
 </html>
