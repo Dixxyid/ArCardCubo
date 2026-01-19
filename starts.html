@@ -2,10 +2,14 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AR Solar System</title>
+    
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     
+    <script src="materials/scripts/func.js"></script>
+
     <style>
         .back-btn {
             position: fixed; top: 1rem; left: 1rem;
@@ -24,85 +28,6 @@
             pointer-events: none;
         }
     </style>
-
-    <script>
-        AFRAME.registerComponent('interactive-logic', {
-            init: function () {
-                const el = this.el;
-                const status = document.querySelector('#Status-Notif');
-                this.isVisible = false;
-
-                // 1. Muncul perlahan saat marker terdeteksi
-                this.el.parentNode.addEventListener("targetFound", () => {
-                    this.isVisible = true;
-                    // Mengambil ID model untuk notifikasi yang lebih spesifik
-                    const modelName = el.id === 'earthModel' ? 'Bumi' : 'Matahari';
-                    status.innerHTML = `✅ ${modelName} Terdeteksi`;
-                    status.style.borderColor = "#28a745";
-                    
-                    el.setAttribute('animation__scale', {
-                        property: 'scale',
-                        from: '0 0 0',
-                        to: '0.5 0.5 0.5',
-                        dur: 1000,
-                        easing: 'easeOutBack'
-                    });
-                });
-
-                this.el.parentNode.addEventListener("targetLost", () => {
-                    this.isVisible = false;
-                    status.innerHTML = "🔍 Scan Markers ...";
-                    status.style.borderColor = "#20aaee";
-                });
-
-                // 2. Logika Sentuhan (Gesture)
-                this.el.sceneEl.addEventListener('touchstart', (e) => {
-                    if (!this.isVisible) return;
-                    this.touchStart = e.touches;
-                    if (el.components.animation__autorotate) {
-                        el.components.animation__autorotate.pause();
-                    }
-                });
-
-                this.el.sceneEl.addEventListener('touchmove', (e) => {
-                    if (!this.isVisible || !this.touchStart) return;
-
-                    if (e.touches.length === 1) {
-                        const deltaX = e.touches[0].pageX - this.touchStart[0].pageX;
-                        const deltaY = e.touches[0].pageY - this.touchStart[0].pageY;
-                        el.object3D.rotation.y += deltaX * 0.01;
-                        el.object3D.rotation.x += deltaY * 0.01;
-                        this.touchStart = e.touches;
-                    } else if (e.touches.length === 2) {
-                        const touch1 = e.touches[0];
-                        const touch2 = e.touches[1];
-                        const dist = Math.hypot(touch1.pageX - touch2.pageX, touch1.pageY - touch2.pageY);
-                        if (this.lastDist) {
-                            const ratio = dist / this.lastDist;
-                            let newScale = el.object3D.scale.x * ratio;
-                            newScale = Math.min(Math.max(newScale, 0.1), 2.5);
-                            el.object3D.scale.set(newScale, newScale, newScale);
-                        }
-                        this.lastDist = dist;
-                    }
-                });
-
-                this.el.sceneEl.addEventListener('touchend', () => {
-                    this.lastDist = null;
-                    if (!this.isVisible) return;
-
-                    const currentRot = el.getAttribute('rotation');
-                    el.setAttribute('animation__autorotate', {
-                        from: `${currentRot.x} ${currentRot.y} ${currentRot.z}`,
-                        to: `${currentRot.x} ${currentRot.y + 360} ${currentRot.z}`
-                    });
-                    if (el.components.animation__autorotate) {
-                        el.components.animation__autorotate.play();
-                    }
-                });
-            }
-        });
-    </script>
 </head>
 
 <body>
@@ -112,44 +37,30 @@
         vr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false">
         
-        <a-assets>
-            <a-asset-item id="modelEarth" src="assets/model1/model1.glb"></a-asset-item>
-            <a-asset-item id="modelSun" src="assets/sun/sun.glb"></a-asset-item>
-        </a-assets>
-
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
         <a-light type="ambient" intensity="1.2"></a-light>
         <a-light type="directional" position="0 10 5" intensity="1"></a-light>
 
+        <a-assets>
+            <a-asset-item id="modelEarth" src="assets/object/earth/earth.glb"></a-asset-item>
+            <a-asset-item id="modelSun" src="assets/object/sun/sun.glb"></a-asset-item>
+        </a-assets>
+
         <a-entity mindar-image-target="targetIndex: 0">
-            <a-gltf-model 
-                id="earthModel"
-                src="#modelEarth" 
-                position="0 0 0" 
-                scale="0 0 0" 
-                animation-mixer
-                interactive-logic
+            <a-gltf-model id="earthModel" src="#modelEarth" position="0 0 0" scale="0 0 0" animation-mixer interactive-logic
                 animation__autorotate="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 20000; easing: linear">
             </a-gltf-model>
         </a-entity>
 
         <a-entity mindar-image-target="targetIndex: 1">
-            <a-gltf-model 
-                id="sunModel"
-                src="#modelSun" 
-                position="0 0 0" 
-                scale="0 0 0" 
-                animation-mixer
-                interactive-logic
+            <a-gltf-model id="sunModel" src="#modelSun" position="0 0 0" scale="0 0 0" animation-mixer interactive-logic
                 animation__autorotate="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 20000; easing: linear">
             </a-gltf-model>
         </a-entity>
 
     </a-scene>
 
-    <div id="Status-Notif">🔍 Scan Markers 8 ...</div>
+    <div id="Status-Notif">🔍 Scan Markers ...</div>
     <a href="dashboard.html" class="back-btn">Back</a>
 </body>
 </html>
-
