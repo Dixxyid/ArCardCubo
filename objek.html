@@ -1,0 +1,28 @@
+<a-assets>
+    <a-asset-item id="modelEarth" src="assets/model1/model1.glb"></a-asset-item>
+    <a-asset-item id="modelSun" src="assets/sun/sun.glb"></a-asset-item>
+</a-assets>
+
+<a-entity mindar-image-target="targetIndex: 0">
+    <a-gltf-model 
+        id="earthModel"
+        src="#modelEarth" 
+        position="0 0 0" 
+        scale="0 0 0" 
+        animation-mixer
+        interactive-logic
+        animation__autorotate="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+    </a-gltf-model>
+</a-entity>
+
+<a-entity mindar-image-target="targetIndex: 1">
+    <a-gltf-model 
+        id="sunModel"
+        src="#modelSun" 
+        position="0 0 0" 
+        scale="0 0 0" 
+        animation-mixer
+        interactive-logic
+        animation__autorotate="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+    </a-gltf-model>
+</a-entity>
