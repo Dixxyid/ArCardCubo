@@ -4,5 +4,7 @@
 
 3.masalah ditemukan dan mencoba memperbaiki objek matahri. 25-01-2026
 
-4.mencari obejt dan detail list nya 25 persen objek telah di temukan. 28-01-2016
+4.mencari obejt dan detail list nya 25 persen objek telah di temukan. 28-01-2026
+
+5.membuat barcode aqses menuju page site nya, dan memperbaiki kartu ar nya 30-01-2026
 
