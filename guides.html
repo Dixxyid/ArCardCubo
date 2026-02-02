@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            /* Mengarah ke folder materials sesuai permintaan */
             background-image: url('materials/bg_guides.jpeg');
             background-size: cover;
             background-position: center;
@@ -18,7 +17,7 @@
             position: relative;
         }
 
-        /* Efek Lapisan Kaca Blur pada Background */
+        /* Lapisan Blur Seperti Kaca di Background */
         body::before {
             content: "";
             position: fixed;
@@ -26,8 +25,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.1); /* Overlay transparan tipis */
-            backdrop-filter: blur(12px); /* Intensitas blur kaca */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             z-index: -1;
         }
@@ -50,9 +49,20 @@
             <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-2"></div>
             <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-3"></div>
             <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-4"></div>
+            <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-5"></div>
         </div>
 
         <div class="slide active p-8 text-center" id="slide-1">
+            <div class="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">✨</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Selamat Datang!</h2>
+            <p class="text-slate-600 text-sm leading-relaxed">
+                Halaman ini dilengkapi dengan teknologi <b>Augmented Reality (AR)</b>. Anda dapat menghadirkan objek digital ke dalam ruang nyata Anda secara interaktif. Mari mulai eksplorasi dimensi baru!
+            </p>
+        </div>
+
+        <div class="slide p-8 text-center" id="slide-2">
             <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span class="text-3xl">📱</span>
             </div>
@@ -64,7 +74,7 @@
             </ul>
         </div>
 
-        <div class="slide p-8 text-center" id="slide-2">
+        <div class="slide p-8 text-center" id="slide-3">
             <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span class="text-3xl">🔍</span>
             </div>
@@ -76,7 +86,7 @@
             </ul>
         </div>
 
-        <div class="slide p-8 text-center" id="slide-3">
+        <div class="slide p-8 text-center" id="slide-4">
             <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span class="text-3xl">🌐</span>
             </div>
@@ -88,7 +98,7 @@
             </ul>
         </div>
 
-        <div class="slide p-8 text-center" id="slide-4">
+        <div class="slide p-8 text-center" id="slide-5">
             <div class="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span class="text-3xl">🚀</span>
             </div>
@@ -110,7 +120,7 @@
 
     <script>
         let currentSlide = 1;
-        const totalSlides = 4;
+        const totalSlides = 5; // Updated to 5
 
         function updateUI() {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
@@ -148,6 +158,7 @@
                 updateUI();
             } else {
                 alert("Memulai Pengalaman AR...");
+                // Tambahkan logika untuk menutup modal atau pindah halaman di sini
             }
         }
 
