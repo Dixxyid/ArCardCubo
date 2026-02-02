@@ -50,6 +50,7 @@
             <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-3"></div>
             <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-4"></div>
             <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-5"></div>
+            <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-6"></div>
         </div>
 
         <div class="slide active p-8 text-center" id="slide-1">
@@ -79,7 +80,7 @@
         </div>
 
         <div class="slide p-8 text-center" id="slide-3">
-            <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div class="bg-red-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span class="text-3xl">🔍</span>
             </div>
             <h2 class="text-2xl font-bold text-slate-800 mb-4">Eksplorasi Materi</h2>
@@ -104,6 +105,19 @@
         </div>
 
         <div class="slide p-8 text-center" id="slide-5">
+            <div class="bg-pink-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">📝</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Challenge Quiz</h2>
+            <ul class="text-left text-slate-600 space-y-3 text-sm">
+                <li class="flex items-start"><span class="font-bold text-orange-500 mr-2">🏆</span> Uji pemahaman Anda melalui kuis interaktif di platform web (Tab Quiz).</li>
+                <li class="flex items-start"><span class="font-bold text-orange-500 mr-2">🏆</span> Jawab pertanyaan berdasarkan objek AR yang telah Anda amati.</li>
+                <li class="flex items-start"><span class="font-bold text-orange-500 mr-2">🏆</span> Buat costom kelas untuk mengambil data (penilaian)</li>
+                <li class="flex items-start"><span class="font-bold text-orange-500 mr-2">🏆</span> Selesaikan Quiz untuk mendapatkan skor maksimal.</li>
+            </ul>
+        </div>
+
+         <div class="slide p-8 text-center" id="slide-6">
             <div class="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span class="text-3xl">🚀</span>
             </div>
@@ -125,7 +139,7 @@
 
     <script>
         let currentSlide = 1;
-        const totalSlides = 5; // Updated to 5
+        const totalSlides = 6; // Updated to 5
 
         function updateUI() {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
@@ -176,6 +190,7 @@
     </script>
 </body>
 </html>
+
 
 
 
