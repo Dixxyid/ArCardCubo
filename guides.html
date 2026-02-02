@@ -1,23 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Guide</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div>
-      <h1 class="title">RobotAR Guide</h1>
-      <ol>
-        <li>
-          Download the marker by clicking the "Marker", then print it or display
-          it on another device.
-        </li>
-        <li>Go back to the dashboard and click "Start" from the menu.</li>
-        <li>Place the AR Marker in front of the camera.</li>
-        <li>The 3D object should appear in front of you.</li>
-      </ol>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Penggunaan AR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide { display: none; }
+        .slide.active { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .step-dot.active { background-color: #3b82f6; width: 1.5rem; }
+    </style>
+</head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden relative border border-slate-100">
+        
+        <div class="flex justify-center space-x-2 mt-6">
+            <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300 active" id="dot-1"></div>
+            <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-2"></div>
+            <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-3"></div>
+            <div class="step-dot h-2 w-2 rounded-full bg-slate-200 transition-all duration-300" id="dot-4"></div>
+        </div>
+
+        <div class="slide active p-8 text-center" id="slide-1">
+            <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">📱</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Penggunaan AR</h2>
+            <ul class="text-left text-slate-600 space-y-3 text-sm">
+                <li class="flex items-start"><span class="font-bold text-blue-500 mr-2">1.</span> Izinkan akses kamera pada browser/aplikasi Anda.</li>
+                <li class="flex items-start"><span class="font-bold text-blue-500 mr-2">2.</span> Cari permukaan datar dengan cahaya yang cukup terang.</li>
+                <li class="flex items-start"><span class="font-bold text-blue-500 mr-2">3.</span> Gerakkan ponsel perlahan & ketuk layar untuk memunculkan objek 3D.</li>
+            </ul>
+        </div>
+
+        <div class="slide p-8 text-center" id="slide-2">
+            <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">🔍</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Eksplorasi Materi</h2>
+            <ul class="text-left text-slate-600 space-y-3 text-sm">
+                <li class="flex items-start"><span class="font-bold text-purple-500 mr-2">1.</span> Gunakan dua jari (pinch) untuk memperbesar atau memutar objek.</li>
+                <li class="flex items-start"><span class="font-bold text-purple-500 mr-2">2.</span> Ketuk ikon "i" pada objek untuk memunculkan penjelasan teks.</li>
+                <li class="flex items-start"><span class="font-bold text-purple-500 mr-2">3.</span> Bandingkan ukuran objek digital dengan benda asli untuk skala nyata.</li>
+            </ul>
+        </div>
+
+        <div class="slide p-8 text-center" id="slide-3">
+            <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">🌐</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Akses Materi Web</h2>
+            <ul class="text-left text-slate-600 space-y-3 text-sm">
+                <li class="flex items-start"><span class="font-bold text-green-500 mr-2">1.</span> Pindai QR atau klik ikon "Detail Web" di samping objek AR.</li>
+                <li class="flex items-start"><span class="font-bold text-green-500 mr-2">2.</span> Tunggu sinkronisasi; materi akan terbuka otomatis di browser.</li>
+                <li class="flex items-start"><span class="font-bold text-green-500 mr-2">3.</span> Akses modul lengkap seperti PDF, kuis, dan video pembelajaran.</li>
+            </ul>
+        </div>
+
+        <div class="slide p-8 text-center" id="slide-4">
+            <div class="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">🚀</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Siap Memulai?</h2>
+            <ul class="text-left text-slate-600 space-y-3 text-sm">
+                <li class="flex items-start"><span class="font-bold text-orange-500 mr-2">💡</span> Pastikan koneksi internet Anda stabil (4G/Wi-Fi).</li>
+                <li class="flex items-start"><span class="font-bold text-orange-500 mr-2">💡</span> Hindari permukaan kaca agar pelacakan kamera akurat.</li>
+                <li class="flex items-start"><span class="font-bold text-orange-500 mr-2">💡</span> Refresh halaman jika objek tidak muncul dalam 10 detik.</li>
+            </ul>
+        </div>
+
+        <div class="p-6 bg-slate-50 flex justify-between items-center">
+            <button onclick="prevSlide()" id="prevBtn" class="invisible text-slate-500 font-semibold px-4 py-2">Kembali</button>
+            <button onclick="nextSlide()" id="nextBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded-full transition-colors shadow-lg shadow-blue-200">
+                Lanjut
+            </button>
+        </div>
     </div>
-  </body>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+
+        function updateUI() {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            // Show current slide
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            
+            // Update dots
+            document.querySelectorAll('.step-dot').forEach((dot, index) => {
+                if (index + 1 === currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+
+            // Update Buttons
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+
+            if (currentSlide === 1) {
+                prevBtn.classList.add('invisible');
+            } else {
+                prevBtn.classList.remove('invisible');
+            }
+
+            if (currentSlide === totalSlides) {
+                nextBtn.innerText = 'Mulai';
+                nextBtn.classList.replace('bg-blue-600', 'bg-orange-500');
+            } else {
+                nextBtn.innerText = 'Lanjut';
+                nextBtn.classList.replace('bg-orange-500', 'bg-blue-600');
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateUI();
+            } else {
+                alert("Memulai Pengalaman AR...");
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateUI();
+            }
+        }
+    </script>
+</body>
 </html>
