@@ -10,70 +10,102 @@
 <body class="bg-gray-100 flex items-center justify-center h-screen">
 
     <div class="space-x-4">
-        <button onclick="openModal('modalParticipation')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700">Participation</button>
+        <button onclick="openModal('modalParticipation')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 shadow-lg">Participation</button>
         
-        <button onclick="openModal('modalMaster')" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700">Room Master</button>
+        <button onclick="openModal('modalMaster')" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 shadow-lg">Room Master</button>
     </div>
 
-    <div id="modalParticipation" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white p-8 rounded-xl w-80 shadow-2xl">
-            <h2 class="text-xl font-bold mb-4 text-blue-600">Join Challenge</h2>
-            <input type="text" id="joinRoomId" placeholder="Code Room" class="w-full border p-2 mb-2 rounded">
-            <input type="password" id="joinPw" placeholder="Password" class="w-full border p-2 mb-4 rounded">
+    <div id="modalParticipation" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-xl w-full max-w-sm shadow-2xl">
+            <h2 class="text-xl font-bold mb-4 text-blue-600">Join as Participant</h2>
+            <input type="text" id="partName" placeholder="Nama Anda" class="w-full border p-2 mb-2 rounded focus:outline-blue-500">
+            <input type="text" id="joinRoomId" placeholder="Room ID" class="w-full border p-2 mb-2 rounded focus:outline-blue-500">
+            <input type="password" id="joinPw" placeholder="Password Room" class="w-full border p-2 mb-4 rounded focus:outline-blue-500">
             <div class="flex justify-end space-x-2">
-                <button onclick="closeModal('modalParticipation')" class="text-gray-500">Batal</button>
-                <button onclick="handleJoin()" class="bg-blue-600 text-white px-4 py-2 rounded">Masuk</button>
+                <button onclick="closeModal('modalParticipation')" class="text-gray-500 px-4 py-2">Batal</button>
+                <button onclick="handleJoin()" class="bg-blue-600 text-white px-6 py-2 rounded font-semibold">Masuk</button>
             </div>
         </div>
     </div>
 
-    <div id="modalMaster" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white p-8 rounded-xl w-80 shadow-2xl">
-            <h2 class="text-xl font-bold mb-4 text-green-600">Create Room</h2>
-            <input type="text" id="masterName" placeholder="Nama Master" class="w-full border p-2 mb-2 rounded">
-            <input type="text" id="createRoomId" placeholder="Room ID" class="w-full border p-2 mb-2 rounded">
-            <input type="password" id="createPw" placeholder="Password" class="w-full border p-2 mb-4 rounded">
+    <div id="modalMaster" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-xl w-full max-w-sm shadow-2xl">
+            <h2 class="text-xl font-bold mb-4 text-green-600">Create New Room</h2>
+            <input type="text" id="masterName" placeholder="Nama Master" class="w-full border p-2 mb-2 rounded focus:outline-green-500">
+            <input type="text" id="createRoomId" placeholder="Buat Room ID" class="w-full border p-2 mb-2 rounded focus:outline-green-500">
+            <input type="password" id="createPw" placeholder="Buat Password" class="w-full border p-2 mb-4 rounded focus:outline-green-500">
             <div class="flex justify-end space-x-2">
-                <button onclick="closeModal('modalMaster')" class="text-gray-500">Batal</button>
-                <button onclick="handleCreate()" class="bg-green-600 text-white px-4 py-2 rounded">Buat Room</button>
+                <button onclick="closeModal('modalMaster')" class="text-gray-500 px-4 py-2">Batal</button>
+                <button onclick="handleCreate()" class="bg-green-600 text-white px-6 py-2 rounded font-semibold">Buat Room</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Inisialisasi Supabase (Ganti dengan API Key & URL Anda)
+        // Ganti dengan kredensial Supabase Anda
         const supabaseUrl = 'https://bmswsgtgxmijjomkltzx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtc3dzZ3RneG1pampvbWtsdHp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyOTc5MDIsImV4cCI6MjA4NTg3MzkwMn0.tudVaH1BpfQA2h6EhWv2ekmhAPMTgDhiEKRbvCOM074';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Perbaikan Inisialisasi: Menggunakan window.supabase agar tidak bentrok
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
+        // LOGIKA ROOM MASTER (Buat Room Baru)
         async function handleCreate() {
             const name = document.getElementById('masterName').value;
             const roomId = document.getElementById('createRoomId').value;
             const pw = document.getElementById('createPw').value;
 
-            const { data, error } = await supabase.from('rooms').insert([{ room_id: roomId, password: pw, master_name: name }]);
+            if(!name || !roomId || !pw) return alert("Harap isi semua kolom!");
+
+            // Simpan ke tabel 'rooms'
+            const { error } = await supabase.from('rooms').insert([
+                { room_id: roomId, password: pw, master_name: name }
+            ]);
             
             if (!error) {
                 localStorage.setItem('role', 'master');
                 localStorage.setItem('room_id', roomId);
+                localStorage.setItem('username', name);
                 window.location.href = 'challengestart.html';
-            } else { alert("Gagal membuat room: " + error.message); }
+            } else { 
+                alert("Gagal: " + error.message + "\n(Pastikan Room ID belum digunakan)"); 
+            }
         }
 
+        // LOGIKA PARTICIPATION (Cek ID & PW saja)
         async function handleJoin() {
+            const name = document.getElementById('partName').value;
             const roomId = document.getElementById('joinRoomId').value;
             const pw = document.getElementById('joinPw').value;
 
-            const { data, error } = await supabase.from('rooms').select('*').eq('room_id', roomId).eq('password', pw).single();
+            if(!name || !roomId || !pw) return alert("Harap isi semua kolom!");
+
+            // Validasi: Hanya cek room_id dan password
+            const { data, error } = await supabase
+                .from('rooms')
+                .select('*')
+                .eq('room_id', roomId)
+                .eq('password', pw)
+                .single();
 
             if (data) {
+                // Simpan data ke localStorage untuk digunakan di halaman selanjutnya
                 localStorage.setItem('role', 'participant');
                 localStorage.setItem('room_id', roomId);
+                localStorage.setItem('username', name);
+                
+                // Tambahkan ke tabel peserta (opsional, untuk pantauan Master)
+                await supabase.from('participants').insert([
+                    { room_id: roomId, student_name: name }
+                ]);
+
                 window.location.href = 'challengestart.html';
-            } else { alert("Code Room atau Password Salah!"); }
+            } else { 
+                alert("Room ID atau Password salah!"); 
+            }
         }
     </script>
 </body>
