@@ -1,25 +1,128 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const role = localStorage.getItem('role');
-    const roomId = localStorage.getItem('room_id');
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting Room - Realtime</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
 
-    if (!role || !roomId) { window.location.href = 'index.html'; }
+    <div id="mainContent" class="flex items-center justify-center min-h-screen p-6">
+        <div class="text-center animate-pulse">Memuat halaman...</div>
+    </div>
 
-    window.onload = function() {
-        if (role === 'master') {
-            document.body.innerHTML = `
-                <div class="p-10 text-center">
-                    <h1 class="text-2xl font-bold">Panel Pemantauan Master (Room: ${roomId})</h1>
-                    <div id="playerList" class="mt-4 border p-4 bg-white rounded shadow text-left">
-                        Menunggu peserta bergabung...
+    <script>
+        // 1. Konfigurasi Supabase
+        const supabaseUrl = 'https://bmswsgtgxmijjomkltzx.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtc3dzZ3RneG1pampvbWtsdHp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyOTc5MDIsImV4cCI6MjA4NTg3MzkwMn0.tudVaH1BpfQA2h6EhWv2ekmhAPMTgDhiEKRbvCOM074';
+        const db = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // 2. Ambil data dari LocalStorage
+        const role = localStorage.getItem('role');
+        const roomId = localStorage.getItem('room_id');
+        const username = localStorage.getItem('username');
+
+        // Proteksi Halaman: Jika tidak ada data login, lempar balik ke index
+        if (!role || !roomId) { window.location.href = 'index.html'; }
+
+        window.onload = function() {
+            const container = document.getElementById('mainContent');
+
+            if (role === 'master') {
+                // Tampilan Panel Master
+                container.innerHTML = `
+                    <div class="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-xl">
+                        <h1 class="text-3xl font-extrabold text-green-600 mb-2">Panel Pemantauan Master</h1>
+                        <p class="text-gray-500 mb-6 font-medium">Room ID: <span class="text-black font-bold text-xl">${roomId}</span></p>
+                        
+                        <div class="text-left">
+                            <h2 class="text-lg font-bold text-gray-700 mb-3 flex items-center">
+                                <span class="w-3 h-3 bg-green-500 rounded-full mr-2 animate-ping"></span>
+                                Peserta Terhubung:
+                            </h2>
+                            <div id="playerList" class="grid grid-cols-2 gap-3 min-h-[150px] border-2 border-dashed border-gray-200 p-4 rounded-xl bg-gray-50">
+                                <p class="text-gray-400 col-span-2 text-center py-10">Menunggu peserta bergabung...</p>
+                            </div>
+                        </div>
+
+                        <button onclick="mulaiChallenge()" class="w-full mt-8 bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition-all active:scale-95">
+                            MULAI CHALLENGE SEKARANG
+                        </button>
                     </div>
-                    <button class="mt-6 bg-green-600 text-white px-6 py-2 rounded">Mulai Challenge</button>
-                </div>
-            `;
-            // Logika ambil data peserta secara real-time dari Supabase bisa ditaruh di sini
-        } else {
-            // Jika dia participant, langsung lempar ke form penilaian
-            window.location.href = 'formpenilaian.html';
+                `;
+                
+                // Panggil fungsi data pertama kali & aktifkan realtime
+                fetchParticipants();
+                initRealtime();
+
+            } else {
+                // Jika dia participant, arahkan ke form penilaian (sesuai instruksi Anda sebelumnya)
+                window.location.href = 'formpenilaian.html';
+            }
         }
-    }
-</script>
+
+        // 3. Fungsi Ambil Data Peserta dari Supabase
+        async function fetchParticipants() {
+            const { data, error } = await db
+                .from('participants')
+                .select('student_name')
+                .eq('room_id', roomId)
+                .order('id', { ascending: true });
+
+            if (error) {
+                console.error("Gagal mengambil data:", error.message);
+                return;
+            }
+
+            renderPlayerList(data);
+        }
+
+        // 4. Fungsi Render List ke HTML
+        function renderPlayerList(list) {
+            const listDiv = document.getElementById('playerList');
+            if (list.length === 0) {
+                listDiv.innerHTML = `<p class="text-gray-400 col-span-2 text-center py-10">Menunggu peserta bergabung...</p>`;
+            } else {
+                listDiv.innerHTML = list.map(p => `
+                    <div class="bg-white border border-gray-200 px-4 py-3 rounded-lg shadow-sm flex items-center space-x-3 animate-bounce-short">
+                        <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">
+                            ${p.student_name.charAt(0).toUpperCase()}
+                        </div>
+                        <span class="font-semibold text-gray-700">${p.student_name}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 5. LOGIKA REALTIME: Pantau tabel 'participants'
+        function initRealtime() {
+            db.channel('room-updates')
+                .on('postgres_changes', { 
+                    event: 'INSERT', 
+                    schema: 'public', 
+                    table: 'participants', 
+                    filter: `room_id=eq.${roomId}` 
+                }, (payload) => {
+                    console.log('Ada siswa baru join:', payload.new);
+                    fetchParticipants(); // Ambil ulang data setiap ada yang INSERT
+                })
+                .subscribe();
+        }
+
+        function mulaiChallenge() {
+            alert("Sinyal 'Mulai' dikirim ke semua peserta!");
+            // Di sini Anda bisa menambahkan logika update kolom 'is_started' di tabel rooms
+        }
+    </script>
+
+    <style>
+        @keyframes bounce-short {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-short { animation: bounce-short 0.3s ease-out; }
+    </style>
+</body>
+</html>
