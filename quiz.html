@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Kuis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        .button-group {
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+        }
+        .btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            transition: transform 0.2s, background-color 0.2s;
+            cursor: pointer;
+        }
+        .btn-quiz {
+            background-color: #4CAF50;
+        }
+        .btn-quiz:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .btn-challenge {
+            background-color: #ff9800;
+        }
+        .btn-challenge:hover {
+            background-color: #fb8c00;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Pilih Mode Permainan</h1>
+        <div class="button-group">
+            <a href="quiz2.html" class="btn btn-quiz">Mulai Quiz</a>
+            <a href="challenge.html" class="btn btn-challenge">Ambil Challenge</a>
+        </div>
+    </div>
+
+</body>
+</html>
