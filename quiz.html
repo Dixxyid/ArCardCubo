@@ -12,53 +12,82 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            /* Perubahan di sini: Menggunakan gambar latar belakang */
+            overflow: hidden; /* Mencegah scroll akibat efek blur di pinggir */
+            background-color: #f0f2f5;
+        }
+
+        /* Membuat lapisan background blur */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: url('materials/bg_quiz.jpg');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
-            background-color: #f0f2f5; /* Warna cadangan jika gambar gagal dimuat */
+            filter: blur(8px); /* Mengatur tingkat keburaman latar belakang */
+            transform: scale(1.1); /* Sedikit diperbesar agar pinggiran blur tidak putih */
+            z-index: -1;
         }
+
         .container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9); /* Sedikit transparansi agar estetis */
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            backdrop-filter: blur(5px); /* Memberikan efek blur pada background di belakang kotak */
+            /* Efek Kaca Transparan */
+            background: rgba(255, 255, 255, 0.25); 
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px); /* Blur tambahan tepat di bawah kotak */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 300px;
         }
+
         h1 {
-            color: #333;
+            color: #ffffff; /* Ubah ke putih agar kontras dengan efek kaca */
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
             margin-bottom: 2rem;
+            font-size: 24px;
         }
+
         .button-group {
             display: flex;
             gap: 20px;
             flex-direction: column;
         }
+
         .btn {
             padding: 15px 40px;
             font-size: 18px;
             font-weight: bold;
             text-decoration: none;
             color: white;
-            border-radius: 8px;
-            transition: transform 0.2s, background-color 0.2s;
+            border-radius: 12px;
+            transition: all 0.3s ease;
             cursor: pointer;
+            text-align: center;
         }
+
         .btn-quiz {
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
         }
+
         .btn-quiz:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
         }
+
         .btn-challenge {
-            background-color: #ff9800;
+            background: linear-gradient(135deg, #ff9800 0%, #ef6c00 100%);
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
         }
+
         .btn-challenge:hover {
-            background-color: #fb8c00;
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.5);
         }
     </style>
 </head>
