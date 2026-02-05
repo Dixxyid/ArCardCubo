@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div class="space-x-4">
+        <button onclick="openModal('modalParticipation')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700">Participation</button>
+        
+        <button onclick="openModal('modalMaster')" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700">Room Master</button>
+    </div>
+
+    <div id="modalParticipation" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl w-80 shadow-2xl">
+            <h2 class="text-xl font-bold mb-4 text-blue-600">Join Challenge</h2>
+            <input type="text" id="joinRoomId" placeholder="Code Room" class="w-full border p-2 mb-2 rounded">
+            <input type="password" id="joinPw" placeholder="Password" class="w-full border p-2 mb-4 rounded">
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeModal('modalParticipation')" class="text-gray-500">Batal</button>
+                <button onclick="handleJoin()" class="bg-blue-600 text-white px-4 py-2 rounded">Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalMaster" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl w-80 shadow-2xl">
+            <h2 class="text-xl font-bold mb-4 text-green-600">Create Room</h2>
+            <input type="text" id="masterName" placeholder="Nama Master" class="w-full border p-2 mb-2 rounded">
+            <input type="text" id="createRoomId" placeholder="Room ID" class="w-full border p-2 mb-2 rounded">
+            <input type="password" id="createPw" placeholder="Password" class="w-full border p-2 mb-4 rounded">
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeModal('modalMaster')" class="text-gray-500">Batal</button>
+                <button onclick="handleCreate()" class="bg-green-600 text-white px-4 py-2 rounded">Buat Room</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inisialisasi Supabase (Ganti dengan API Key & URL Anda)
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        async function handleCreate() {
+            const name = document.getElementById('masterName').value;
+            const roomId = document.getElementById('createRoomId').value;
+            const pw = document.getElementById('createPw').value;
+
+            const { data, error } = await supabase.from('rooms').insert([{ room_id: roomId, password: pw, master_name: name }]);
+            
+            if (!error) {
+                localStorage.setItem('role', 'master');
+                localStorage.setItem('room_id', roomId);
+                window.location.href = 'challengestart.html';
+            } else { alert("Gagal membuat room: " + error.message); }
+        }
+
+        async function handleJoin() {
+            const roomId = document.getElementById('joinRoomId').value;
+            const pw = document.getElementById('joinPw').value;
+
+            const { data, error } = await supabase.from('rooms').select('*').eq('room_id', roomId).eq('password', pw).single();
+
+            if (data) {
+                localStorage.setItem('role', 'participant');
+                localStorage.setItem('room_id', roomId);
+                window.location.href = 'challengestart.html';
+            } else { alert("Code Room atau Password Salah!"); }
+        }
+    </script>
+</body>
+</html>
