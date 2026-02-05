@@ -5,54 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Kuis</title>
     <style>
-        body {
+        body, html {
+            height: 100%;
+            margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
+            overflow: hidden; /* Mencegah scroll jika tidak perlu */
         }
+
+        /* Background Layer */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Menggunakan gambar bg_quiz.png */
+            background-image: url('bg_quiz.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Efek Blur */
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            /* Memperbesar sedikit agar pinggiran blur tidak putih */
+            transform: scale(1.1);
+            z-index: -1;
+        }
+
         .container {
             text-align: center;
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            /* Membuat container agak transparan agar background sedikit terlihat */
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            z-index: 1;
         }
+
         h1 {
             color: #333;
             margin-bottom: 2rem;
+            font-size: 24px;
         }
+
         .button-group {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-direction: column;
         }
+
         .btn {
-            padding: 15px 40px;
+            padding: 15px 30px;
             font-size: 18px;
             font-weight: bold;
             text-decoration: none;
             color: white;
-            border-radius: 8px;
-            transition: transform 0.2s, background-color 0.2s;
+            border-radius: 12px;
+            transition: all 0.3s ease;
             cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
         .btn-quiz {
-            background-color: #4CAF50;
+            background-color: #2ecc71;
         }
+
         .btn-quiz:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
+            background-color: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
+
         .btn-challenge {
-            background-color: #ff9800;
+            background-color: #e67e22;
         }
+
         .btn-challenge:hover {
-            background-color: #fb8c00;
-            transform: scale(1.05);
+            background-color: #d35400;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
     </style>
 </head>
