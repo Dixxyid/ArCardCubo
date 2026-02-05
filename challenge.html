@@ -63,72 +63,83 @@
         }
 
         async function handleCreate() {
-            const name = document.getElementById('masterName').value;
-            const roomId = document.getElementById('createRoomId').value;
-            const pw = document.getElementById('createPw').value;
+    const name = document.getElementById('masterName').value.trim();
+    const roomId = document.getElementById('createRoomId').value.trim();
+    const pw = document.getElementById('createPw').value.trim();
 
-            if(!name || !roomId || !pw) return alert("Harap isi semua kolom!");
-            
-            if(!isValidCode(roomId) || !isValidCode(pw)) {
-                return alert("Room ID dan Password harus berupa angka (4 - 6 digit)!");
-            }
+    if(!name || !roomId || !pw) return alert("Harap isi semua kolom!");
+    if(!isValidCode(roomId) || !isValidCode(pw)) {
+        return alert("Room ID dan Password harus berupa angka (4 - 6 digit)!");
+    }
 
-            const { error } = await db.from('rooms').insert([{ room_id: roomId, password: pw, master_name: name }]);
-            
-            if (!error) {
-                localStorage.setItem('role', 'master');
-                localStorage.setItem('room_id', roomId);
-                localStorage.setItem('username', name);
-                window.location.href = 'challengestart.html';
-            } else { alert("Gagal: " + error.message); }
+    // 1. CEK: Apakah Room ID sudah ada?
+    const { data: existingRoom, error: checkError } = await db
+        .from('rooms')
+        .select('*')
+        .eq('room_id', roomId)
+        .maybeSingle(); // Menggunakan maybeSingle agar tidak error jika data nol
+
+    if (existingRoom) {
+        // 2. Jika ada, cek apakah passwordnya cocok?
+        if (existingRoom.password === pw) {
+            alert("Masuk kembali ke room yang sudah ada.");
+            lanjutKeWaitingRoom('master', roomId, name);
+        } else {
+            alert("Room ID sudah digunakan dengan password berbeda!");
         }
+    } else {
+        // 3. Jika benar-benar belum ada, baru buat database baru
+        const { error: insertError } = await db
+            .from('rooms')
+            .insert([{ room_id: roomId, password: pw, master_name: name }]);
+        
+        if (!insertError) {
+            lanjutKeWaitingRoom('master', roomId, name);
+        } else { 
+            alert("Gagal membuat room: " + insertError.message); 
+        }
+    }
+}
 
 async function handleJoin() {
     const name = document.getElementById('partName').value.trim();
     const roomId = document.getElementById('joinRoomId').value.trim();
     const pw = document.getElementById('joinPw').value.trim();
 
-    // 1. Validasi Input Kosong
     if(!name || !roomId || !pw) return alert("Harap isi semua kolom!");
-
-    // 2. Validasi Format Angka (4-6 Digit)
     if(!isValidCode(roomId) || !isValidCode(pw)) {
         return alert("Room ID dan Password harus berupa angka (4 - 6 digit)!");
     }
 
-    // 3. VALIDASI: Cek apakah Room ID dan Password cocok di tabel 'rooms'
+    // 1. CEK: Validasi keberadaan room & password
     const { data: roomData, error: roomError } = await db
         .from('rooms')
-        .select('room_id') // Kita hanya butuh konfirmasi keberadaan room
+        .select('room_id')
         .eq('room_id', roomId)
         .eq('password', pw)
-        .single();
+        .maybeSingle();
 
-    if (roomError || !roomData) {
+    if (!roomData) {
         return alert("Room ID atau Password salah!");
     }
 
-    // 4. PENCATATAN: Tulis nama dan room_id ke tabel 'participants'
+    // 2. CATAT: Masukkan ke tabel peserta
     const { error: partError } = await db
         .from('participants')
-        .insert([
-            { 
-                room_id: roomId,      // Mencatat ID Room
-                student_name: name    // Mencatat Nama Peserta
-                // Kolom score tidak perlu ditulis jika sudah ada default 0 di database
-            }
-        ]);
+        .insert([{ room_id: roomId, student_name: name }]);
 
-    if (partError) {
-        console.error("Detail Error:", partError);
-        return alert("Gagal mendaftar ke room: " + partError.message);
+    if (!partError) {
+        lanjutKeWaitingRoom('participant', roomId, name);
+    } else {
+        alert("Gagal mendaftar: " + partError.message);
     }
+}
 
-    // 5. PENYIMPANAN LOKAL & REDIRECT
-    localStorage.setItem('role', 'participant');
+// Fungsi pembantu agar kode lebih rapi
+function lanjutKeWaitingRoom(role, roomId, username) {
+    localStorage.setItem('role', role);
     localStorage.setItem('room_id', roomId);
-    localStorage.setItem('username', name);
-    
+    localStorage.setItem('username', username);
     window.location.href = 'challengestart.html';
 }
     </script>
