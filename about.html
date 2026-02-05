@@ -3,8 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="stylesheet" href="style.css">
+    <title>About - RobotAR</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-color: #222; /* Warna dasar gelap */
+            color: white;
+        }
+
+        /* Background dengan efek blur */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('materials/bg_about.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px); /* Efek blur kaca pada background */
+            transform: scale(1.1); /* Menghilangkan border putih akibat blur */
+            z-index: -1;
+        }
+
+        /* Container dengan efek Glassmorphism */
+        .about {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1); /* Transparansi rendah */
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px); /* Efek kaca di dalam kotak */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 80%;
+            width: 400px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
 </head>
 <body>
     <div class="about">
