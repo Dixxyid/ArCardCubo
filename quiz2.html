@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Tata Surya SMA/SMK</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 10px;
+        }
+
+        .question-info {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: var(--secondary-color);
+            background-color: #ebf5fb;
+        }
+
+        .option.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        #prev-btn { background-color: #95a5a6; color: white; }
+        #next-btn { background-color: var(--secondary-color); color: white; }
+        #submit-btn { background-color: #27ae60; color: white; display: none; }
+
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        #result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="quiz-box">
+    <div id="quiz-content">
+        <div class="question-info">Pertanyaan <span id="current-pos">1</span> dari 10</div>
+        <div class="question" id="question-text">Memuat pertanyaan...</div>
+        <div class="options" id="options-container">
+            </div>
+
+        <div class="controls">
+            <button id="prev-btn" onclick="prevQuestion()" disabled>Sebelumnya</button>
+            <button id="next-btn" onclick="nextQuestion()">Selanjutnya</button>
+            <button id="submit-btn" onclick="showResult()">Kirim Jawaban</button>
+        </div>
+    </div>
+
+    <div id="result-container">
+        <h2>Hasil Kuis Anda</h2>
+        <div class="score" id="final-score">0</div>
+        <p id="score-message"></p>
+        <button onclick="location.reload()" style="background-color: var(--secondary-color); color: white; margin-top: 20px;">Coba Lagi</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            q: "Apa yang menjadi penyebab utama benda-benda langit tetap berada pada orbitnya mengelilingi Matahari?",
+            a: ["Gaya magnet antarplanet", "Gaya gravitasi Matahari", "Tekanan radiasi matahari", "Keberadaan atmosfer"],
+            correct: 1
+        },
+        {
+            q: "Hukum Kepler II menyatakan bahwa garis penghubung planet dan Matahari menyapu luas yang sama. Implikasinya adalah...",
+            a: ["Orbit planet lingkaran sempurna", "Planet bergerak lebih cepat di perihelion", "Waktu revolusi sebanding jarak", "Planet tidak berotasi"],
+            correct: 1
+        },
+        {
+            q: "Planet manakah yang dikenal sebagai 'Planet Superior' namun tidak memiliki permukaan padat?",
+            a: ["Mars", "Venus", "Jupiter", "Merkurius"],
+            correct: 2
+        },
+        {
+            q: "Sabuk Asteroid terletak di antara orbit planet...",
+            a: ["Bumi dan Mars", "Jupiter dan Saturnus", "Mars dan Jupiter", "Saturnus dan Uranus"],
+            correct: 2
+        },
+        {
+            q: "Kenapa Venus lebih panas dari Merkurius?",
+            a: ["Banyak gunung berapi", "Tidak ada atmosfer", "Efek rumah kaca ekstrem", "Rotasi sangat cepat"],
+            correct: 2
+        },
+        {
+            q: "Cincin Saturnus sebagian besar terbuat dari...",
+            a: ["Gas hidrogen beku", "Pecahan es dan batuan berlapis es", "Lava dingin", "Oksigen cair"],
+            correct: 1
+        },
+        {
+            q: "Ekor komet selalu menjauhi Matahari karena...",
+            a: ["Gravitasi planet", "Angin surya dan radiasi Matahari", "Kecepatan orbit", "Gesekan atmosfer"],
+            correct: 1
+        },
+        {
+            q: "Berapa nilai percepatan gravitasi standar di permukaan Bumi?",
+            a: ["1,62 m/s²", "3,71 m/s²", "9,81 m/s²", "24,79 m/s²"],
+            correct: 2
+        },
+        {
+            q: "Perbedaan utama antara meteoroid, meteor, dan meteorit adalah...",
+            a: ["Massa", "Lokasi objek berada", "Kecepatan cahaya", "Kandungan mineral"],
+            correct: 1
+        },
+        {
+            q: "Pasang surut air laut paling kuat dipengaruhi oleh gravitasi...",
+            a: ["Matahari", "Bulan", "Jupiter", "Venus"],
+            correct: 1
+        }
+    ];
+
+    let currentIdx = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const currentPosEl = document.getElementById('current-pos');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const submitBtn = document.getElementById('submit-btn');
+
+    function loadQuestion() {
+        const currentData = quizData[currentIdx];
+        questionText.innerText = currentData.q;
+        currentPosEl.innerText = currentIdx + 1;
+        
+        optionsContainer.innerHTML = '';
+        currentData.a.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            if (userAnswers[currentIdx] === i) div.classList.add('selected');
+            div.innerText = opt;
+            div.onclick = () => selectOption(i);
+            optionsContainer.appendChild(div);
+        });
+
+        prevBtn.disabled = currentIdx === 0;
+        if (currentIdx === quizData.length - 1) {
+            nextBtn.style.display = 'none';
+            submitBtn.style.display = 'block';
+        } else {
+            nextBtn.style.display = 'block';
+            submitBtn.style.display = 'none';
+        }
+    }
+
+    function selectOption(idx) {
+        userAnswers[currentIdx] = idx;
+        const options = document.querySelectorAll('.option');
+        options.forEach(opt => opt.classList.remove('selected'));
+        options[idx].classList.add('selected');
+    }
+
+    function nextQuestion() {
+        if (currentIdx < quizData.length - 1) {
+            currentIdx++;
+            loadQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            loadQuestion();
+        }
+    }
+
+    function showResult() {
+        let score = 0;
+        userAnswers.forEach((ans, i) => {
+            if (ans === quizData[i].correct) score++;
+        });
+
+        const finalScore = (score / quizData.length) * 100;
+        document.getElementById('quiz-content').style.display = 'none';
+        document.getElementById('result-container').style.display = 'block';
+        document.getElementById('final-score').innerText = finalScore;
+        
+        let msg = "";
+        if(finalScore >= 80) msg = "Luar biasa! Kamu ahli astronomi!";
+        else if(finalScore >= 60) msg = "Cukup baik, pelajari lagi sedikit ya!";
+        else msg = "Jangan menyerah, baca lagi materi tata surya kamu!";
+        document.getElementById('score-message').innerText = msg;
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
