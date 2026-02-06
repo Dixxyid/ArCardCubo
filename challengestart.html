@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waiting Room - Challenge Realtime</title>
+    <title>Waiting Room - Master Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -23,18 +23,26 @@
     </div>
 
     <script>
-        // 1. KONFIGURASI SUPABASE
         const supabaseUrl = 'https://bmswsgtgxmijjomkltzx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtc3dzZ3RneG1pampvbWtsdHp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyOTc5MDIsImV4cCI6MjA4NTg3MzkwMn0.tudVaH1BpfQA2h6EhWv2ekmhAPMTgDhiEKRbvCOM074';
         const db = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 2. DATA DARI LOCALSTORAGE
         const role = localStorage.getItem('role');
         const roomId = localStorage.getItem('room_id');
         const username = localStorage.getItem('username');
 
-        // Proteksi Halaman
         if (!role || !roomId) { window.location.href = 'index.html'; }
+
+        // Fungsi Helper untuk menentukan kelas warna berdasarkan skor
+        function getScoreStyle(score) {
+            if (score <= 20) return "bg-pink-100 text-pink-600 border-pink-200";
+            if (score <= 40) return "bg-red-100 text-red-600 border-red-200";
+            if (score <= 60) return "bg-orange-100 text-orange-600 border-orange-200";
+            if (score <= 70) return "bg-yellow-100 text-yellow-600 border-yellow-200";
+            if (score <= 80) return "bg-green-100 text-green-600 border-green-200";
+            if (score <= 90) return "bg-sky-100 text-sky-600 border-sky-200";
+            return "bg-blue-600 text-white border-blue-700"; // Biru Solid (>90)
+        }
 
         window.onload = function() {
             const container = document.getElementById('mainContent');
@@ -42,26 +50,41 @@
             if (role === 'master') {
                 container.innerHTML = `
                     <div class="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-xl">
-                        <div class="flex justify-between items-start mb-6">
+                        <div class="flex justify-between items-start mb-4">
                             <div>
-                                <h1 class="text-3xl font-extrabold text-green-600">Master Panel</h1>
-                                <p class="text-gray-500 font-medium">Room ID: <span class="text-black font-bold text-xl">${roomId}</span></p>
+                                <h1 class="text-3xl font-extrabold text-gray-800">Master Panel</h1>
+                                <p class="text-gray-500 font-medium text-lg">Room: <span class="text-green-600 font-mono">${roomId}</span></p>
                             </div>
                             <div class="text-right">
-                                <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Status</span>
-                                <div class="flex items-center text-green-500 font-bold">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Status</span>
+                                <div class="flex items-center justify-end text-green-500 font-bold mb-2">
                                     <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-ping"></span> Live
+                                </div>
+                                
+                                <div class="grid grid-cols-4 gap-1 text-[8px] font-bold uppercase">
+                                    <div class="px-1 bg-pink-100 text-pink-600 rounded">0-20</div>
+                                    <div class="px-1 bg-red-100 text-red-600 rounded">21-40</div>
+                                    <div class="px-1 bg-orange-100 text-orange-600 rounded">41-60</div>
+                                    <div class="px-1 bg-yellow-100 text-yellow-600 rounded">61-70</div>
+                                    <div class="px-1 bg-green-100 text-green-600 rounded">71-80</div>
+                                    <div class="px-1 bg-sky-100 text-sky-600 rounded">81-90</div>
+                                    <div class="px-1 bg-blue-600 text-white rounded">91-100</div>
                                 </div>
                             </div>
                         </div>
+
+                        <hr class="mb-6 border-gray-100">
                         
                         <div class="text-left">
-                            <h2 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">Peserta Terhubung</h2>
+                            <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 flex justify-between">
+                                <span>Peserta Terhubung</span>
+                                <span id="participantCount">0 Orang</span>
+                            </h2>
                             <div id="playerList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-h-[150px] border-2 border-dashed border-gray-100 p-4 rounded-xl bg-gray-50/50">
                                 </div>
                         </div>
 
-                        <button onclick="mulaiChallenge()" class="w-full mt-8 bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-green-200 transition-all active:scale-95">
+                        <button onclick="mulaiChallenge()" class="w-full mt-8 bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-green-100 transition-all active:scale-95">
                             MULAI CHALLENGE
                         </button>
                     </div>
@@ -71,69 +94,67 @@
                 initRealtime();
 
             } else {
-                // Participant langsung diarahkan ke form
                 window.location.href = 'formpenilaian.html';
             }
         }
 
-        // 3. FUNGSI AMBIL DATA PESERTA & SKOR
         async function fetchParticipants() {
             const { data, error } = await db
                 .from('participants')
                 .select('student_name, score')
                 .eq('room_id', roomId)
-                .order('score', { ascending: false }); // Urutkan skor tertinggi ke bawah
+                .order('score', { ascending: false });
 
-            if (error) {
-                console.error("Error:", error.message);
-                return;
+            if (!error) {
+                document.getElementById('participantCount').innerText = `${data.length} Orang`;
+                renderPlayerList(data);
             }
-
-            renderPlayerList(data);
         }
 
-        // 4. RENDER TAMPILAN LIST (NAMA DI KIRI, SKOR DI KANAN)
         function renderPlayerList(list) {
             const listDiv = document.getElementById('playerList');
             if (!listDiv) return;
 
             if (list.length === 0) {
-                listDiv.innerHTML = `<p class="text-gray-400 col-span-2 text-center py-10 italic">Belum ada peserta...</p>`;
+                listDiv.innerHTML = `<p class="text-gray-400 col-span-2 text-center py-10 italic">Menunggu peserta...</p>`;
             } else {
-                listDiv.innerHTML = list.map(p => `
-                    <div class="bg-white border border-gray-200 px-4 py-3 rounded-xl shadow-sm flex items-center justify-between animate-bounce-short">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-inner">
-                                ${p.student_name.charAt(0).toUpperCase()}
+                listDiv.innerHTML = list.map(p => {
+                    const currentScore = p.score || 0;
+                    const colorClass = getScoreStyle(currentScore);
+                    
+                    return `
+                        <div class="bg-white border border-gray-200 px-4 py-3 rounded-xl shadow-sm flex items-center justify-between animate-bounce-short hover:border-gray-300 transition-colors">
+                            <div class="flex items-center space-x-3 overflow-hidden">
+                                <div class="w-8 h-8 bg-gray-800 text-white rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs">
+                                    ${p.student_name.charAt(0).toUpperCase()}
+                                </div>
+                                <span class="font-bold text-gray-700 truncate">${p.student_name}</span>
                             </div>
-                            <span class="font-bold text-gray-700 truncate max-w-[100px]">${p.student_name}</span>
+                            <div class="${colorClass} px-3 py-1 rounded-lg text-xs font-black border flex flex-col items-center min-w-[50px]">
+                                <span class="text-[8px] opacity-70 leading-none mb-0.5">SCORE</span>
+                                <span>${currentScore}</span>
+                            </div>
                         </div>
-                        <div class="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg text-xs font-black border border-orange-100 flex flex-col items-center">
-                            <span class="text-[10px] leading-none text-orange-400 font-medium">SKOR</span>
-                            <span>${p.score || 0}</span>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
         }
 
-        // 5. INISIALISASI REALTIME (PANTAU INSERT & UPDATE SKOR)
         function initRealtime() {
             db.channel('room-updates')
                 .on('postgres_changes', { 
-                    event: '*', // Pantau semua (Insert nama baru & Update skor)
+                    event: '*', 
                     schema: 'public', 
                     table: 'participants', 
                     filter: `room_id=eq.${roomId}` 
-                }, (payload) => {
-                    fetchParticipants(); // Refresh otomatis jika ada perubahan
+                }, () => {
+                    fetchParticipants(); 
                 })
                 .subscribe();
         }
 
         function mulaiChallenge() {
-            alert("Challenge dimulai! Pantau skor siswa secara real-time di sini.");
-            // Logika tambahan bisa diletakkan di sini
+            alert("Sistem Pemantauan Aktif! Skor akan berubah otomatis saat siswa menginput.");
         }
     </script>
 </body>
