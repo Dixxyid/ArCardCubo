@@ -12,6 +12,7 @@
             50% { transform: translateY(-3px); }
         }
         .animate-bounce-short { animation: bounce-short 0.4s ease-out; }
+        body { font-style: normal; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -29,7 +30,7 @@
 
         const role = localStorage.getItem('role');
         const roomId = localStorage.getItem('room_id');
-        let currentSort = 'score'; // Default sort
+        let currentSort = 'score'; 
 
         if (!role || !roomId) { window.location.href = 'index.html'; }
 
@@ -49,23 +50,26 @@
             if (role === 'master') {
                 container.innerHTML = `
                     <div class="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-xl">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h1 class="text-3xl font-extrabold text-gray-800">MASTER ROOM PANEL</h1>
-                                <p class="text-gray-500 font-medium">Room: <span class="text-green-600 font-mono">${roomId}</span></p>
-                            </div>
-                            <div class="text-right">
-                                <div class="flex items-center justify-end text-green-500 font-bold mb-2 text-xs uppercase">
+                        <div class="mb-6">
+                            <h1 class="text-3xl font-extrabold text-gray-800 uppercase tracking-tight mb-4">Master Panel</h1>
+                            
+                            <div class="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-xl border border-gray-100">
+                                <p class="text-gray-500 font-medium">Room ID: <span class="text-green-600 font-mono font-bold text-lg ml-1">${roomId}</span></p>
+                                <div class="flex items-center text-green-500 font-bold text-xs uppercase tracking-wider">
                                     <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-ping"></span> Live Status
                                 </div>
-                                <div class="grid grid-cols-4 gap-1 text-[7px] font-bold uppercase">
-                                    <div class="px-1 bg-pink-100 text-pink-600 rounded">0-20</div>
-                                    <div class="px-1 bg-red-100 text-red-600 rounded">21-40</div>
-                                    <div class="px-1 bg-orange-100 text-orange-600 rounded">41-60</div>
-                                    <div class="px-1 bg-yellow-100 text-yellow-600 rounded">61-70</div>
-                                    <div class="px-1 bg-green-100 text-green-600 rounded">71-80</div>
-                                    <div class="px-1 bg-sky-100 text-sky-600 rounded">81-90</div>
-                                    <div class="px-1 bg-blue-600 text-white rounded">91-100</div>
+                            </div>
+
+                            <div class="mt-4">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 text-center sm:text-left">Indikator Rentang Nilai:</p>
+                                <div class="grid grid-cols-4 sm:grid-cols-7 gap-1 text-[8px] font-bold uppercase">
+                                    <div class="py-1.5 text-center bg-pink-100 text-pink-600 rounded-md border border-pink-200">0-20</div>
+                                    <div class="py-1.5 text-center bg-red-100 text-red-600 rounded-md border border-red-200">21-40</div>
+                                    <div class="py-1.5 text-center bg-orange-100 text-orange-600 rounded-md border border-orange-200">41-60</div>
+                                    <div class="py-1.5 text-center bg-yellow-100 text-yellow-600 rounded-md border border-yellow-200">61-70</div>
+                                    <div class="py-1.5 text-center bg-green-100 text-green-600 rounded-md border border-green-200">71-80</div>
+                                    <div class="py-1.5 text-center bg-sky-100 text-sky-600 rounded-md border border-sky-200">81-90</div>
+                                    <div class="py-1.5 text-center bg-blue-600 text-white rounded-md border border-blue-700">91-100</div>
                                 </div>
                             </div>
                         </div>
@@ -75,9 +79,9 @@
                         <div class="text-left">
                             <div class="flex justify-between items-center mb-3">
                                 <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center">
-                                    Peserta Terhubung (<span id="participantCount">0</span>)
+                                    Peserta Terhubung (<span id="participantCount" class="mx-1 text-gray-800">0</span>)
                                 </h2>
-                                <select id="sortOption" onchange="changeSort(this.value)" class="text-[10px] font-bold border rounded px-2 py-1 bg-gray-50 text-gray-600 outline-none focus:ring-2 focus:ring-green-500">
+                                <select id="sortOption" onchange="changeSort(this.value)" class="text-[10px] font-bold border rounded-md px-2 py-1 bg-gray-50 text-gray-600 outline-none focus:ring-2 focus:ring-green-500 cursor-pointer">
                                     <option value="score">SORT BY: SKOR TERTINGGI</option>
                                     <option value="name">SORT BY: NAMA A-Z</option>
                                 </select>
@@ -103,7 +107,6 @@
         async function fetchParticipants() {
             let query = db.from('participants').select('student_name, score').eq('room_id', roomId);
             
-            // Logika Sorting
             if (currentSort === 'score') {
                 query = query.order('score', { ascending: false });
             } else {
@@ -138,7 +141,7 @@
                                 <div class="w-8 h-8 bg-gray-800 text-white rounded-full flex-shrink-0 flex items-center justify-center font-bold text-[10px]">
                                     ${p.student_name.charAt(0).toUpperCase()}
                                 </div>
-                                <span class="font-bold text-gray-700 truncate text-sm">${p.student_name}</span>
+                                <span class="font-bold text-gray-700 truncate text-sm font-sans">${p.student_name}</span>
                             </div>
                             <div class="${getScoreStyle(score)} px-3 py-1 rounded-lg text-xs font-black border flex flex-col items-center min-w-[50px]">
                                 <span class="text-[7px] opacity-70 leading-none mb-0.5">SCORE</span>
@@ -164,7 +167,7 @@
         }
 
         function mulaiChallenge() {
-            alert("Mode Pemantauan Skor Aktif!");
+            alert("Sistem Monitoring Skor Aktif!");
         }
     </script>
 </body>
