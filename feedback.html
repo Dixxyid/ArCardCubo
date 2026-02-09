@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Feedback</title>
+    <title>Futuristic Feedback | Mission Control</title>
     <style>
         :root {
             --primary: #00f2fe;
             --secondary: #4facfe;
-            --accent-yellow: #ffdf00; /* Warna kuning bintang */
-            --bg: #0b0d17;
-            --glass: rgba(255, 255, 255, 0.05);
+            --accent-yellow: #ffdf00;
+            --bg-overlay: rgba(11, 13, 23, 0.7); /* Overlay untuk menjaga legibilitas */
+            --glass: rgba(255, 255, 255, 0.08);
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at center, #1a1c2c 0%, #0b0d17 100%);
+            font-family: 'Inter', -apple-system, sans-serif;
+            /* Update Background ke Gambar */
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('materials\bg_feedback.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: white;
             display: flex;
             justify-content: center;
@@ -26,103 +29,129 @@
             overflow: hidden;
         }
 
+        /* Floating Orb - Dipertahankan untuk kedalaman visual */
         .orb {
             position: absolute;
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
-            filter: blur(80px);
+            filter: blur(100px);
             border-radius: 50%;
             z-index: -1;
-            opacity: 0.3;
-            animation: float 10s infinite alternate;
+            opacity: 0.2;
+            animation: float 12s infinite alternate ease-in-out;
         }
 
         @keyframes float {
-            from { transform: translate(-50px, -50px); }
-            to { transform: translate(50px, 50px); }
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(10%, 10%); }
         }
 
         .feedback-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             padding: 40px;
-            border-radius: 24px;
-            width: 400px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
             text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        h2 { margin-bottom: 10px; font-weight: 700; letter-spacing: 1px; font-size: 1.5rem; }
-        p { color: #ccc; font-size: 0.85rem; margin-bottom: 25px; }
+        .feedback-card:hover {
+            border-color: rgba(0, 242, 254, 0.3);
+        }
 
-        /* Rating Stars - Diubah ke Kuning */
+        h2 { 
+            margin: 0 0 10px 0; 
+            font-weight: 800; 
+            letter-spacing: 3px; 
+            font-size: 1.4rem;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p { color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 30px; }
+
+        /* Rating Stars */
         .rating-group {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 25px;
         }
 
         .star {
             cursor: pointer;
-            font-size: 2.2rem;
-            color: rgba(255, 255, 255, 0.15);
-            transition: 0.3s;
-            filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0.1);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
         }
 
-        .star:hover, .star.active {
+        .star:hover {
+            transform: scale(1.1);
+            color: rgba(255, 223, 0, 0.4);
+        }
+
+        .star.active {
             color: var(--accent-yellow);
-            text-shadow: 0 0 15px rgba(255, 223, 0, 0.6);
+            text-shadow: 0 0 20px rgba(255, 223, 0, 0.8);
             transform: scale(1.2);
         }
 
         /* Input Styles */
         .input-field {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 12px 15px;
+            border-radius: 14px;
+            padding: 14px 18px;
             color: white;
             box-sizing: border-box;
             margin-bottom: 15px;
             transition: 0.3s;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        textarea.input-field {
-            resize: none;
+            background: rgba(0, 242, 254, 0.05);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
         }
 
         button {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             background: linear-gradient(45deg, var(--secondary), var(--primary));
             color: #0b0d17;
-            font-weight: bold;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s;
             margin-top: 10px;
         }
 
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 242, 254, 0.4);
-            filter: brightness(1.1);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 242, 254, 0.5);
+            filter: saturate(1.2) brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(-1px);
         }
     </style>
 </head>
@@ -131,41 +160,72 @@
     <div class="orb"></div>
 
     <div class="feedback-card">
-        <h2>TRANSMIT FEEDBACK</h2>
-        <p>Identifikasi transmisi Anda dan berikan penilaian.</p>
+        <h2>TRANSMIT DATA</h2>
+        <p>Hubungkan frekuensi Anda ke pusat kendali.</p>
 
-        <div class="rating-group">
-            <span class="star">★</span>
-            <span class="star">★</span>
-            <span class="star">★</span>
-            <span class="star">★</span>
-            <span class="star">★</span>
+        <div class="rating-group" id="ratingGroup">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
         </div>
 
-        <input type="email" class="input-field" placeholder="Masukkan Email Anda (user@cosmos.com)" required>
+        <input type="email" id="userEmail" class="input-field" placeholder="ID Email (user@cosmos.com)" required>
         
-        <textarea class="input-field" rows="4" placeholder="Tuliskan transmisi pesan Anda di sini..."></textarea>
+        <textarea id="userMessage" class="input-field" rows="4" placeholder="Enkripsi pesan Anda di sini..."></textarea>
 
-        <button onclick="handleSubmit()">Kirim Feedback</button>
+        <button onclick="handleSubmit()">Inisiasi Pengiriman</button>
     </div>
 
     <script>
         const stars = document.querySelectorAll('.star');
+        let currentRating = 0;
+
         stars.forEach((star, index) => {
             star.addEventListener('click', () => {
-                stars.forEach((s, i) => {
-                    i <= index ? s.classList.add('active') : s.classList.remove('active');
-                });
+                currentRating = index + 1;
+                updateStars();
             });
         });
 
+        function updateStars() {
+            stars.forEach((s, i) => {
+                i < currentRating ? s.classList.add('active') : s.classList.remove('active');
+            });
+        }
+
         function handleSubmit() {
-            const email = document.querySelector('input[type="email"]').value;
-            if(email) {
-                alert('Transmisi berhasil! Feedback dari ' + email + ' telah diterima di pusat data.');
-            } else {
-                alert('Mohon masukkan email transmisi Anda.');
+            const email = document.getElementById('userEmail').value;
+            const message = document.getElementById('userMessage').value;
+
+            if (!currentRating) {
+                alert('Peringatan: Berikan penilaian bintang sebelum transmisi.');
+                return;
             }
+
+            if (!email.includes('@')) {
+                alert('Peringatan: Alamat email tidak valid.');
+                return;
+            }
+
+            // Simulasi pengiriman
+            const btn = document.querySelector('button');
+            btn.innerText = 'MENGIRIM...';
+            btn.style.opacity = '0.7';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Suksess! Transmisi terkirim ke sektor ' + (currentRating * 100) + '. Terima kasih, Agent.');
+                // Reset form
+                document.getElementById('userEmail').value = '';
+                document.getElementById('userMessage').value = '';
+                currentRating = 0;
+                updateStars();
+                btn.innerText = 'Inisiasi Pengiriman';
+                btn.style.opacity = '1';
+                btn.disabled = false;
+            }, 1500);
         }
     </script>
 </body>
