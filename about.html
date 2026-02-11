@@ -8,7 +8,7 @@
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
-            --bg-color: #f4f7f6;
+            --bg-overlay: rgba(244, 247, 246, 0.9); /* Overlay agar teks tetap terbaca */
             --text-color: #333;
             --accent-color: #95a5a6;
             --white: #ffffff;
@@ -16,10 +16,12 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            /* Menggunakan gambar latar belakang sesuai permintaan */
+            background: url('materials/bg_about.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,23 +29,38 @@
         }
 
         .about-container {
-            background-color: var(--white);
+            background-color: var(--bg-overlay); /* Transparan sedikit agar estetik */
+            backdrop-filter: blur(5px); /* Efek blur pada background di belakang kontainer */
             padding: 3rem;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             width: 90%;
             max-width: 800px;
             text-align: center;
+        }
+
+        /* Container untuk 3 Logo di paling atas */
+        .logo-header {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .logo-header img {
+            height: 60px; /* Ukuran tinggi logo */
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         .profile-section {
             margin-bottom: 40px;
         }
 
-        /* Avatar Placeholder */
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             background-color: var(--secondary-color);
             border-radius: 50%;
             margin: 0 auto 20px;
@@ -51,22 +68,24 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: bold;
-            border: 5px solid #ebf5fb;
+            border: 4px solid var(--white);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        h1 { color: var(--primary-color); margin-bottom: 5px; }
-        .subtitle { color: var(--secondary-color); font-weight: 600; margin-bottom: 20px; display: block; }
+        h1 { color: var(--primary-color); margin: 0 0 5px 0; font-size: 1.8rem; }
+        .subtitle { color: var(--secondary-color); font-weight: 600; margin-bottom: 20px; display: block; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
         
         .description {
-            line-height: 1.6;
-            color: #555;
-            max-width: 600px;
+            line-height: 1.7;
+            color: #444;
+            max-width: 650px;
             margin: 0 auto 30px;
+            font-size: 1rem;
         }
 
-        hr { border: 0; border-top: 1px solid #eee; margin: 40px 0; }
+        hr { border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 40px 0; }
 
         .dosen-grid {
             display: grid;
@@ -76,81 +95,98 @@
         }
 
         .dosen-card {
-            background: #fafafa;
+            background: rgba(255, 255, 255, 0.7);
             padding: 20px;
             border-radius: 10px;
-            border-left: 4px solid var(--secondary-color);
-            text-align: left;
+            border-top: 3px solid var(--secondary-color);
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        .dosen-card h4 { margin: 0; color: var(--primary-color); }
-        .dosen-card p { margin: 5px 0 0; font-size: 0.85rem; color: #7f8c8d; }
+        .dosen-card:hover {
+            transform: translateY(-5px);
+            background: var(--white);
+        }
+
+        .dosen-card h4 { margin: 0; color: var(--primary-color); font-size: 1rem; }
+        .dosen-card p { margin: 8px 0 0; font-size: 0.8rem; color: #666; font-weight: 500; }
 
         .tech-stack {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
             margin-top: 30px;
             flex-wrap: wrap;
         }
 
         .badge {
-            background: #eee;
-            padding: 5px 12px;
+            background: var(--primary-color);
+            padding: 6px 15px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            color: #666;
-            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--white);
+            font-weight: 500;
         }
 
         .btn-back {
             display: inline-block;
             margin-top: 40px;
-            padding: 12px 30px;
+            padding: 12px 35px;
             background-color: var(--primary-color);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .btn-back:hover { background-color: var(--secondary-color); }
+        .btn-back:hover { 
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
 
 <div class="about-container">
+    <div class="logo-header">
+        <img src="materials/logo1.png" alt="Logo 1">
+        <img src="materials/logo2.png" alt="Logo 2">
+        <img src="materials/logo3.png" alt="Logo 3">
+    </div>
+
     <div class="profile-section">
         <div class="avatar">G</div>
-        <h1>Nama Anda, S.Kom (Opsional)</h1>
+        <h1>Nama Anda, S.Kom</h1>
         <span class="subtitle">Developer & Astronomy Enthusiast</span>
         <p class="description">
-            Halo! Saya adalah pengembang dibalik aplikasi kuis ini. Proyek ini dibuat untuk memudahkan siswa SMA/SMK dalam memahami konsep Tata Surya melalui platform digital yang interaktif dan mudah diakses.
+            Aplikasi kuis ini dikembangkan sebagai media pembelajaran digital yang interaktif. Fokus utama proyek ini adalah memvisualisasikan data astronomi ke dalam bentuk tantangan edukatif bagi siswa SMA/SMK guna meningkatkan minat literasi sains.
         </p>
         
         <div class="tech-stack">
             <span class="badge">HTML5</span>
             <span class="badge">CSS3</span>
             <span class="badge">JavaScript ES6</span>
-            <span class="badge">Education Technology</span>
+            <span class="badge">UI/UX Design</span>
         </div>
     </div>
 
     <hr>
 
-    <h3>Dosen Pembimbing</h3>
+    <h3 style="color: var(--primary-color);">Tim Pembimbing</h3>
     <div class="dosen-grid">
         <div class="dosen-card">
             <h4>Nama Dosen 1, Gelar</h4>
-            <p>Dosen Pembimbing Utama</p>
+            <p>Dosen Pembimbing I</p>
         </div>
         <div class="dosen-card">
             <h4>Nama Dosen 2, Gelar</h4>
-            <p>Dosen Pembimbing Pendamping</p>
+            <p>Dosen Pembimbing II</p>
         </div>
         <div class="dosen-card">
             <h4>Nama Dosen 3, Gelar</h4>
-            <p>Dosen Penguji / Ahli Materi</p>
+            <p>Dosen Penguji</p>
         </div>
     </div>
 
