@@ -36,9 +36,9 @@
             height: 100%;
             background: url('materials/bg_about.jpg') no-repeat center center fixed;
             background-size: cover;
-            filter: blur(8px); /* Mengatur tingkat blur gambar background */
+            filter: blur(8px); 
             z-index: -1;
-            transform: scale(1.1); /* Menghindari garis putih di tepi layar akibat blur */
+            transform: scale(1.1); 
         }
 
         .about-container {
@@ -86,8 +86,30 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        h1 { color: var(--primary-color); margin: 0; font-size: 1.7rem; }
-        .subtitle { color: var(--secondary-color); font-weight: 700; margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; }
+        h1 { 
+            color: var(--primary-color); 
+            margin: 0; 
+            font-size: 1.7rem; 
+            line-height: 1.2;
+        }
+
+        /* Styling NPM agar kecil dan dempet ke Nama */
+        h2 {
+            color: #555;
+            font-size: 1rem;
+            margin: 2px 0 10px 0; /* Margin atas hanya 2px agar dempet */
+            font-weight: 500;
+        }
+
+        .subtitle { 
+            color: var(--secondary-color); 
+            font-weight: 700; 
+            margin-bottom: 15px; 
+            display: block; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-size: 0.85rem; 
+        }
         
         .description {
             line-height: 1.7;
@@ -97,7 +119,6 @@
             font-size: 0.95rem;
         }
 
-        /* Garis Pemisah Style */
         hr { 
             border: 0; 
             border-top: 1px solid rgba(0,0,0,0.1); 
@@ -177,8 +198,8 @@
     <div class="profile-section">
         <div class="avatar">G</div>
         <h1>DIKI PRASETIA</h1>
-        <span class="subtitle">Developer & College Student</span>
         <h2>2113025007</h2>
+        <span class="subtitle">Developer & College Student</span>
         <p class="description">
             Halo! Saya adalah pengembang dibalik aplikasi kuis ini. Proyek ini dibuat untuk memudahkan siswa dalam memahami konsep Tata Surya melalui platform digital yang interaktif dan mudah diakses. Fokus utama proyek ini adalah memvisualisasikan data astronomi ke dalam bentuk tantangan edukatif bagi siswa guna meningkatkan minat literasi sains.
         </p>
@@ -216,4 +237,3 @@
 
 </body>
 </html>
-
