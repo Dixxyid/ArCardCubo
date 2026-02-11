@@ -1,66 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - RobotAR</title>
+    <title>About - Kuis Tata Surya</title>
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --accent-color: #95a5a6;
+            --white: #ffffff;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            background-color: #f0f2f5;
+            min-height: 100vh;
         }
 
-        /* Latar belakang gambar dengan efek blur */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('materials/bg_about.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: blur(10px); /* Efek kaca pada background luar */
-            transform: scale(1.1);
-            z-index: -1;
-        }
-
-        /* Kotak isi dibuat putih bersih */
-        .about {
-            text-align: center;
-            background: white; /* Putih solid */
+        .about-container {
+            background-color: var(--white);
             padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Bayangan agar lebih menonjol */
-            max-width: 80%;
-            width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
         }
 
-        .title {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #333; /* Warna teks gelap agar kontras dengan putih */
+        .profile-section {
+            margin-bottom: 40px;
+        }
+
+        /* Avatar Placeholder */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
             font-weight: bold;
+            border: 5px solid #ebf5fb;
         }
 
-        p {
-            font-size: 1.1rem;
+        h1 { color: var(--primary-color); margin-bottom: 5px; }
+        .subtitle { color: var(--secondary-color); font-weight: 600; margin-bottom: 20px; display: block; }
+        
+        .description {
             line-height: 1.6;
-            color: #666; /* Warna abu-abu gelap untuk deskripsi */
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto 30px;
         }
+
+        hr { border: 0; border-top: 1px solid #eee; margin: 40px 0; }
+
+        .dosen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .dosen-card {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary-color);
+            text-align: left;
+        }
+
+        .dosen-card h4 { margin: 0; color: var(--primary-color); }
+        .dosen-card p { margin: 5px 0 0; font-size: 0.85rem; color: #7f8c8d; }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: #eee;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn-back:hover { background-color: var(--secondary-color); }
     </style>
 </head>
 <body>
-    <div class="about">
-        <h1 class="title">About RobotAR</h1>
-        <p>This is an AR Cards demo using 10 robot models.</p>
+
+<div class="about-container">
+    <div class="profile-section">
+        <div class="avatar">G</div>
+        <h1>Nama Anda, S.Kom (Opsional)</h1>
+        <span class="subtitle">Developer & Astronomy Enthusiast</span>
+        <p class="description">
+            Halo! Saya adalah pengembang dibalik aplikasi kuis ini. Proyek ini dibuat untuk memudahkan siswa SMA/SMK dalam memahami konsep Tata Surya melalui platform digital yang interaktif dan mudah diakses.
+        </p>
+        
+        <div class="tech-stack">
+            <span class="badge">HTML5</span>
+            <span class="badge">CSS3</span>
+            <span class="badge">JavaScript ES6</span>
+            <span class="badge">Education Technology</span>
+        </div>
     </div>
+
+    <hr>
+
+    <h3>Dosen Pembimbing</h3>
+    <div class="dosen-grid">
+        <div class="dosen-card">
+            <h4>Nama Dosen 1, Gelar</h4>
+            <p>Dosen Pembimbing Utama</p>
+        </div>
+        <div class="dosen-card">
+            <h4>Nama Dosen 2, Gelar</h4>
+            <p>Dosen Pembimbing Pendamping</p>
+        </div>
+        <div class="dosen-card">
+            <h4>Nama Dosen 3, Gelar</h4>
+            <p>Dosen Penguji / Ahli Materi</p>
+        </div>
+    </div>
+
+    <a href="dashboard.html" class="btn-back">Kembali ke Dashboard</a>
+</div>
+
 </body>
 </html>
