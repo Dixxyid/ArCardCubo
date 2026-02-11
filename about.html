@@ -91,24 +91,26 @@
             margin: 0; 
             font-size: 1.7rem; 
             line-height: 1.2;
-        }
-
-        /* Styling NPM agar kecil dan dempet ke Nama */
-        h2 {
-            color: #555;
-            font-size: 1rem;
-            margin: 2px 0 10px 0; /* Margin atas hanya 2px agar dempet */
-            font-weight: 500;
+            text-transform: uppercase;
         }
 
         .subtitle { 
             color: var(--secondary-color); 
             font-weight: 700; 
-            margin-bottom: 15px; 
+            margin: 5px 0 0 0; /* Jarak kecil dari Nama */
             display: block; 
             text-transform: uppercase; 
             letter-spacing: 1px; 
             font-size: 0.85rem; 
+        }
+
+        /* Styling NPM agar kecil dan dempet ke Subtitle */
+        h2 {
+            color: #555;
+            font-size: 0.95rem;
+            margin: -2px 0 20px 0; /* Margin negatif untuk mendempetkan ke atas */
+            font-weight: 500;
+            letter-spacing: 1px;
         }
         
         .description {
@@ -198,8 +200,9 @@
     <div class="profile-section">
         <div class="avatar">G</div>
         <h1>DIKI PRASETIA</h1>
-        <h2>2113025007</h2>
         <span class="subtitle">Developer & College Student</span>
+        <h2>2113025007</h2>
+        
         <p class="description">
             Halo! Saya adalah pengembang dibalik aplikasi kuis ini. Proyek ini dibuat untuk memudahkan siswa dalam memahami konsep Tata Surya melalui platform digital yang interaktif dan mudah diakses. Fokus utama proyek ini adalah memvisualisasikan data astronomi ke dalam bentuk tantangan edukatif bagi siswa guna meningkatkan minat literasi sains.
         </p>
