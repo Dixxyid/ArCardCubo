@@ -8,7 +8,7 @@
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
-            --bg-overlay: rgba(244, 247, 246, 0.9); /* Overlay agar teks tetap terbaca */
+            --bg-overlay: rgba(255, 255, 255, 0.85); 
             --text-color: #333;
             --accent-color: #95a5a6;
             --white: #ffffff;
@@ -16,51 +16,63 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Menggunakan gambar latar belakang sesuai permintaan */
-            background: url('materials/bg_about.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: var(--text-color);
             margin: 0;
             padding: 40px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Membuat Background Blur */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('materials/bg_about.jpg') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(8px); /* Mengatur tingkat blur gambar background */
+            z-index: -1;
+            transform: scale(1.1); /* Menghindari garis putih di tepi layar akibat blur */
         }
 
         .about-container {
-            background-color: var(--bg-overlay); /* Transparan sedikit agar estetik */
-            backdrop-filter: blur(5px); /* Efek blur pada background di belakang kontainer */
+            background-color: var(--bg-overlay);
             padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             width: 90%;
             max-width: 800px;
             text-align: center;
+            position: relative;
         }
 
-        /* Container untuk 3 Logo di paling atas */
         .logo-header {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 40px;
             margin-bottom: 30px;
             align-items: center;
         }
 
         .logo-header img {
-            height: 60px; /* Ukuran tinggi logo */
+            height: 55px;
             width: auto;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         .profile-section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .avatar {
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             background-color: var(--secondary-color);
             border-radius: 50%;
             margin: 0 auto 20px;
@@ -68,82 +80,88 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: bold;
             border: 4px solid var(--white);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        h1 { color: var(--primary-color); margin: 0 0 5px 0; font-size: 1.8rem; }
-        .subtitle { color: var(--secondary-color); font-weight: 600; margin-bottom: 20px; display: block; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+        h1 { color: var(--primary-color); margin: 0; font-size: 1.7rem; }
+        .subtitle { color: var(--secondary-color); font-weight: 700; margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; }
         
         .description {
             line-height: 1.7;
             color: #444;
-            max-width: 650px;
-            margin: 0 auto 30px;
-            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            font-size: 0.95rem;
         }
 
-        hr { border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 40px 0; }
+        /* Garis Pemisah Style */
+        hr { 
+            border: 0; 
+            border-top: 1px solid rgba(0,0,0,0.1); 
+            margin: 35px 0; 
+        }
 
         .dosen-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 15px;
         }
 
         .dosen-card {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            border-top: 3px solid var(--secondary-color);
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            border-bottom: 3px solid var(--secondary-color);
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .dosen-card:hover {
-            transform: translateY(-5px);
             background: var(--white);
+            transform: translateY(-3px);
         }
 
-        .dosen-card h4 { margin: 0; color: var(--primary-color); font-size: 1rem; }
-        .dosen-card p { margin: 8px 0 0; font-size: 0.8rem; color: #666; font-weight: 500; }
+        .dosen-card h4 { margin: 0; color: var(--primary-color); font-size: 0.95rem; }
+        .dosen-card p { margin: 5px 0 0; font-size: 0.75rem; color: #7f8c8d; }
 
         .tech-stack {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-top: 30px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
 
         .badge {
             background: var(--primary-color);
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
             color: var(--white);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .btn-back {
             display: inline-block;
-            margin-top: 40px;
-            padding: 12px 35px;
+            padding: 12px 40px;
             background-color: var(--primary-color);
             color: white;
             text-decoration: none;
-            border-radius: 30px;
-            font-weight: 600;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         .btn-back:hover { 
             background-color: var(--secondary-color);
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
         }
     </style>
 </head>
@@ -161,20 +179,20 @@
         <h1>Nama Anda, S.Kom</h1>
         <span class="subtitle">Developer & Astronomy Enthusiast</span>
         <p class="description">
-            Aplikasi kuis ini dikembangkan sebagai media pembelajaran digital yang interaktif. Fokus utama proyek ini adalah memvisualisasikan data astronomi ke dalam bentuk tantangan edukatif bagi siswa SMA/SMK guna meningkatkan minat literasi sains.
+            Aplikasi kuis ini dikembangkan sebagai media pembelajaran digital yang interaktif untuk memudahkan siswa memahami konsep astronomi secara modern.
         </p>
         
         <div class="tech-stack">
             <span class="badge">HTML5</span>
             <span class="badge">CSS3</span>
-            <span class="badge">JavaScript ES6</span>
-            <span class="badge">UI/UX Design</span>
+            <span class="badge">JavaScript</span>
+            <span class="badge">EdTech</span>
         </div>
     </div>
 
     <hr>
 
-    <h3 style="color: var(--primary-color);">Tim Pembimbing</h3>
+    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 20px;">Tim Pembimbing & Penguji</h3>
     <div class="dosen-grid">
         <div class="dosen-card">
             <h4>Nama Dosen 1, Gelar</h4>
@@ -189,6 +207,8 @@
             <p>Dosen Penguji</p>
         </div>
     </div>
+
+    <hr>
 
     <a href="dashboard.html" class="btn-back">Kembali ke Dashboard</a>
 </div>
