@@ -95,6 +95,19 @@ body {
     z-index: 2;
 }
 
+/* Efek saat tombol ditekan (Feedback Visual) */
+.btn-main:active, .btn-sub:active {
+    transform: scale(0.95);
+    filter: brightness(0.9);
+}
+
+/* Pastikan kursor berubah jadi tangan di desktop */
+button {
+    cursor: pointer;
+    border: none; /* Menghapus border default button */
+    outline: none;
+}
+
 .icon-main {
     position: absolute;
     left: 15px; /* Pojok kiri */
@@ -177,5 +190,6 @@ body {
     transform: translateY(-3px);
     border-color: #00d2ff;
 }
+
 
 
