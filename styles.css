@@ -57,8 +57,37 @@ body {
     display: flex;
     align-items: center;
     justify-content: center; /* Center teks */
-    margin-bottom: 1rem;
+    margin-bottom: 3rem; 
     transition: 0.3s;
+    box-shadow: 0 12px 24px rgba(0, 97, 255, 0.2);
+}
+
+/* GARIS PEMISAH (DIVIDER) */
+.btn-main::after {
+    content: "";
+    position: absolute;
+    bottom: -1.5rem; /* Posisi tepat di tengah antara tombol 1 dan grid */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%; /* Lebar garis */
+    height: 1px;
+    /* Efek gradasi agar garis terlihat memudar di ujung (estetik) */
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* Optional: Menambah teks kecil di tengah garis jika ingin */
+.btn-main::before {
+    content: "MENU LAINNYA";
+    position: absolute;
+    bottom: -1.85rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0d0d18; 
+    padding: 0 15px;
+    font-size: 0.6rem;
+    color: #4a4a6a;
+    letter-spacing: 2px;
+    z-index: 2;
 }
 
 .icon-main {
@@ -143,3 +172,4 @@ body {
     transform: translateY(-3px);
     border-color: #00d2ff;
 }
+
