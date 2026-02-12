@@ -73,8 +73,16 @@
             </button>
         </div>
     </div>
-</div>        
+</div>
 
+<script>
+    function navigateTo(url) {
+        // Menambahkan sedikit efek delay agar user bisa melihat animasi tombol saat ditekan
+        setTimeout(() => {
+            window.location.href = url;
+        }, 150); 
+    }
+</script>
 
-
-
+</body>
+</html>
