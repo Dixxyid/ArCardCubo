@@ -3,48 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Augmented Reality Portal</title>
+    <title>AR Navigation</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="main-wrapper">
-        <header>
-            <h1>ArCubo <span>Cards</span></h1>
-            <p>Jelajahi dunia digital dan Augmented Reality</p>
+    <div class="container">
+        <header class="header">
+            <h1>AUGMENTED <span>REALITY</span></h1>
+            <p>Jelajahi dunia digital dan pengalaman interaktif</p>
         </header>
 
-        <nav class="nav-grid">
-            <button class="nav-card start" onclick="navigateTo('starts.html')">
-                <span class="icon">🚀</span>
-                <span class="label">Mulai</span>
+        <div class="menu-wrapper">
+            <button class="btn-main" onclick="navigateTo('starts.html')">
+                <span class="btn-icon">🚀</span>
+                <div class="btn-text">
+                    <span class="title">MULAI SEKARANG</span>
+                    <span class="subtitle">Masuk ke mode AR Kamera</span>
+                </div>
             </button>
-            <button class="nav-card guide" onclick="navigateTo('guides.html')">
-                <span class="icon">📖</span>
-                <span class="label">Panduan</span>
-            </button>
-            <button class="nav-card markers" onclick="navigateTo('ar_markers.html')">
-                <span class="icon">🎯</span>
-                <span class="label">Marker</span>
-            </button>
-            <button class="nav-card quiz" onclick="navigateTo('quiz.html')">
-                <span class="icon">💡</span>
-                <span class="label">Kuis</span>
-            </button>
-            <button class="nav-card learning" onclick="navigateTo('learning.html')">
-                <span class="icon">🎓</span>
-                <span class="label">Belajar</span>
-            </button>
-            <button class="nav-card about" onclick="navigateTo('about.html')">
-                <span class="icon">ℹ️</span>
-                <span class="label">Tentang</span>
-            </button>
-            <button class="nav-card feedback" onclick="navigateTo('feedback.html')">
-                <span class="icon">💬</span>
-                <span class="label">Umpan Balik</span>
-            </button>
-        </nav>
+
+            <div class="btn-grid">
+                <button class="btn-sub" onclick="navigateTo('guides.html')">
+                    <span class="icon-small">📖</span> Panduan
+                </button>
+                <button class="btn-sub" onclick="navigateTo('ar_markers.html')">
+                    <span class="icon-small">🎯</span> Marker
+                </button>
+                <button class="btn-sub" onclick="navigateTo('quiz.html')">
+                    <span class="icon-small">💡</span> Kuis
+                </button>
+                <button class="btn-sub" onclick="navigateTo('learning.html')">
+                    <span class="icon-small">🎓</span> Materi
+                </button>
+                <button class="btn-sub" onclick="navigateTo('about.html')">
+                    <span class="icon-small">ℹ️</span> Tentang
+                </button>
+                <button class="btn-sub" onclick="navigateTo('feedback.html')">
+                    <span class="icon-small">💬</span> Ulasan
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -54,6 +53,3 @@
     </script>
 </body>
 </html>
-
-
-
