@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Transmisi Laporan | AR Navigation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS VARIABLE DISAMAKAN PERSIS DENGAN DASHBOARD.HTML */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #020510 0%, #080f26 50%, #010206 100%);
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --text-primary: #ffffff;
+            --text-secondary: #a4b0be;
+            --glow-cyan: #00d2d3;
+            --glow-blue: #00a8ff;
+            --accent-yellow: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Container Glassmorphism serupa Dashboard */
+        .glass-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .glass-box:hover {
+            border-color: rgba(0, 168, 255, 0.3);
+        }
+
+        /* HEADER TITLE - GRADIENT CYAN TO BLUE */
+        .title-gradient { 
+            font-weight: 900; 
+            font-size: 1.75rem;
+            letter-spacing: 1.5px; 
+            text-transform: uppercase;
+            background: linear-gradient(to right, var(--glow-cyan), var(--glow-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            filter: drop-shadow(0 0 12px rgba(0, 168, 255, 0.4));
+        }
+
+        /* RATING BINTANG KUNING GLOW (Persis Rating Dashboard) */
+        .star {
+            cursor: pointer;
+            font-size: 2.2rem;
+            color: rgba(255, 255, 255, 0.12);
+            line-height: 1; 
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .star.active {
+            color: var(--accent-yellow);
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.75));
+        }
+
+        .star:hover {
+            transform: scale(1.1);
+        }
+
+        /* INPUT FIELD DISESUAIKAN DENGAN GLASS THEMING */
+        .input-custom {
+            width: 100%; 
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-custom:focus {
+            border-color: var(--glow-blue);
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.25);
+        }
+
+        /* TOMBOL UTAMA GRADIENT DENGAN EFEK GLOW DASHBOARD */
+        .btn-main-style {
+            background: linear-gradient(135deg, #0056b3 0%, #00a8ff 100%);
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-main-style:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.5);
+        }
+
+        /* TOMBOL SECONDARY DASHBOARD */
+        .btn-sub-style {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transition: all 0.2s ease;
+        }
+
+        .btn-sub-style:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--glow-blue);
+            color: white;
+        }
+
+        /* TOAST NOTIFIKASI GLASSMORPHISM */
+        #toast {
+            visibility: hidden;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            opacity: 0;
+            transition: 0.4s ease;
+        }
+        #toast.show { visibility: visible; opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <!-- TOAST NOTIFIKASI -->
+    <div id="toast" class="flex items-center p-4 rounded-2xl shadow-2xl border border-white/10 bg-[#080f26]/90 backdrop-blur-md">
+        <div id="toast-icon" class="w-8 h-8 flex items-center justify-center rounded-full font-bold"></div>
+        <div class="ml-3 text-sm">
+            <p id="toast-title" class="font-bold"></p>
+            <p id="toast-msg" class="opacity-80"></p>
+        </div>
+    </div>
+
+    <div class="w-full max-w-md flex flex-col gap-4">
+        
+        <!-- BOX HEADER -->
+        <div class="glass-box">
+            <div class="flex items-center justify-center mb-2">
+                <h2 class="title-gradient">Feedback Data</h2>
+            </div>
+            <p class="text-xs text-center text-[#a4b0be] leading-relaxed">
+               Terima kasih telah menjelajahi media pembelajaran ini! Jika Anda menemukan kendala teknis, bug, atau materi yang kurang jelas, mohon bagikan tanggapan Anda di bawah ini.
+            </p>
+        </div>
+
+        <!-- BOX RATING -->
+        <div class="glass-box flex flex-col items-center justify-center py-3 gap-1">
+            <span class="text-[10px] text-[#a4b0be] tracking-widest uppercase font-semibold">Berikan Penilaian Skor</span>
+            <div class="flex justify-center gap-2 my-1" id="ratingGroup">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+        </div>
+
+        <!-- BOX EMAIL -->
+        <div class="glass-box flex flex-col gap-2">
+            <label class="text-[10px] text-[#a4b0be] tracking-widest uppercase font-semibold pl-1">Protokol Identitas</label>
+            <input type="email" id="email" class="input-custom p-3.5 text-xs placeholder:text-slate-500" placeholder="Masukkan alamat email aktif anda..." required>
+        </div>
+
+        <!-- BOX FORM & ACTION BUTTONS -->
+        <div class="glass-box flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+                <label class="text-[10px] text-[#a4b0be] tracking-widest uppercase font-semibold pl-1">Detail Laporan Kendala</label>
+                <textarea id="isi_feedback" class="input-custom p-4 text-xs resize-none placeholder:text-slate-500" rows="4" placeholder="Gambarkan bug, error, atau saran pengembangan di sini..."></textarea>
+            </div>
+
+            <!-- Tombol Kirim (Main) -->
+            <button id="btnSubmit" onclick="sendToFirebase()" class="w-full py-3.5 rounded-xl uppercase tracking-widest text-xs font-bold text-white btn-main-style active:scale-[0.98]">
+                Kirim Laporan
+            </button>
+
+            <!-- Tombol Dashboard (Sub) -->
+            <button onclick="window.location.href='../ArCardCubo/dashboard.html'" class="w-full py-3 rounded-xl uppercase tracking-widest text-xs font-semibold text-[#a4b0be] btn-sub-style active:scale-[0.98]">
+                Dashboard
+            </button>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCY_j7-nitUEtMI4-Xk9vPj4UmSWvh1TVM",
+            authDomain: "arcubo-5ed55.firebaseapp.com",
+            projectId: "arcubo-5ed55",
+            storageBucket: "arcubo-5ed55.firebasestorage.app",
+            messagingSenderId: "788282131772",
+            appId: "1:788282131772:web:bc13320122f8bb62544a39"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const stars = document.querySelectorAll('.star');
+        let currentRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                currentRating = star.getAttribute('data-value');
+                stars.forEach(s => s.classList.toggle('active', s.getAttribute('data-value') <= currentRating));
+            });
+        });
+
+        function showNotification(type, title, message) {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            toast.className = `flex items-center p-4 rounded-2xl shadow-2xl border border-white/10 bg-[#080f26]/90 backdrop-blur-md show`;
+            icon.className = `w-8 h-8 flex items-center justify-center rounded-full font-bold ${type === 'success' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}`;
+            icon.innerText = type === 'success' ? '✓' : '✕';
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = message;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        async function sendToFirebase() {
+            const email = document.getElementById('email').value.trim();
+            const feedback = document.getElementById('isi_feedback').value;
+            const btn = document.getElementById('btnSubmit');
+
+            if (!currentRating || !email || !feedback) {
+                showNotification('error', 'GAGAL', 'Lengkapi seluruh segmen blok data sebelum mengirim.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = 'MEMPROSES TRANSMISI...';
+
+            try {
+                await setDoc(doc(db, "feedback", email), {
+                    email: email,
+                    isi_feedback: feedback,
+                    rating: parseInt(currentRating),
+                    created_at: serverTimestamp()
+                });
+
+                showNotification('success', 'SUKSES', 'Data sukses terkirim. Mengalihkan ke dashboard...');
+                setTimeout(() => window.location.href = '../ArCardCubo/dashboard.html', 2000);
+            } catch (err) {
+                showNotification('error', 'ERROR', err.message);
+                btn.disabled = false;
+                btn.innerText = 'Kirim Laporan';
+            }
+        }
+
+        window.sendToFirebase = sendToFirebase;
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Room | WebAR Solar System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #020510 0%, #080f26 50%, #010206 100%);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-white p-4">
+
+    <!-- CONTAINER UTAMA / CARD -->
+    <div class="bg-white/5 border border-white/10 backdrop-blur-xl p-8 rounded-2xl w-full max-w-md shadow-2xl text-center">
+        
+        <!-- HEADER JUDUL -->
+        <div class="mb-8">
+            <span class="inline-block bg-blue-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">
+                Mode Penilaian
+            </span>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight mb-2">
+                CHALLENGE TIME
+            </h1>
+            <p class="text-gray-400 text-sm">
+                Pilih peran Anda untuk memulai atau bergabung ke dalam ruang tantangan.
+            </p>
+        </div>
+
+        <!-- TOMBOL PILIHAN (SEIMBANG KANAN-KIRI) -->
+        <div class="grid grid-cols-2 gap-3 mb-4">
+            <button onclick="openModal('modalParticipation')" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-xl font-bold shadow-lg shadow-blue-600/30 transition-all active:scale-95 text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-user-group"></i> Participation
+            </button>
+            
+            <button onclick="openModal('modalMaster')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 px-4 rounded-xl font-bold shadow-lg shadow-emerald-600/30 transition-all active:scale-95 text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-crown"></i> Room Master
+            </button>
+        </div>
+
+        <!-- TOMBOL KEMBALI (FULL WIDTH RAPI DI BAWAH) -->
+        <a href="../quiz.html" class="flex items-center justify-center gap-2 w-full bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-xl font-semibold border border-white/10 transition-all active:scale-95 text-sm backdrop-blur-md">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Awal
+        </a>
+
+    </div>
+
+    <!-- Modal Participation -->
+    <div id="modalParticipation" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 md:p-8 rounded-2xl w-full max-w-sm shadow-2xl text-gray-800">
+            <h2 class="text-xl font-bold mb-4 text-blue-600 border-b pb-2 flex items-center gap-2">
+                <i class="fa-solid fa-right-to-bracket"></i> Join Challenge
+            </h2>
+            <div class="space-y-3">
+                <input type="text" id="partName" placeholder="Nama Anda" class="w-full border p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <input type="text" id="joinRoomId" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Room ID (4-6 Angka)" class="w-full border p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <input type="password" id="joinPw" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Password (4-6 Angka)" class="w-full border p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            </div>
+            <div class="flex justify-end mt-6 space-x-2">
+                <button onclick="closeModal('modalParticipation')" class="text-gray-500 px-4 py-2 hover:bg-gray-100 rounded-lg text-sm font-semibold">Batal</button>
+                <button onclick="handleJoin()" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 text-sm shadow-md">Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Room Master -->
+    <div id="modalMaster" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 md:p-8 rounded-2xl w-full max-w-sm shadow-2xl text-gray-800">
+            <h2 class="text-xl font-bold mb-4 text-emerald-600 border-b pb-2 flex items-center gap-2">
+                <i class="fa-solid fa-plus-circle"></i> Create New Room
+            </h2>
+            <div class="space-y-3">
+                <input type="text" id="masterName" placeholder="Nama Master" class="w-full border p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+                <input type="text" id="createRoomId" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Buat Room ID (4-6 Angka)" class="w-full border p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+                <input type="password" id="createPw" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Buat Password (4-6 Angka)" class="w-full border p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+            </div>
+            <div class="flex justify-end mt-6 space-x-2">
+                <button onclick="closeModal('modalMaster')" class="text-gray-500 px-4 py-2 hover:bg-gray-100 rounded-lg text-sm font-semibold">Batal</button>
+                <button onclick="handleCreate()" class="bg-emerald-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-emerald-700 text-sm shadow-md">Buat Room</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENGHUBUNGKAN KE FILE JS tantangan.js -->
+    <script type="module" src="tantangan.js"></script>
+</body>
+</html>

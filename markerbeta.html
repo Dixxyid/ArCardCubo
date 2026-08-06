@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Marker AR - WebAR Solar System</title>
+    <!-- Font Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CSS VARIABLE SERAGAM DENGAN DASHBOARD */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #020510 0%, #080f26 50%, #010206 100%);
+            --glow-cyan: #00d2d3;
+            --primary-blue: #0284c7;
+            --primary-light: #e0f2fe;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --bg-card: rgba(255, 255, 255, 0.94);
+            --border-card: rgba(255, 255, 255, 0.7);
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* LATAR BELAKANG DISAMAKAN PERSIS */
+        body {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            position: relative;
+            overflow-x: hidden;
+            padding: 50px 24px;
+        }
+
+        .marker-section {
+            max-width: 1080px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .badge-header {
+            display: inline-block;
+            background: rgba(0, 210, 211, 0.1);
+            color: var(--glow-cyan);
+            border: 1px solid rgba(0, 210, 211, 0.25);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin-bottom: 40px;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Container Grid Kosong yang Akan Diisi JS */
+        .marker-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 35px;
+        }
+
+        .marker-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 18px;
+            text-align: left;
+            position: relative;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 310px;
+        }
+
+        .marker-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px -5px rgba(0, 168, 255, 0.3);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .marker-number {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #cbd5e1;
+        }
+
+        .card-tag {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #0284c7;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 9px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        /* WADAH GAMBAR UNTUK PC / DESKTOP */
+        .marker-preview {
+            width: 100%;
+            height: 120px;
+            background: #000000;
+            border-radius: 12px;
+            border: 2px dashed #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .marker-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 0.75rem;
+            color: #64748b;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .card-footer {
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            background: #e0f2fe;
+            color: #0284c7;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-download:hover {
+            background: #0284c7;
+            color: #ffffff;
+        }
+
+        .cta-container {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-camera {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0056b3 0%, #00a8ff 100%);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 13px 26px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-camera:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.5);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 13px 26px;
+            border-radius: 50px;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* MEDIA QUERIES RESPONSIVE */
+        @media (max-width: 1024px) {
+            .marker-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .marker-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .section-title { font-size: 1.6rem; }
+        }
+
+        /* TAMPILAN HP */
+        @media (max-width: 480px) {
+            body { 
+                padding: 30px 16px; 
+            }
+
+            .section-title { 
+                font-size: 1.35rem; 
+                line-height: 1.3;
+                padding: 0 20px; 
+                margin-bottom: 12px;
+            }
+
+            .section-subtitle {
+                font-size: 0.82rem; 
+                line-height: 1.5;
+                padding: 0 25px; 
+                margin-bottom: 30px;
+                max-width: 100%;
+            }
+
+            .marker-grid { 
+                grid-template-columns: 1fr; 
+                gap: 28px; 
+            }
+
+            .marker-card {
+                max-width: 270px; 
+                min-height: 400px;
+                margin: 0 auto;
+                width: 100%;
+                padding: 20px 18px;
+                border-radius: 24px;
+            }
+
+            .marker-preview {
+                height: 210px;
+                border-radius: 16px;
+                margin-bottom: 18px;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .card-desc {
+                font-size: 0.8rem;
+                margin-bottom: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="marker-section">
+        <div class="badge-header">Target Marker WebAR</div>
+        <h1 class="section-title">Koleksi Marker Tata Surya</h1>
+        <p class="section-subtitle">Unduh atau tampilkan pola target marker berikut pada layar terpisah untuk memunculkan model 3D interaktif.</p>
+
+        <!-- Grid ini akan diisi secara otomatis oleh JavaScript -->
+        <div class="marker-grid" id="markerGrid"></div>
+
+        <div class="cta-container">
+            <a href="dashboard.html" class="btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+            <a href="camera.html" class="btn-camera">
+                Buka Kamera AR <i class="fa-solid fa-camera"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- SCRIPT RENDERER AUTOMATIS -->
+<script>
+    // 1. Data Lengkap Objek Astronomi dengan Path Gambar assets/web/web_[nama].webp
+    const markersData = [
+        { id: "01", tag: "Bintang", title: "Matahari", desc: "Pusat sistem tata surya.", file: "web_sun.webp" },
+        { id: "02", tag: "Planet", title: "Merkurius", desc: "Planet kebumian terkecil terdekat dari Matahari.", file: "web_mercury.webp" },
+        { id: "03", tag: "Planet", title: "Venus", desc: "Planet terpanas dengan atmosfer CO2 tebal.", file: "web_venus.webp" },
+        { id: "04", tag: "Planet", title: "Bumi", desc: "Dunia kehidupan dengan atmosfer dan laut cair.", file: "web_bumi.webp" },
+        { id: "05", tag: "Planet", title: "Mars", desc: "Planet Merah berdebu besi oksida.", file: "web_mars.webp" },
+        { id: "06", tag: "Raksasa Gas", title: "Jupiter", desc: "Planet terbesar dengan Bintik Merah Raksasa.", file: "web_jupiter.webp" },
+        { id: "07", tag: "Raksasa Gas", title: "Saturnus", desc: "Ikonik dengan sistem cincin es dan debu tebal.", file: "web_saturnus.webp" },
+        { id: "08", tag: "Raksasa Es", title: "Uranus", desc: "Planet es dingin dengan rotasi menyamping.", file: "web_uranus.webp" },
+        { id: "09", tag: "Raksasa Es", title: "Neptunus", desc: "Planet biru terluar dengan angin supersonik.", file: "web_neptunus.webp" },
+        { id: "10", tag: "Satelit", title: "Bulan", desc: "Satelit alami tunggal milik Bumi.", file: "web_bulan.webp" },
+        { id: "11", tag: "Planet Kerdil", title: "Pluto", desc: "Planet kerdil terkenal di Sabuk Kuiper.", file: "web_pluto.webp" },
+        { id: "12", tag: "Planet Kerdil", title: "Ceres", desc: "Planet kerdil terbesar di Sabuk Asteroid.", file: "web_ceres.webp" },
+        { id: "13", tag: "Planet Kerdil", title: "Eris", desc: "Planet kerdil paling masif di Sabuk Kuiper.", file: "web_eris.webp" },
+        { id: "14", tag: "Planet Kerdil", title: "Haumea", desc: "Planet kerdil berbentuk elips yang berotasi cepat.", file: "web_haumea.webp" },
+        { id: "15", tag: "Planet Kerdil", title: "Makemake", desc: "Planet kerdil tertutup es metana cair.", file: "web_makemake.webp" },
+        { id: "16", tag: "Satelit", title: "Europa", desc: "Satelit Jupiter dengan lautan es bawah tanah.", file: "web_europa.webp" },
+        { id: "17", tag: "Satelit", title: "Enceladus", desc: "Satelit Saturnus dengan geyser es aktif.", file: "web_enceladus.webp" },
+        { id: "18", tag: "Satelit", title: "Titan", desc: "Satelit Saturnus ber-atmosfer tebal & memiliki danau metana.", file: "web_titan.webp" },
+        { id: "19", tag: "Satelit", title: "Phobos", desc: "Satelit berukuran kecil berbentuk kentang milik Mars.", file: "web_phobos.webp" },
+        { id: "20", tag: "Satelit", title: "Triton", desc: "Satelit Neptunus yang berorbit mundur (retrograde).", file: "web_triton.webp" },
+        { id: "21", tag: "Satelit", title: "Oberon", desc: "Satelit alami terbesar kedua milik Uranus.", file: "web_oberon.webp" },
+        { id: "22", tag: "Eksoplanet", title: "55Cancrie", desc: "Eksoplanet batuan ultra-panas (Janssen).", file: "web_55cancrie.webp" },
+        { id: "23", tag: "Benda Langit", title: "Asteroid", desc: "Batuan luar angkasa dari sisa pembentukan tata surya.", file: "web_asteroid.webp" },
+        { id: "24", tag: "Benda Langit", title: "Komet", desc: "Bola es dan debu berorbit lonjong dengan ekor gas.", file: "web_comet.webp" },
+        { id: "25", tag: "Galaksi", title: "Bima Sakti", desc: "Galaksi spiral tempat Tata Surya berada.", file: "web_bimasakti.webp" }
+    ];
+
+    // 2. Render Otomatis ke Grid
+    function renderMarkers() {
+        const gridContainer = document.getElementById("markerGrid");
+        
+        gridContainer.innerHTML = markersData.map(item => `
+            <div class="marker-card">
+                <div>
+                    <div class="card-top">
+                        <span class="marker-number">${item.id}</span>
+                        <div class="card-tag">${item.tag}</div>
+                    </div>
+                    <div class="marker-preview">
+                        <img src="assets/web/${item.file}" alt="Marker ${item.title}" onerror="this.src='https://via.placeholder.com/100?text=${item.title.toUpperCase()}'">
+                    </div>
+                    <h3 class="card-title">${item.title}</h3>
+                    <p class="card-desc">${item.desc}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="assets/web/${item.file}" download class="btn-download">
+                        <i class="fa-solid fa-download"></i> Unduh Marker
+                    </a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    document.addEventListener("DOMContentLoaded", renderMarkers);
+</script>
+</body>
+</html>

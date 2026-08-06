@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objek Astronomi: Phobos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Model Viewer CDN untuk Interaktif 3D -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --glow-color: #e06d53; /* Warna khas Phobos / Mars Regolith (Oranye Merah Batuan) */
+            --bg-gradient: linear-gradient(135deg, #181110 0%, #211614 50%, #0a0706 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #d6c6c3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Background Dekoratif */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(224, 109, 83, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        /* Header Area */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(224, 109, 83, 0.15);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(224, 109, 83, 0.3);
+        }
+
+        /* Main Content Grid */
+        .container {
+            max-width: 800px;
+            margin: 0 auto 100px auto;
+        }
+
+        /* Hero Image & Title */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .planet-frame {
+            width: 140px;           
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            border: 3px solid rgba(224, 109, 83, 0.5); 
+            background-color: #000000; 
+            box-shadow: 0 0 35px rgba(224, 109, 83, 0.4), 
+                        inset 0 0 25px rgba(224, 109, 83, 0.2);
+            animation: framePulse 4s ease-in-out infinite alternate;
+        }
+
+        .object-visual {
+            width: 100px;             
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        @keyframes framePulse {
+            0% { 
+                box-shadow: 0 0 25px rgba(224, 109, 83, 0.3); 
+                transform: scale(0.98); 
+            }
+            100% { 
+                box-shadow: 0 0 45px rgba(224, 109, 83, 0.6); 
+                transform: scale(1.02); 
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #e06d53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .hero-section p {
+            color: var(--glow-color);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Glassmorphism Card Base */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .card-title i {
+            color: var(--glow-color);
+        }
+
+        /* Data Spesifikasi Grid */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* Struktur List */
+        .structure-list {
+            list-style: none;
+        }
+
+        .structure-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-color);
+        }
+
+        .structure-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        .structure-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Info Ilmiah */
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .header-tag {
+            font-size: 0.75rem;
+            color: rgba(224, 109, 83, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Style Komponen 3D Viewer */
+        .pv-container {
+            width: 100%;
+            height: 320px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        .pv-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glow-color);
+            color: var(--glow-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .pov-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pov-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pov-btn:hover {
+            background: rgba(224, 109, 83, 0.2);
+            color: #ffffff;
+            border-color: var(--glow-color);
+        }
+
+        /* Fixed Bottom Action Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(33, 22, 20, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        .btn-action.active, .btn-action:hover {
+            color: var(--glow-color);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #e06d53 0%, #b34329 100%);
+            color: #ffffff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px rgba(224, 109, 83, 0.4);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-scan:hover {
+            box-shadow: 0 0 25px rgba(224, 109, 83, 0.6);
+            transform: translateY(-7px) scale(1.05);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 480px) {
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+            <div class="header-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Media Pembelajaran ArCubo
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="planet-frame">
+                <img src="../assets/web/web_phobos.webp" alt="Phobos Objek AR" class="object-visual" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/5/5c/Phobos_colour_2008.jpg'">
+            </div>
+            <h1>Phobos</h1>
+            <p>Satelit Alami Mars</p>
+        </section>
+
+        <!-- Kartu 1: Detail Astrofisika -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-circle-info"></i> Detail Astrofisika
+            </div>
+            <p class="info-text">
+                Phobos merupakan satelit alami terbesar dan terdekat yang mengorbit planet Mars. Ditemukan oleh Asaph Hall pada tahun 1877, Phobos memiliki morfologi asimetris menyerupai kentang akibat gravitasinya yang sangat rendah sehingga tidak mampu mencapai kesetimbangan hidrostatik. Phobos mengorbit Mars pada jarak rata-rata sekitar 6.000 km—menjadikannya satelit alami dengan jarak orbit terdekat ke planet induknya di seluruh Tata Surya. Akibat pasang surut gravitasi (tidal decay), Phobos mendekati Mars sekitar 1,8 meter per abad dan diperkirakan akan hancur membentuk cincin planetary atau menabrak permukaan Mars dalam kurun waktu 30 hingga 50 juta tahun ke depan.
+            </p>
+        </div>
+
+        <!-- Kartu 2: Karakteristik Fisik -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-chart-simple"></i> Karakteristik Fisik
+            </div>
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <div class="spec-label">Jenis Klasifikasi</div>
+                    <div class="spec-value">Satelit Alami Terestrial (Bulan Mars)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ukuran & Massa</div>
+                    <div class="spec-value">Dimensi: 27 × 22 × 18 km | Massa: 1,06 × 10¹⁶ kg</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Komposisi</div>
+                    <div class="spec-value">Serupa Asteroid Tipe-C (Kaya Karbon, Silikat & Regolit)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu (Iklim)</div>
+                    <div class="spec-value">Hampa Udara Ekstrem (Tanpa Atmosfer)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Periode Orbit</div>
+                    <div class="spec-value">7 Jam 39 Menit (Sangat Cepat)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Gravitasi</div>
+                    <div class="spec-value">0,0057 m/s² (Sangat Lemah)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Satelit Pendamping</div>
+                    <div class="spec-value">Deimos (Satelit Luar Mars)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Jarak Orbit (ke Mars)</div>
+                    <div class="spec-value">~6.000 km dari Permukaan Mars</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Permukaan</div>
+                    <div class="spec-value">-4 °C (Siang) hingga -112 °C (Malam)</div>
+                </div>
+                <!-- REVISI DI BAGIAN INI -->
+                <div class="spec-item">
+                    <div class="spec-label">Jarak Tempuh Orbit</div>
+                    <div class="spec-value">~0.0000627 AU (9.376 km)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu 3: Lapisan Penyusun -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-layer-group"></i> Fitur Geologi & Struktur Internal
+            </div>
+            <ul class="structure-list">
+                <li class="structure-item">
+                    <div class="structure-name">1. Kawah Impak Stickney</div>
+                    <div class="structure-desc">Fitur geologi paling menonjol pada Phobos. Kawah raksasa seluas 9 km ini hampir menghancurkan seluruh struktur internal Phobos saat tumbukan terjadi di masa purba.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">2. Lapisan Regolit Tebal</div>
+                    <div class="structure-desc">Permukaan Phobos tertutup oleh debu halus dan selimut batuan (regolit) setebal 100 meter, hasil dari penumpukan sisa-sisa lontaran impak kawah selama miliaran tahun.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">3. Alur Fraktur Permukaan (Grooves)</div>
+                    <div class="structure-desc">Rangkaian alur dan retakan memanjang di permukaan Phobos diduga merupakan akibat dari gaya pasang surut gravitasi Mars atau lintasan sekunder puing tumbukan.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">4. Porositas Internal (Struktur Tumpukan Puing)</div>
+                    <div class="structure-desc">Dengan kerapatan rata-rata yang sangat rendah (~1,87 g/cm³), Phobos diperkirakan memiliki rongga internal yang besar (porositas ~30%), mengindikasikan struktur tumpukan puing (rubble-pile).</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Kartu 4: Live Object 3D Viewer -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-cube"></i> Simulasi 3D Interaktif
+            </div>
+            <div class="pv-container">
+                <div class="pv-tag">SIMULASI 3D</div>
+                <model-viewer 
+                    id="phobos-viewer"
+                    src="../assets/object/glb_phobos/phobos.glb" 
+                    alt="Model 3D Phobos" 
+                    auto-rotate 
+                    camera-controls 
+                    shadow-intensity="1"
+                    exposure="1"
+                    loading="lazy">
+                </model-viewer>
+            </div>
+            <div class="pov-controls">
+                <button class="pov-btn" onclick="setPOV('0deg 75deg 105%')">Sisi Utama</button>
+                <button class="pov-btn" onclick="setPOV('180deg 75deg 105%')">Kawah Stickney</button>
+                <button class="pov-btn" onclick="setPOV('0deg 0deg 105%')">Kutub Atas</button>
+                <button class="pov-btn" onclick="setPOV('45deg 60deg 70%')">Close-up Tekstur</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="btn-action active">
+            <i class="fa-solid fa-house"></i>
+            <span>Menu</span>
+        </a>
+        
+        <a href="camera.html?object=phobos" class="btn-scan" title="Scan AR Marker">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </a>
+
+        <a href="quiz.html?object=phobos" class="btn-action">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Kuis</span>
+        </a>
+    </nav>
+
+    <!-- Script Kontrol POV 3D Viewer -->
+    <script>
+        function setPOV(orbit) {
+            const viewer = document.getElementById('phobos-viewer');
+            if (viewer) {
+                viewer.cameraOrbit = orbit;
+            }
+        }
+    </script>
+</body>
+</html>

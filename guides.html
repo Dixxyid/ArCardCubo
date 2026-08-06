@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Penggunaan - WebAR Solar System</title>
+    <!-- Font Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CSS VARIABLE DISAMAKAN PERSIS DENGAN DASHBOARD */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #020510 0%, #080f26 50%, #010206 100%);
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --text-primary: #ffffff;
+            --text-secondary: #a4b0be;
+            --glow-cyan: #00d2d3;
+            --glow-blue: #00a8ff;
+            
+            --bg-card: rgba(255, 255, 255, 0.94);
+            --border-card: rgba(255, 255, 255, 0.7);
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* BACKGROUND UTAMA SAMA DENGAN DASHBOARD */
+        body {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            position: relative;
+            padding: 50px 24px;
+        }
+
+        /* Container Utama */
+        .guide-section {
+            max-width: 1080px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Header / Badge Atas */
+        .badge-header {
+            display: inline-block;
+            background: rgba(0, 210, 211, 0.1);
+            color: var(--glow-cyan);
+            border: 1px solid rgba(0, 210, 211, 0.25);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Grid System 10 Kotak */
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 35px;
+        }
+
+        /* Styling Card */
+        .guide-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 22px 18px;
+            text-align: left;
+            position: relative;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 235px;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px -5px rgba(0, 168, 255, 0.3);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        /* Layout Atas Card */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .step-number {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #cbd5e1;
+        }
+
+        .icon-wrapper {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Warna Ikon Card */
+        .icon-1 { background: #e0f2fe; color: #0284c7; }
+        .icon-2 { background: #fef3c7; color: #d97706; }
+        .icon-3 { background: #dcfce7; color: #16a34a; }
+        .icon-4 { background: #fae8ff; color: #c026d3; }
+        .icon-5 { background: #ffe4e6; color: #e11d48; }
+        .icon-6 { background: #ccfbf1; color: #0d9488; }
+        .icon-7 { background: #e0e7ff; color: #4f46e5; }
+        .icon-8 { background: #fef2f2; color: #dc2626; }
+        .icon-9 { background: #f3e8ff; color: #9333ea; }
+        .icon-10 { background: #d1fae5; color: #059669; }
+
+        /* Tag Label Kecil Dalam Card */
+        .card-tag {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #0284c7;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 9px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }
+
+        /* Layout Bawah Card */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.725rem;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        .card-footer .highlight-text {
+            color: #0284c7;
+            font-weight: 700;
+        }
+
+        /* Tombol CTA Bawah */
+        .cta-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Tombol Pindai Kamera (Base Gradient) */
+        .btn-camera {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0056b3 0%, #00a8ff 100%);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 13px 26px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.3);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-camera:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.5);
+        }
+
+        /* Tombol Unduh Manual (Warna Kebalikan / Inverted Light Theme) */
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            color: #0056b3;
+            font-size: 0.9rem;
+            font-weight: 800;
+            padding: 13px 26px;
+            border-radius: 50px;
+            text-decoration: none;
+            border: 1px solid #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            background: #e0f2fe;
+            color: #003a7a;
+            border-color: #e0f2fe;
+            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .guide-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .guide-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Khusus HP (Ramping & Memanjang) */
+        @media (max-width: 480px) {
+            body {
+                padding: 30px 16px;
+            }
+
+            .section-title { 
+                font-size: 1.35rem; 
+                line-height: 1.3;
+                padding: 0 20px; 
+                margin-bottom: 12px;
+            }
+
+            .section-subtitle {
+                font-size: 0.82rem; 
+                line-height: 1.5;
+                padding: 0 25px; 
+                margin-bottom: 30px;
+                max-width: 100%;
+            }
+
+            .guide-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .guide-card {
+                max-width: 270px;
+                min-height: 260px;
+                margin: 0 auto;
+                width: 100%;
+                padding: 22px 18px;
+                border-radius: 24px;
+            }
+
+            .card-title {
+                font-size: 1.05rem;
+            }
+
+            .card-desc {
+                font-size: 0.82rem;
+                margin-bottom: 16px;
+            }
+
+            .cta-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .btn-camera, .btn-download {
+                width: 100%;
+                max-width: 270px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="guide-section">
+        <!-- Header -->
+        <div class="badge-header">Panduan Akses WebAR</div>
+        <h1 class="section-title">Cara Penggunaan ARCubo WebAR</h1>
+        <p class="section-subtitle">Ikuti 10 langkah praktis ini untuk mulai mengeksplorasi planet dan benda langit dalam bentuk Augmented Reality 3D.</p>
+
+        <!-- Grid 10 Kotak Panduan -->
+        <div class="guide-grid">
+            
+            <!-- Kotak 01 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">01</span>
+                        <div class="icon-wrapper icon-1"><i class="fa-solid fa-globe"></i></div>
+                    </div>
+                    <div class="card-tag">Web Based</div>
+                    <h3 class="card-title">Buka Website</h3>
+                    <p class="card-desc">Akses platform WebAR Tata Surya langsung dari browser HP, Tablet, atau PC tanpa instalasi.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 1</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 02 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">02</span>
+                        <div class="icon-wrapper icon-2"><i class="fa-solid fa-layer-group"></i></div>
+                    </div>
+                    <div class="card-tag">Modul Edukasi</div>
+                    <h3 class="card-title">Pilih Objek</h3>
+                    <p class="card-desc">Jelajahi galeri dan pilih planet atau benda langit yang ingin Anda pelajari secara detail.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 2</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 03 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">03</span>
+                        <div class="icon-wrapper icon-3"><i class="fa-solid fa-download"></i></div>
+                    </div>
+                    <div class="card-tag">Free Download</div>
+                    <h3 class="card-title">Download Marker</h3>
+                    <p class="card-desc">Unduh file pola marker AR dalam format gambar secara gratis melalui menu yang tersedia.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 3</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 04 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">04</span>
+                        <div class="icon-wrapper icon-4"><i class="fa-solid fa-print"></i></div>
+                    </div>
+                    <div class="card-tag">Siap Cetak</div>
+                    <h3 class="card-title">Cetak Marker</h3>
+                    <p class="card-desc">Cetak marker pada kertas biasa atau tampilkan di layar HP/perangkat pendamping.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 4</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 05 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">05</span>
+                        <div class="icon-wrapper icon-5"><i class="fa-solid fa-camera"></i></div>
+                    </div>
+                    <div class="card-tag">Izin Kamera</div>
+                    <h3 class="card-title">Izinkan Kamera</h3>
+                    <p class="card-desc">Berikan izin akses kamera pada browser saat diminta agar WebAR dapat berjalan lancar.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 5</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 06 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">06</span>
+                        <div class="icon-wrapper icon-6"><i class="fa-solid fa-expand"></i></div>
+                    </div>
+                    <div class="card-tag">WebAR Instant</div>
+                    <h3 class="card-title">Scan Marker</h3>
+                    <p class="card-desc">Arahkan kamera ke marker untuk menghadirkan visualisasi 3D planet secara interaktif.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 6</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 07 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">07</span>
+                        <div class="icon-wrapper icon-7"><i class="fa-solid fa-hand-pointer"></i></div>
+                    </div>
+                    <div class="card-tag">Interaksi 3D</div>
+                    <h3 class="card-title">Rotasi & Zoom</h3>
+                    <p class="card-desc">Gunakan sentuhan jari untuk memutar, memperbesar, dan mengamati detail objek 3D.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 7</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 08 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">08</span>
+                        <div class="icon-wrapper icon-8"><i class="fa-solid fa-book-open"></i></div>
+                    </div>
+                    <div class="card-tag">Informasi Sains</div>
+                    <h3 class="card-title">Baca Deskripsi</h3>
+                    <p class="card-desc">Klik panel info untuk membaca karakteristik ilmiah dan fakta unik dari setiap planet.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 8</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 09 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">09</span>
+                        <div class="icon-wrapper icon-9"><i class="fa-solid fa-brain"></i></div>
+                    </div>
+                    <div class="card-tag">Uji Pemahaman</div>
+                    <h3 class="card-title">Kerjakan Kuis</h3>
+                    <p class="card-desc">Jawab pertanyaan kuis interaktif untuk menguji pemahaman materi tata surya yang dipelajari.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 9</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <!-- Kotak 10 -->
+            <div class="guide-card">
+                <div>
+                    <div class="card-top">
+                        <span class="step-number">10</span>
+                        <div class="icon-wrapper icon-10"><i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                    <div class="card-tag">Siap Eksplorasi</div>
+                    <h3 class="card-title">Selesai</h3>
+                    <p class="card-desc">Selamat! Anda siap mengeksplorasi keajaiban tata surya secara interaktif di mana saja.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Langkah 10</span>
+                    <span class="highlight-text">Siap WebAR!</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tombol Aksi Bawah -->
+        <div class="cta-container">
+            <a href="starts.html" class="btn-camera">
+                Mulai Pindai dan Eksplorasi WebAR <i class="fa-solid fa-camera"></i>
+            </a>
+            <a href="assets/manual-book.pdf" download class="btn-download">
+                Unduh User Manual <i class="fa-solid fa-file-arrow-down"></i>
+            </a>
+        </div>
+    </section>
+
+</body>
+</html>

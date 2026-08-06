@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objek Astronomi: Eris</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Model Viewer CDN untuk Interaktif 3D -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --glow-color: #a55eea; /* Warna khas Eris (Violet Frost / Deep Purple Neon) */
+            --bg-gradient: linear-gradient(135deg, #180a29 0%, #2a1147 50%, #0d0417 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #e2d4f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Background Dekoratif */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(165, 94, 234, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        /* Header Area */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(165, 94, 234, 0.15);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(165, 94, 234, 0.3);
+        }
+
+        /* Main Content Grid */
+        .container {
+            max-width: 800px;
+            margin: 0 auto 100px auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .planet-frame {
+            width: 130px;           
+            height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            border: 3px solid rgba(165, 94, 234, 0.6); 
+            background-color: #000000; 
+            box-shadow: 0 0 30px rgba(165, 94, 234, 0.4), 
+                        inset 0 0 20px rgba(165, 94, 234, 0.2);
+            animation: framePulse 4s ease-in-out infinite alternate;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .object-visual {
+            width: 75%;             
+            height: 75%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        @keyframes framePulse {
+            0% { 
+                box-shadow: 0 0 20px rgba(165, 94, 234, 0.3); 
+                transform: scale(0.98); 
+            }
+            100% { 
+                box-shadow: 0 0 35px rgba(165, 94, 234, 0.6); 
+                transform: scale(1.02); 
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #a55eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .hero-section p {
+            color: var(--glow-color);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Glassmorphism Card Base */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .card-title i {
+            color: var(--glow-color);
+        }
+
+        /* Data Spesifikasi Grid */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* Struktur List */
+        .structure-list {
+            list-style: none;
+        }
+
+        .structure-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-color);
+        }
+
+        .structure-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        .structure-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Info Ilmiah */
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .header-tag {
+            font-size: 0.75rem;
+            color: rgba(165, 94, 234, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Style Komponen 3D Viewer */
+        .pv-container {
+            width: 100%;
+            height: 320px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        .pv-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glow-color);
+            color: var(--glow-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .pov-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pov-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pov-btn:hover {
+            background: rgba(165, 94, 234, 0.2);
+            color: #ffffff;
+            border-color: var(--glow-color);
+        }
+
+        /* Fixed Bottom Action Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(24, 10, 41, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        .btn-action.active, .btn-action:hover {
+            color: var(--glow-color);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #a55eea 0%, #8854d0 100%);
+            color: #ffffff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px rgba(165, 94, 234, 0.4);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-scan:hover {
+            box-shadow: 0 0 25px rgba(165, 94, 234, 0.6);
+            transform: translateY(-7px) scale(1.05);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 480px) {
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+            <div class="header-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Media Pembelajaran ArCubo
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="planet-frame">
+                <img src="../assets/web/web_eris.webp" alt="Eris Objek AR" class="object-visual" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/5/5b/Eris_and_Dysnomia2.jpg'">
+            </div>
+            <h1>Eris</h1>
+            <p>Planet Kerdil Masif Cakram Tersebar</p>
+        </section>
+
+        <!-- Kartu 1: Detail Astrofisika -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-circle-info"></i> Detail Astrofisika
+            </div>
+            <p class="info-text">
+                Eris adalah planet kerdil paling masif dan terbesar kedua di luar orbit Neptunus. Ditemukan pada tahun 2005 di kawasan cakram tersebar (*scattered disc*), penemuan Eris memicu perdebatan sengit di komunitas astronomi dunia hingga berujung pada penetapan redefinisi resmi istilah "planet" oleh *International Astronomical Union* (IAU) pada tahun 2006. Memiliki orbit yang sangat lonjong (*eksentrik*), Eris membutuhkan waktu 558 tahun untuk sekali mengelilingi Matahari. Permukaannya sangat reflektif (albedo ~0,96) dan sebagian besar dilapisi es nitrogen serta metana beku yang membentuk atmosfer sementara ketika berada dekat dengan Matahari.
+            </p>
+        </div>
+
+        <!-- Kartu 2: Karakteristik Fisik -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-chart-simple"></i> Karakteristik Fisik
+            </div>
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <div class="spec-label">Jenis</div>
+                    <div class="spec-value">Planet Kerdil / Objek Cakram Tersebar (SDO)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ukuran & Massa</div>
+                    <div class="spec-value">Diameter: ~2.326 km | Massa: ~1,66 × 10²² kg</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Komposisi Permukaan</div>
+                    <div class="spec-value">Es Nitrogen Murni & Es Metana Beku</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Reflektivitas (Albedo)</div>
+                    <div class="spec-value">Sangat Tinggi (~0,96) | Hampir Memantulkan Seluruh Cahaya</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Rotasi</div>
+                    <div class="spec-value">25,9 Jam (~1,08 Hari Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Gravitasi</div>
+                    <div class="spec-value">~0,82 m/s² (~0,083 Gravitasi Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Satelit</div>
+                    <div class="spec-value">1 Bulan Terkonfirmasi (Dysnomia)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Jarak Orbit (dari Matahari)</div>
+                    <div class="spec-value">~67,7 AU hingga 97,5 AU (~10,1 hingga 14,6 Miliar km)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Permukaan</div>
+                    <div class="spec-value">-243 °C hingga -217 °C (~30 K hingga 56 K)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Inti</div>
+                    <div class="spec-value">~500 °C hingga 800 °C</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu 3: Struktur Internal (Lapisan Edukasi) -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-layer-group"></i> Struktur Internal (Lapisan)
+            </div>
+            <ul class="structure-list">
+                <li class="structure-item">
+                    <div class="structure-name">1. Kerak Es Nitrogen & Metana (Nitrogen-Methane Ice Crust)</div>
+                    <div class="structure-desc">Lapisan luar tipis berwarna putih cemerlang yang didominasi oleh es nitrogen murni dan jejak es metana. Lapisan ini memadat menjadi es keras saat aphelion (titik terjauh) dan menguap membentuk atmosfer tipis saat perihelion.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">2. Mantel Es Air Padat (Water-Ice Mantle)</div>
+                    <div class="structure-desc">Lapisan mantel tebal berbahan es air padat dengan kemungkinan keberadaan sisa-sisa larutan amonia-air dalam bentuk slush di kedalaman perbatasan inti.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">3. Inti Batuan Silikat Masif (Massive Rocky Silicate Core)</div>
+                    <div class="structure-desc">Pusat planet kerdil berukuran besar yang terdiri dari batuan silikat padat dengan densitas tinggi (~2,52 g/cm³), menyusun sekitar 85% dari total volume internal Eris.</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Kartu 4: Live Object 3D Viewer -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-cube"></i> Simulasi 3D Interaktif
+            </div>
+            <div class="pv-container">
+                <div class="pv-tag">SIMULASI 3D</div>
+                <model-viewer 
+                    id="eris-viewer"
+                    src="../assets/object/glb_eris/eris.glb" 
+                    alt="Model 3D Eris" 
+                    auto-rotate 
+                    camera-controls 
+                    shadow-intensity="1"
+                    exposure="1"
+                    loading="lazy">
+                </model-viewer>
+            </div>
+            <div class="pov-controls">
+                <button class="pov-btn" onclick="setPOV('0deg 75deg 105%')">Sisi Utang</button>
+                <button class="pov-btn" onclick="setPOV('90deg 70deg 105%')">Area Es Terang</button>
+                <button class="pov-btn" onclick="setPOV('180deg 60deg 105%')">Sisi Gelap</button>
+                <button class="pov-btn" onclick="setPOV('30deg 80deg 70%')">Close-up Tekstur Es</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="btn-action active">
+            <i class="fa-solid fa-house"></i>
+            <span>Menu</span>
+        </a>
+        
+        <a href="camera.html?object=eris" class="btn-scan" title="Scan AR Marker">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </a>
+
+        <a href="quiz.html?object=eris" class="btn-action">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Kuis</span>
+        </a>
+    </nav>
+
+    <!-- Script Kontrol POV 3D Viewer -->
+    <script>
+        function setPOV(orbit) {
+            const viewer = document.getElementById('eris-viewer');
+            if (viewer) {
+                viewer.cameraOrbit = orbit;
+            }
+        }
+    </script>
+</body>
+</html>

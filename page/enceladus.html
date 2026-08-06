@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objek Astronomi: Enceladus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Model Viewer CDN untuk Interaktif 3D -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --glow-color: #38bdf8; /* Warna khas Enceladus (Icy Blue / Cryo Glow) */
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #020617 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Background Dekoratif */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        /* Header Area */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Main Content Grid */
+        .container {
+            max-width: 800px;
+            margin: 0 auto 100px auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .planet-frame {
+            width: 150px;           
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            border: 3px solid rgba(56, 189, 248, 0.6); 
+            background-color: #000000; 
+            box-shadow: 0 0 35px rgba(56, 189, 248, 0.4), 
+                        inset 0 0 25px rgba(56, 189, 248, 0.2);
+            animation: framePulse 4s ease-in-out infinite alternate;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .object-visual {
+            width: 100%;             
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            mix-blend-mode: screen;
+            transform: scale(1.05);
+        }
+        
+        @keyframes framePulse {
+            0% { 
+                box-shadow: 0 0 25px rgba(56, 189, 248, 0.3); 
+                transform: scale(0.98); 
+            }
+            100% { 
+                box-shadow: 0 0 45px rgba(56, 189, 248, 0.6); 
+                transform: scale(1.02); 
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .hero-section p {
+            color: var(--glow-color);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Glassmorphism Card Base */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .card-title i {
+            color: var(--glow-color);
+        }
+
+        /* Data Spesifikasi Grid */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* Struktur List */
+        .structure-list {
+            list-style: none;
+        }
+
+        .structure-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-color);
+        }
+
+        .structure-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        .structure-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Info Ilmiah */
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .header-tag {
+            font-size: 0.75rem;
+            color: rgba(56, 189, 248, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Style Komponen 3D Viewer */
+        .pv-container {
+            width: 100%;
+            height: 320px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        .pv-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glow-color);
+            color: var(--glow-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .pov-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pov-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pov-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            color: #ffffff;
+            border-color: var(--glow-color);
+        }
+
+        /* Fixed Bottom Action Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        .btn-action.active, .btn-action:hover {
+            color: var(--glow-color);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #ffffff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-scan:hover {
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+            transform: translateY(-7px) scale(1.05);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 480px) {
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+            <div class="header-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Media Pembelajaran ArCubo
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="planet-frame">
+                <img src="../assets/web/web_enceladus.webp" alt="Enceladus Objek AR" class="object-visual" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/23/Enceladus_stripes_PIA08329.jpg'">
+            </div>
+            <h1>Enceladus</h1>
+            <p>Bulan Es Aktif Saturnus</p>
+        </section>
+
+        <!-- Kartu 1: Detail Astrofisika -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-circle-info"></i> Detail Astrofisika
+            </div>
+            <p class="info-text">
+                Enceladus adalah satelit alami terbesar keenam milik planet Saturnus. Meskipun berukuran tergolong kecil, Enceladus merupakan salah satu objek paling memikat di Tata Surya karena permukaannya hampir seluruhnya tertutup es murni yang sangat bersih, menjadikannya objek dengan tingkat reflektivitas (albedo) tertinggi di Tata Surya. Penemuan terpenting oleh wahana <em>Cassini</em> mengungkapkan adanya geyser kriovulkanik di wilayah kutub selatannya. Geyser ini secara aktif menyemburkan uap air, es, garam, dan molekul organik ke luar angkasa, membuktikan keberadaan samudra cair global bawah tanah dengan aktivitas hidrothermal yang berpotensi menyokong kehidupan (keterhunian astrobiologi).
+            </p>
+        </div>
+
+        <!-- Kartu 2: Karakteristik Fisik -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-chart-simple"></i> Karakteristik Fisik
+            </div>
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <div class="spec-label">Jenis</div>
+                    <div class="spec-value">Satelit Alami / Bulan Kriovulkanik (Icy Moon)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ukuran & Massa</div>
+                    <div class="spec-value">Diameter: 504 km | Massa: 1,08 × 10²⁰ kg</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Komposisi</div>
+                    <div class="spec-value">Kerak Es Air Murni, Samudra Asin, & Inti Berbatu</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu (Iklim)</div>
+                    <div class="spec-value">Kriovulkanisme (Semburan Geyser Uap Es & Organik)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Rotasi</div>
+                    <div class="spec-value">1 Hari 9 Jam (Tidally Locked dengan Saturnus)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Gravitasi</div>
+                    <div class="spec-value">0,113 m/s² (~0,0115 Gravitasi Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Satelit</div>
+                    <div class="spec-value">0 (Enceladus Adalah Bulan Bagi Saturnus)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Jarak Orbit (dari Matahari)</div>
+                    <div class="spec-value">~9,58 AU (~1,43 Miliar km)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Permukaan</div>
+                    <div class="spec-value">-201 °C (72 Kelvin)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Inti</div>
+                    <div class="spec-value">~90 °C (Ventilasi Hidrothermal Dasar Laut)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu 3: Struktur Internal (Lapisan) -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-layer-group"></i> Struktur Internal (Lapisan)
+            </div>
+            <ul class="structure-list">
+                <li class="structure-item">
+                    <div class="structure-name">1. Kerak Es Luar (Outer Ice Shell)</div>
+                    <div class="structure-desc">Lapisan es air murni setebal 5 hingga 35 km yang sangat reflektif. Kerak ini menipis hingga hanya beberapa kilometer di wilayah Kutub Selatan tempat timbulnya retakan garis harimau (Tiger Stripes).</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">2. Retakan Tiger Stripes (Tiger Stripe Fractures)</div>
+                    <div class="structure-desc">Celah-celah termal aktif di kutub selatan tempat meluncurnya geyser es air dan uap ke luar angkasa akibat dorongan tekanan hidrotermal bawah permukaan.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">3. Samudra Bawah Tanah Global (Subsurface Ocean)</div>
+                    <div class="structure-desc">Lautan cair asin setebal ~30 km di bawah kerak es. Air ini kaya akan garam natrium, silika, serta molekul organik kompleks yang terus berada dalam kondisi cair.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">4. Zone Ventilasi Hidrothermal (Hydrothermal Vents)</div>
+                    <div class="structure-desc">Pusat interaksi panas di dasar laut tempat air hangat menyerap mineral dari batuan inti, menghasilkan reaksi kimia mirip ventilasi laut dalam di Bumi.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">5. Inti Poros Berbatu (Porous Rocky Core)</div>
+                    <div class="structure-desc">Pusat Enceladus berupa batuan silikat berpori yang dilalui oleh aliran air, menghasilkan panas gravitasi pasang surut akibat interaksi orbit dengan planet Saturnus.</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Kartu 4: Live Object 3D Viewer -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-cube"></i> Simulasi 3D Interaktif
+            </div>
+            <div class="pv-container">
+                <div class="pv-tag">SIMULASI 3D</div>
+                <model-viewer 
+                    id="enceladus-viewer"
+                    src="../assets/object/glb_enceladus/enceladus.glb" 
+                    alt="Model 3D Enceladus" 
+                    auto-rotate 
+                    camera-controls 
+                    shadow-intensity="1"
+                    exposure="1"
+                    loading="lazy">
+                </model-viewer>
+            </div>
+            <div class="pov-controls">
+                <button class="pov-btn" onclick="setPOV('0deg 75deg 105%')">Sisi Utama</button>
+                <button class="pov-btn" onclick="setPOV('0deg 140deg 105%')">Kutub Selatan (Tiger Stripes)</button>
+                <button class="pov-btn" onclick="setPOV('180deg 60deg 105%')">Sisi Gelap</button>
+                <button class="pov-btn" onclick="setPOV('30deg 70deg 60%')">Close-up Tekstur Es</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="btn-action active">
+            <i class="fa-solid fa-house"></i>
+            <span>Menu</span>
+        </a>
+        
+        <a href="camera.html?object=enceladus" class="btn-scan" title="Scan AR Marker">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </a>
+
+        <a href="quiz.html?object=enceladus" class="btn-action">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Kuis</span>
+        </a>
+    </nav>
+
+    <!-- Script Kontrol POV 3D Viewer -->
+    <script>
+        function setPOV(orbit) {
+            const viewer = document.getElementById('enceladus-viewer');
+            if (viewer) {
+                viewer.cameraOrbit = orbit;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Astronomi: Galaksi Bima Sakti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --glow-color: #f39c12;
+            --bg-gradient: linear-gradient(135deg, #11091c 0%, #1a0c2e 50%, #08030f 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #e1d5eb;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(243, 156, 18, 0.15);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.3);
+        }
+
+        .header-tag {
+            font-size: 0.75rem;
+            color: rgba(243, 156, 18, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto 100px auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .quiz-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff, #f39c12);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .quiz-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Card Container */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #f39c12, #e67e22);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Question Box */
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        /* Options Grid */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.25 ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(243, 156, 18, 0.15);
+            border-color: var(--glow-color);
+        }
+
+        .option-btn.correct {
+            background: rgba(46, 204, 113, 0.2) !important;
+            border-color: var(--success-color) !important;
+            color: #ffffff;
+        }
+
+        .option-btn.incorrect {
+            background: rgba(231, 76, 60, 0.2) !important;
+            border-color: var(--error-color) !important;
+            color: #ffffff;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(243, 156, 18, 0.08);
+            border-left: 3px solid var(--glow-color);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: none;
+        }
+
+        .explanation-box strong {
+            color: var(--glow-color);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Action Buttons */
+        .actions-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border: none;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-next:hover {
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Result Screen */
+        .result-box {
+            text-align: center;
+            padding: 30px 10px;
+            display: none;
+        }
+
+        .result-icon {
+            font-size: 3.5rem;
+            color: var(--glow-color);
+            margin-bottom: 15px;
+        }
+
+        .result-score {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .result-message {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-restart {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-restart:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Fixed Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(17, 9, 28, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        .btn-action.active, .btn-action:hover {
+            color: var(--glow-color);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: #ffffff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.4);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-scan:hover {
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.6);
+            transform: translateY(-7px) scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            .quiz-header h1 {
+                font-size: 1.6rem;
+            }
+            .question-title {
+                font-size: 1rem;
+            }
+            .option-btn {
+                font-size: 0.88rem;
+                padding: 12px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="starts.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+            <div class="header-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Media Pembelajaran ArCubo
+            </div>
+        </header>
+
+        <section class="quiz-header">
+            <h1>Kuis Bima Sakti</h1>
+            <p>Uji pemahamanmu tentang Astrofisika & Anatomi Galaksi Bima Sakti</p>
+        </section>
+
+        <!-- Quiz Card Container -->
+        <div class="card" id="quiz-card">
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span id="question-count">Soal 1 dari 5</span>
+                    <span id="score-live">Skor: 0</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="question-title" id="question-text">
+                Loading pertanyaan...
+            </div>
+
+            <div class="options-list" id="options-container">
+                <!-- Pilihan jawaban di-inject via JavaScript -->
+            </div>
+
+            <div class="explanation-box" id="explanation-box">
+                <strong><i class="fa-solid fa-circle-info"></i> Pembahasan:</strong>
+                <span id="explanation-text"></span>
+            </div>
+
+            <div class="actions-area">
+                <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+                    Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Screen Card -->
+        <div class="card result-box" id="result-card">
+            <div class="result-icon">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2>Kuis Selesai!</h2>
+            <div class="result-score" id="final-score">0 / 100</div>
+            <p class="result-message" id="result-message">Kamu telah menyelesaikan kuis Galaksi Bima Sakti.</p>
+
+            <div class="result-actions">
+                <button class="btn-restart" onclick="restartQuiz()">
+                    <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                </button>
+                <a href="starts.html" class="btn-next" style="display: inline-flex; text-decoration: none;">
+                    Kembali ke Objek <i class="fa-solid fa-house"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="btn-action">
+            <i class="fa-solid fa-house"></i>
+            <span>Menu</span>
+        </a>
+        
+        <a href="camera.html?object=milkyway" class="btn-scan" title="Scan AR Marker">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </a>
+
+        <a href="quiz20.html" class="btn-action active">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Kuis</span>
+        </a>
+    </nav>
+
+    <script>
+        const questions = [
+            {
+                question: "1. Berdasarkan Klasifikasi Hubble, apa bentuk (morfologi) dari Galaksi Bima Sakti?",
+                options: [
+                    "A. Galaksi Elips Sempurna (E0)",
+                    "B. Spiral Berpalang (SBbc)",
+                    "C. Spiral Murni Tanpa Palang (SAc)",
+                    "D. Galaksi Tak Beraturan (Irr)"
+                ],
+                answer: 1,
+                explanation: "Galaksi Bima Sakti diklasifikasikan sebagai galaksi Spiral Berpalang (SBbc), yaitu galaksi spiral yang memiliki struktur palang memanjang di bagian pusatnya."
+            },
+            {
+                question: "2. Objek astronomi apakah yang bersemayam di pusat ekstrem (inti) Galaksi Bima Sakti?",
+                options: [
+                    "A. Bintang Neutron Magnitar",
+                    "B. Bintang Maha Raksasa Betelgeuse",
+                    "C. Lubang Hitam Supermasif (Sagittarius A*)",
+                    "D. Nebula Orion"
+                ],
+                answer: 2,
+                explanation: "Di pusat ekstrem Bima Sakti terdapat lubang hitam supermasif yang dikenal sebagai Sagittarius A* (Sgr A*) dengan massa sekitar 4,1 juta kali massa Matahari."
+            },
+            {
+                question: "3. Di struktur manakah posisi Tata Surya kita berada dalam Galaksi Bima Sakti?",
+                options: [
+                    "A. Tonjolan Pusat (Galactic Bulge)",
+                    "B. Halo Galaksi",
+                    "C. Lengan Orion (Orion Arm)",
+                    "D. Lengan Perseus Utama"
+                ],
+                answer: 2,
+                explanation: "Tata Surya kita terletak di piringan galaksi, tepatnya pada Lengan Orion (Orion Arm/Spur), berjarak sekitar 27.000 tahun cahaya dari pusat galaksi."
+            },
+            {
+                question: "4. Manakah di bawah ini yang merupakan galaksi spiral raksasa tetangga Bima Sakti di dalam Grup Lokal (Local Group)?",
+                options: [
+                    "A. Galaksi Andromeda (M31)",
+                    "B. Awan Magellan Besar",
+                    "C. Galaksi Sombrero",
+                    "D. Centaurus A"
+                ],
+                answer: 0,
+                explanation: "Grup Lokal didominasi oleh tiga galaksi spiral utama, dengan Galaksi Andromeda (M31) sebagai yang terbesar dan Bima Sakti di posisi kedua."
+            },
+            {
+                question: "5. Struktur galaksi yang berbentuk bola melingkupi piringan dan didominasi oleh materi gelap (dark matter) disebut...",
+                options: [
+                    "A. Central Bar",
+                    "B. Galactic Disk",
+                    "C. Halo Galaksi",
+                    "D. Awan Molekuler"
+                ],
+                answer: 2,
+                explanation: "Halo Galaksi adalah komponen spherical (bola) yang membungkus piringan Bima Sakti, berisi gugus bola kuno dan massa materi gelap (dark matter) yang besar."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionCount = document.getElementById('question-count');
+        const scoreLive = document.getElementById('score-live');
+        const progressFill = document.getElementById('progress-fill');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const btnNext = document.getElementById('btn-next');
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            questionText.innerText = q.question;
+            questionCount.innerText = `Soal ${currentQuestion + 1} dari ${questions.length}`;
+            progressFill.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            
+            optionsContainer.innerHTML = '';
+            explanationBox.style.display = 'none';
+            btnNext.style.display = 'none';
+            selectedOption = null;
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span>${opt}</span><i class="fa-regular fa-circle"></i>`;
+                btn.onclick = () => selectOption(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(index, btnElement) {
+            if (selectedOption !== null) return;
+            selectedOption = index;
+
+            const q = questions[currentQuestion];
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+
+            buttons.forEach((b, i) => {
+                b.disabled = true;
+                if (i === q.answer) {
+                    b.classList.add('correct');
+                    b.querySelector('i').className = 'fa-solid fa-circle-check';
+                }
+            });
+
+            if (index === q.answer) {
+                score += 20;
+                scoreLive.innerText = `Skor: ${score}`;
+            } else {
+                btnElement.classList.add('incorrect');
+                btnElement.querySelector('i').className = 'fa-solid fa-circle-xmark';
+            }
+
+            explanationText.innerText = q.explanation;
+            explanationBox.style.display = 'block';
+
+            if (currentQuestion < questions.length - 1) {
+                btnNext.style.display = 'inline-flex';
+                btnNext.innerHTML = 'Selanjutnya <i class="fa-solid fa-arrow-right"></i>';
+            } else {
+                btnNext.style.display = 'inline-flex';
+                btnNext.innerHTML = 'Lihat Hasil <i class="fa-solid fa-trophy"></i>';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-card').style.display = 'none';
+            const resultCard = document.getElementById('result-card');
+            resultCard.style.display = 'block';
+
+            const finalScoreElem = document.getElementById('final-score');
+            const resultMessage = document.getElementById('result-message');
+
+            finalScoreElem.innerText = `${score} / 100`;
+
+            if (score === 100) {
+                resultMessage.innerText = "Sempurna! Kamu telah menguasai konsep Astrofisika & Anatomi Galaksi Bima Sakti dengan sangat baik!";
+            } else if (score >= 60) {
+                resultMessage.innerText = "Bagus sekali! Pemahamanmu tentang Galaksi Bima Sakti sudah cukup mantap.";
+            } else {
+                resultMessage.innerText = "Jangan berkecil hati! Pelajari kembali materi spesifikasi astronomi Bima Sakti dan coba lagi.";
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            scoreLive.innerText = 'Skor: 0';
+            document.getElementById('result-card').style.display = 'none';
+            document.getElementById('quiz-card').style.display = 'block';
+            loadQuestion();
+        }
+
+        // Init Quiz
+        loadQuestion();
+    </script>
+</body>
+</html>

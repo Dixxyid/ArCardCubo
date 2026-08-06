@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objek Astronomi: Haumea</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Model Viewer CDN untuk Interaktif 3D -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --glow-color: #54a0ff; /* Warna khas Haumea (Arctic Cyan / Frost Blue) */
+            --bg-gradient: linear-gradient(135deg, #061527 0%, #0c2748 50%, #030a14 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #d0e4ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Background Dekoratif */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(84, 160, 255, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        /* Header Area */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(84, 160, 255, 0.15);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(84, 160, 255, 0.3);
+        }
+
+        /* Main Content Grid */
+        .container {
+            max-width: 800px;
+            margin: 0 auto 100px auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .planet-frame {
+            width: 130px;           
+            height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            border: 3px solid rgba(84, 160, 255, 0.6); 
+            background-color: #000000; 
+            box-shadow: 0 0 30px rgba(84, 160, 255, 0.4), 
+                        inset 0 0 20px rgba(84, 160, 255, 0.2);
+            animation: framePulse 4s ease-in-out infinite alternate;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .object-visual {
+            width: 100%;             
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        @keyframes framePulse {
+            0% { 
+                box-shadow: 0 0 20px rgba(84, 160, 255, 0.3); 
+                transform: scale(0.98); 
+            }
+            100% { 
+                box-shadow: 0 0 35px rgba(84, 160, 255, 0.6); 
+                transform: scale(1.02); 
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #54a0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .hero-section p {
+            color: var(--glow-color);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Glassmorphism Card Base */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .card-title i {
+            color: var(--glow-color);
+        }
+
+        /* Data Spesifikasi Grid */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* Struktur List */
+        .structure-list {
+            list-style: none;
+        }
+
+        .structure-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-color);
+        }
+
+        .structure-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        .structure-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Info Ilmiah */
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .header-tag {
+            font-size: 0.75rem;
+            color: rgba(84, 160, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Style Komponen 3D Viewer */
+        .pv-container {
+            width: 100%;
+            height: 320px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        .pv-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glow-color);
+            color: var(--glow-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .pov-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pov-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pov-btn:hover {
+            background: rgba(84, 160, 255, 0.2);
+            color: #ffffff;
+            border-color: var(--glow-color);
+        }
+
+        /* Fixed Bottom Action Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(6, 21, 39, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        .btn-action.active, .btn-action:hover {
+            color: var(--glow-color);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #54a0ff 0%, #2e86de 100%);
+            color: #ffffff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px rgba(84, 160, 255, 0.4);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-scan:hover {
+            box-shadow: 0 0 25px rgba(84, 160, 255, 0.6);
+            transform: translateY(-7px) scale(1.05);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 480px) {
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+            <div class="header-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Media Pembelajaran ArCubo
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="planet-frame">
+                <img src="../assets/web/web_haumea.webp" alt="Haumea Objek AR" class="object-visual" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/22/Haumea_Hubble.png'">
+            </div>
+            <h1>Haumea</h1>
+            <p>Planet Kerdil Elipsoid Sabuk Kuiper</p>
+        </section>
+
+        <!-- Kartu 1: Detail Astrofisika -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-circle-info"></i> Detail Astrofisika
+            </div>
+            <p class="info-text">
+                Haumea adalah salah satu planet kerdil paling unik di Sabuk Kuiper. Akibat rotasinya yang sangat cepat—hanya membutuhkan waktu sekitar 3,9 jam untuk satu putaran penuh—gaya sentrifugal mengubah bentuk Haumea menjadi elipsoid triaksial menyerupai bola rugby. Permukaan Haumea hampir seluruhnya diselimuti oleh lapisan es air kristalin yang sangat reflektif dengan bercak merah kaya senyawa organik. Pada tahun 2017, para astronom menemukan bahwa Haumea memiliki sistem cincin tipis selebar 70 km, menjadikannya objek trans-Neptunus (*TNO*) pertama yang terkonfirmasi memiliki cincin.
+            </p>
+        </div>
+
+        <!-- Kartu 2: Karakteristik Fisik -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-chart-simple"></i> Karakteristik Fisik
+            </div>
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <div class="spec-label">Jenis</div>
+                    <div class="spec-value">Planet Kerdil / Objek Trans-Neptunus (TNO)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ukuran & Forma</div>
+                    <div class="spec-value">~2.322 × 1.704 × 1.138 km (Bentuk Elipsoid Triaksial)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Komposisi Permukaan</div>
+                    <div class="spec-value">Es Air Kristalin Murni & Bercak Senyawa Organik</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Keunikan Utamanya</div>
+                    <div class="spec-value">Rotasi Ultra Cepat (3,9 Jam) & Memiliki Cincin Tipis</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Rotasi</div>
+                    <div class="spec-value">3,91 Jam (Salah Satu yang Tercepat di Tata Surya)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Gravitasi</div>
+                    <div class="spec-value">0,401 m/s² (~0,041 Gravitasi Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Satelit</div>
+                    <div class="spec-value">2 Bulan Terkonfirmasi (Hiʻiaka & Namaka)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Jarak Orbit (dari Matahari)</div>
+                    <div class="spec-value">~43,13 AU (~6,45 Miliar km)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Permukaan</div>
+                    <div class="spec-value">-241 °C (Rata-rata ~32 K)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Inti</div>
+                    <div class="spec-value">~300 °C hingga 600 °C</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu 3: Struktur Internal (Lapisan Edukasi) -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-layer-group"></i> Struktur Internal (Lapisan)
+            </div>
+            <ul class="structure-list">
+                <li class="structure-item">
+                    <div class="structure-name">1. Kerak Es Air Kristalin Tipis (Thin Crystalline Water-Ice Crust)</div>
+                    <div class="structure-desc">Lapisan luar tipis nan berkilau yang terbuat dari es air kristalin. Kemurnian kristal es ini diperhatikan terus diperbarui oleh radiasi radioaktif internal atau aktivitas kriovulkanisme skala kecil.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">2. Mantel Es Mentah & Campuran Batuan (Icy Mantle & Transitional Layer)</div>
+                    <div class="structure-desc">Lapisan perantara berupa campuran es air padat bertekanan tinggi yang menyelimuti bagian inti. Sebagian besar massa es asli Haumea diperkirakan terlempar akibat tabrakan raksasa di masa lalu.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">3. Inti Berbatu Densitas Tinggi (Dense Rocky Silicate Core)</div>
+                    <div class="structure-desc">Pusat planet kerdil yang didominasi oleh batuan silikat padat dengan kerapatan relatif tinggi (~2,6 hingga 3,3 g/cm³), menyusun mayoritas massa total Haumea.</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Kartu 4: Live Object 3D Viewer -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-cube"></i> Simulasi 3D Interaktif
+            </div>
+            <div class="pv-container">
+                <div class="pv-tag">SIMULASI 3D</div>
+                <model-viewer 
+                    id="haumea-viewer"
+                    src="../assets/object/glb_haumea/haumea.glb" 
+                    alt="Model 3D Haumea" 
+                    auto-rotate 
+                    camera-controls 
+                    shadow-intensity="1"
+                    exposure="1"
+                    loading="lazy">
+                </model-viewer>
+            </div>
+            <div class="pov-controls">
+                <button class="pov-btn" onclick="setPOV('0deg 75deg 105%')">Sudut Panjang (Sisi Lonjong)</button>
+                <button class="pov-btn" onclick="setPOV('90deg 70deg 105%')">Perspektif Cincin</button>
+                <button class="pov-btn" onclick="setPOV('180deg 60deg 105%')">Sisi Gelap</button>
+                <button class="pov-btn" onclick="setPOV('30deg 80deg 70%')">Close-up Tekstur Es</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="btn-action active">
+            <i class="fa-solid fa-house"></i>
+            <span>Menu</span>
+        </a>
+        
+        <a href="camera.html?object=haumea" class="btn-scan" title="Scan AR Marker">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </a>
+
+        <a href="quiz.html?object=haumea" class="btn-action">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Kuis</span>
+        </a>
+    </nav>
+
+    <!-- Script Kontrol POV 3D Viewer -->
+    <script>
+        function setPOV(orbit) {
+            const viewer = document.getElementById('haumea-viewer');
+            if (viewer) {
+                viewer.cameraOrbit = orbit;
+            }
+        }
+    </script>
+</body>
+</html>

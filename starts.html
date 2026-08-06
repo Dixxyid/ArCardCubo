@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AR Solar System - Kamera Interaktif</title>
+    
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+
+    <style>
+        body { margin: 0; overflow: hidden; }
+        .back-btn {
+            position: fixed; top: 1rem; left: 1rem;
+            background-color: #20aaee; color: white;
+            padding: 0.8rem 1.2rem; border-radius: 0.5rem;
+            text-decoration: none; font-family: sans-serif; z-index: 1000;
+        }
+        #Status-Notif {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            color: white; background: rgba(0, 0, 0, 0.75);
+            padding: 12px 25px; border-radius: 30px;
+            font-family: sans-serif; text-align: center;
+            border: 2px solid #20aaee; z-index: 1000; pointer-events: none;
+            width: max-content; max-width: 80%;
+            transition: all 0.3s ease;
+        }
+        /* Style Tambahan untuk Indikator Status */
+        .status-scanning { border-color: #20aaee; background: rgba(0, 0, 0, 0.75); }
+        .status-found { border-color: #4ade80 !important; background: rgba(6, 78, 59, 0.85) !important; color: #f0fdf4 !important; }
+    </style>
+</head>
+
+<body>
+    <a-scene 
+        id="ar-scene"
+        mindar-image="imageTargetSrc: ./markers/targets.mind; autoStart: false; maxTrack: 1; filterMinCF: 0.0001; filterBeta: 0.005; uiLoading: yes; uiScanning: yes;" 
+        color-space="sRGB"
+        renderer="colorManagement: true, physicallyCorrectLights: true"
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false"
+        gesture-detector>
+        
+        <a-assets id="asset-container"></a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false" raycaster="objects: .cantap" cursor="fuse: false; rayOrigin: mouse"></a-camera>
+        
+        <a-light type="ambient" intensity="1.5"></a-light>
+        <a-light type="directional" position="0 10 5" intensity="1.2"></a-light>
+    </a-scene>
+
+    <div id="Status-Notif" class="status-scanning">🔍 Menyiapkan sistem AR...</div>
+    <a href="dashboard.html" class="back-btn">Back</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sceneEl = document.querySelector("#ar-scene");
+            const assetContainer = document.querySelector("#asset-container");
+            const statusNotif = document.querySelector("#Status-Notif");
+
+            // Fungsi untuk menyalakan kamera AR secara aman
+            const startARSystem = () => {
+                const arSystem = sceneEl.systems["mindar-image-system"];
+                if (arSystem) {
+                    arSystem.start();
+                    statusNotif.innerHTML = `🔍 Arahkan Kamera ke Marker. Putar untuk Rotasi.`;
+                    statusNotif.className = "status-scanning";
+                } else {
+                    // Jika sistem belum siap, tunggu 100ms lalu coba lagi
+                    setTimeout(startARSystem, 100);
+                }
+            };
+
+            // Mengambil data dari file JSON terpisah
+            fetch('objects.json')
+                .then(response => response.json())
+                .then(objects => {
+                    objects.forEach(obj => {
+                        
+                        // 1. Suntik ke <a-assets>
+                        const assetItem = document.createElement('a-asset-item');
+                        assetItem.setAttribute('id', obj.assetId);
+                        assetItem.setAttribute('src', obj.src);
+                        assetContainer.appendChild(assetItem);
+
+                        // 2. Buat target marker
+                        const targetEntity = document.createElement('a-entity');
+                        targetEntity.setAttribute('mindar-image-target', `targetIndex: ${obj.targetIndex}`);
+                        targetEntity.setAttribute('id', `target-${obj.targetIndex}`);
+
+                        // 3. Buat model 3D
+                        const modelEntity = document.createElement('a-gltf-model');
+                        modelEntity.setAttribute('id', obj.id);
+                        modelEntity.setAttribute('src', `#${obj.assetId}`);
+                        modelEntity.setAttribute('position', obj.position || "0 0 0");
+                        modelEntity.setAttribute('scale', obj.scale || "1 1 1");
+                        modelEntity.setAttribute('class', 'cantap');
+                        modelEntity.setAttribute('gesture-handler', '');
+                        
+                        const cleanName = obj.id.replace('Model', '').toUpperCase();
+                        modelEntity.setAttribute('data-name', cleanName);
+
+                        // 4. Gabungkan komponen
+                        targetEntity.appendChild(modelEntity);
+                        sceneEl.appendChild(targetEntity);
+
+                        // 5. EVENT LISTENER: Indikator Scan Real-time
+                        targetEntity.addEventListener("targetFound", () => {
+                            statusNotif.innerHTML = `✅ Objek Terdeteksi: <b>${cleanName}</b>`;
+                            statusNotif.className = "status-found";
+                        });
+
+                        targetEntity.addEventListener("targetLost", () => {
+                            statusNotif.innerHTML = `🔍 Mencari Marker... Putar untuk Rotasi.`;
+                            statusNotif.className = "status-scanning";
+                        });
+                    });
+
+                    // PERBAIKAN UTAMA: Jika scene sudah loaded, langsung start. Jika belum, tunggu event 'loaded'.
+                    if (sceneEl.hasLoaded) {
+                        startARSystem();
+                    } else {
+                        sceneEl.addEventListener("loaded", startARSystem);
+                    }
+                })
+                .catch(error => {
+                    console.error("Gagal meload data objek:", error);
+                    statusNotif.innerHTML = `❌ Gagal memuat data objek AR.`;
+                });
+        });
+    </script>
+</body>
+</html>

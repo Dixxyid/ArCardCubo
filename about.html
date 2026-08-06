@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - ARCubo</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --cyan-accent: #00f2fe;
+            --pill-blue-text: #38b6ff;
+            --pill-blue-border: #007acc;
+            --pill-blue-bg: rgba(16, 42, 77, 0.55);
+            --subtitle-blue: #81d4fa;
+            --white: #ffffff;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 40px 20px 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: #ffffff;
+        }
+
+        /* Background Blur Utama */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('materials/bg_aboutbeta.webp') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(8px); 
+            z-index: -1;
+            transform: scale(1.1); 
+        }
+
+        /* CONTAINER UTAMA */
+        .main-wrapper {
+            width: 90%;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* EFEK KACA (GLASSMORPHISM) BASE CARD */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+        }
+
+        /* 1. HEADER APLIKASI (3 BARIS) */
+        .app-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .app-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .badge-version {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid rgba(0, 242, 254, 0.5);
+            color: var(--cyan-accent);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        .app-release-date {
+            font-size: 0.88rem;
+            color: #e0e0e0;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* HEADER JUDUL KARTU */
+        .card-header-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header-title i {
+            color: var(--cyan-accent);
+        }
+
+        /* GARIS PEMBATAS KACA */
+        hr.glass-hr { 
+            border: 0; 
+            border-top: 1px solid rgba(255, 255, 255, 0.2); 
+            margin: 16px 0 20px 0; 
+        }
+
+        /* PILL BADGE KHUSUS DOSEN */
+        .dosen-pill-wrapper {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 24px;
+            background: var(--pill-blue-bg);
+            border: 1px solid var(--pill-blue-border);
+            border-radius: 50px;
+            color: var(--pill-blue-text);
+            font-size: 0.95rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-pill i {
+            font-size: 0.95rem;
+            color: var(--pill-blue-text);
+        }
+
+        /* TEKS TENTANG APLIKASI (RATA KANAN KIRI) */
+        .card-text {
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: #f0f0f0;
+            font-weight: 400;
+            text-align: justify;
+        }
+
+        /* 2. GRID FITUR UTAMA */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .feature-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 22px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: left;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-4px);
+            background: rgba(0, 0, 0, 0.32);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .icon-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .icon-ar {
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.35), rgba(58, 123, 213, 0.5));
+            color: #00f2fe;
+            text-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
+        }
+
+        .icon-quiz {
+            background: linear-gradient(135deg, rgba(235, 87, 87, 0.35), rgba(186, 45, 45, 0.45));
+            color: #e57373;
+        }
+
+        .icon-module {
+            background: linear-gradient(135deg, rgba(242, 201, 76, 0.35), rgba(220, 160, 30, 0.45));
+            color: #ffe082;
+        }
+
+        .feature-box h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0 0 6px 0;
+        }
+
+        .feature-box p {
+            font-size: 0.85rem;
+            color: #d1d8dd;
+            margin: 0;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* 3. PROFIL PENGEMBANG & LOGO */
+        .logo-header {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+
+        .logo-header img {
+            height: 55px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--secondary-color);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1.dev-name { 
+            color: #ffffff; 
+            margin: 0; 
+            font-size: 1.6rem; 
+            font-weight: 800;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle { 
+            color: var(--subtitle-blue); 
+            font-weight: 600; 
+            margin: 4px 0 0 0; 
+            display: block; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            font-size: 0.82rem; 
+        }
+
+        h2.npm {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            margin: 2px 0 20px 0; 
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        
+        .description {
+            line-height: 1.7;
+            color: #f0f0f0;
+            width: 90%;             /* Mengikuti lebar penuh kartu */
+            max-width: 90%;        /* Menghapus batasan 650px sebelumnya */
+            margin: 0 auto 25px;
+            font-size: 0.92rem;
+            font-weight: 400;
+            text-align: justify;
+        }
+        /* DOSEN GRID & BINGKAI PORTRAIT MEMANJANG KE ATAS */
+        .dosen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .dosen-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dosen-card:hover {
+            background: rgba(0, 0, 0, 0.32);
+            transform: translateY(-4px);
+            border-color: rgba(0, 242, 254, 0.4);
+        }
+
+        .dosen-photo-box {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 2rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .dosen-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .dosen-card h4 { 
+            margin: 0; 
+            color: #ffffff; 
+            font-size: 0.85rem; 
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .dosen-card p { 
+            margin: 6px 0 0; 
+            font-size: 0.75rem; 
+            color: var(--subtitle-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* TECH STACK */
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            color: var(--white);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge i {
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+        }
+
+        .badge .icon-html { color: #e34f26; }
+        .badge .icon-css { color: #1572b6; }
+        .badge .icon-js { color: #f7df1e; }
+        .badge .icon-ar-tech { color: #00f2fe; }
+
+        /* 4. MEDIA SOSIAL (DERET 3) */
+        .social-links {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .social-btn {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* 5. TOMBOL KEMBALI */
+        .action-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 40px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover { 
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        /* FOOTER COPYRIGHT MINIMALIS (TANPA BACKGROUND KARTU) */
+        .app-footer {
+            text-align: center;
+            padding: 20px 10px 10px 10px;
+            font-size: 0.5rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.65);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .app-footer .brand-highlight {
+            color: var(--cyan-accent);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+
+    <!-- 1. HEADER NAMA APLIKASI & VERSI (3 BARIS) -->
+    <div class="glass-card app-header">
+        <h1 class="app-title">ARCubo</h1>
+        <span class="badge-version"><i class="fa-solid fa-code-branch"></i> v1.0.0</span>
+        <span class="app-release-date"><i class="fa-regular fa-calendar-check"></i> Rilis Terakhir: 5 Agustus 2026</span>
+    </div>
+
+    <!-- 2. TENTANG APLIKASI -->
+    <div class="glass-card">
+        <h2 class="card-header-title">
+            <i class="fa-solid fa-graduation-cap"></i>
+            Tentang Aplikasi
+        </h2>
+        <hr class="glass-hr">
+        <p class="card-text">
+            ARCubo dikembangkan untuk mengatasi keterbatasan media pembelajaran konvensional 2D dalam memahami struktur serta karakteristik benda langit yang kompleks. Dengan mengintegrasikan teknologi Web Augmented Reality, platform ini memungkinkan pengguna memvisualisasikan objek Tata Surya secara 3D yang realistis dan interaktif, lengkap dengan modul materi serta kuis evaluasi.
+        </p>
+    </div>
+
+    <!-- 3. FITUR UTAMA -->
+    <div class="glass-card">
+        <h2 class="card-header-title">
+            <i class="fa-solid fa-star"></i>
+            Fitur Utama
+        </h2>
+        <hr class="glass-hr">
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="icon-circle icon-ar">
+                    <i class="fa-solid fa-vr-cardboard"></i>
+                </div>
+                <h3>Augmented Reality</h3>
+                <p>Visualisasi objek 3D benda langit secara interaktif langsung melalui kamera perangkat.</p>
+            </div>
+            <div class="feature-box">
+                <div class="icon-circle icon-quiz">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3>Kuis & Evaluasi</h3>
+                <p>Latihan soal interaktif untuk menguji pemahaman materi astronomi secara mandiri.</p>
+            </div>
+            <div class="feature-box">
+                <div class="icon-circle icon-module">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h3>Modul Pembelajaran</h3>
+                <p>Materi lengkap dan mendalam mengenai karakteristik setiap planet di Tata Surya.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. PROFIL PENGEMBANG & DOSEN -->
+    <div class="glass-card">
+        <div class="logo-header">
+            <img src="materials/logo_kementrian.svg" alt="Logo Kementerian">
+            <img src="materials/logo_unila.svg" alt="Logo Unila">
+            <img src="materials/logo_fkip.svg" alt="Logo FKIP">
+        </div>
+
+        <div class="profile-section">
+            <div class="avatar">
+                <img src="materials/pp_dev.webp" alt="Diki Prasetia">
+            </div>
+            
+            <h1 class="dev-name">DIKI PRASETIA</h1>
+            <span class="subtitle">Developer & College Student</span>
+            <h2 class="npm">2113025007</h2>
+            
+            <p class="description">
+                Halo! Saya Diki Prasetia, mahasiswa Program Studi Pendidikan Teknologi Informasi Universitas Lampung. Pengembangan ARCubo merupakan bagian dari penelitian tugas akhir saya yang berfokus pada integrasi teknologi Augmented Reality dalam media pembelajaran berbasis web. Melalui proyek ini, saya berupaya menghadirkan inovasi media interaktif yang dapat membantu pendidik dan siswa dalam mengeksplorasi konsep astronomi secara lebih visual dan intuitif.
+            </p>
+            
+            <div class="tech-stack">
+                <span class="badge"><i class="fa-brands fa-html5 icon-html"></i> HTML5</span>
+                <span class="badge"><i class="fa-brands fa-css3-alt icon-css"></i> CSS3</span>
+                <span class="badge"><i class="fa-brands fa-square-js icon-js"></i> JavaScript</span>
+                <span class="badge"><i class="fa-solid fa-cube icon-ar-tech"></i> Augmented Reality</span>
+            </div>
+        </div>
+
+        <hr class="glass-hr">
+
+        <!-- PILL BADGE KHUSUS DOSEN -->
+        <div class="dosen-pill-wrapper">
+            <div class="section-pill">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>Dosen Pembimbing & Pembahas</span>
+            </div>
+        </div>
+
+        <div class="dosen-grid">
+            <!-- DOSEN PEMBIMBING 1 -->
+            <div class="dosen-card">
+                <div class="dosen-photo-box">
+                    <img src="assets/dosen/dosen1.webp" alt="Foto Dr. Rangga Firdaus" onerror="this.style.display='none';">
+                    <i class="fa-solid fa-image-user"></i>
+                </div>
+                <h4>Dr. Rangga Firdaus, S.Kom., M.Kom.</h4>
+                <p>Dosen Pembimbing I</p>
+            </div>
+
+            <!-- DOSEN PEMBIMBING 2 -->
+            <div class="dosen-card">
+                <div class="dosen-photo-box">
+                    <img src="assets/dosen/dosen2.webp" alt="Foto Daniel Rinaldi" onerror="this.style.display='none';">
+                    <i class="fa-solid fa-image-user"></i>
+                </div>
+                <h4>Daniel Rinaldi, S.T., M.Eng.</h4>
+                <p>Dosen Pembimbing II</p>
+            </div>
+
+            <!-- DOSEN PEMBAHAS -->
+            <div class="dosen-card">
+                <div class="dosen-photo-box">
+                    <img src="assets/dosen/dosen3.webp" alt="Foto Afif Rahman Riyanda" onerror="this.style.display='none';">
+                    <i class="fa-solid fa-image-user"></i>
+                </div>
+                <h4>Afif Rahman Riyanda, S.Pd., M.Pd.T.</h4>
+                <p>Dosen Pembahas</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. HUBUNGI PENGEMBANG / MEDIA SOSIAL -->
+    <div class="glass-card">
+        <h2 class="card-header-title">
+            <i class="fa-solid fa-address-card"></i>
+            Hubungi Pengembang
+        </h2>
+        <hr class="glass-hr">
+        <div class="social-links">
+            <a href="https://github.com/dikiprasetia" target="_blank" rel="noopener" class="social-btn">
+                <i class="fa-brands fa-github"></i>
+                <span>GitHub</span>
+            </a>
+            <a href="https://unila.ac.id" target="_blank" rel="noopener" class="social-btn">
+                <i class="fa-solid fa-globe"></i>
+                <span>Website</span>
+            </a>
+            <a href="mailto:diki@fkip.unila.ac.id" class="social-btn">
+                <i class="fa-solid fa-envelope"></i>
+                <span>Email</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 6. TOMBOL KEMBALI -->
+    <div class="action-container">
+        <a href="dashboard.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
+        </a>
+    </div>
+
+<!-- FOOTER HAK CIPTA (MINIMALIS) -->
+<footer class="app-footer">
+    © 2026 <span class="brand-highlight">ARCUBO</span> - UNIVERSITAS LAMPUNG. ALL RIGHTS RESERVED.
+</footer>
+
+</div>
+
+</body>
+</html>

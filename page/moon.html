@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objek Astronomi: Bulan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Model Viewer CDN untuk Interaktif 3D -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --glow-color: #bdc3c7; /* Warna khas Bulan (Abu-abu Perak/Monokrom) */
+            --bg-gradient: linear-gradient(135deg, #0f1115 0%, #1a1d24 50%, #08090b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b5bc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Background Dekoratif */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(189,195,199,0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        /* Header Area */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(189, 195, 199, 0.15);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(189, 195, 199, 0.3);
+        }
+
+        /* Main Content Grid */
+        .container {
+            max-width: 800px;
+            margin: 0 auto 100px auto;
+        }
+
+        /* Hero Image & Title */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .planet-frame {
+            width: 140px;           
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            border: 3px solid rgba(189, 195, 199, 0.5); 
+            background-color: #000000; 
+            box-shadow: 0 0 35px rgba(189, 195, 199, 0.4), 
+                        inset 0 0 25px rgba(189, 195, 199, 0.2);
+            animation: framePulse 4s ease-in-out infinite alternate;
+        }
+
+        .object-visual {
+            width: 100px;             
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        @keyframes framePulse {
+            0% { 
+                box-shadow: 0 0 25px rgba(189, 195, 199, 0.3); 
+                transform: scale(0.98); 
+            }
+            100% { 
+                box-shadow: 0 0 45px rgba(189, 195, 199, 0.6); 
+                transform: scale(1.02); 
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #95a5a6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .hero-section p {
+            color: var(--glow-color);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Glassmorphism Card Base */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .card-title i {
+            color: var(--glow-color);
+        }
+
+        /* Data Spesifikasi Grid */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* Struktur List */
+        .structure-list {
+            list-style: none;
+        }
+
+        .structure-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-color);
+        }
+
+        .structure-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        .structure-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Info Ilmiah */
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .header-tag {
+            font-size: 0.75rem;
+            color: rgba(189, 195, 199, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Style Komponen 3D Viewer */
+        .pv-container {
+            width: 100%;
+            height: 320px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        .pv-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glow-color);
+            color: var(--glow-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .pov-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pov-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pov-btn:hover {
+            background: rgba(189, 195, 199, 0.2);
+            color: #ffffff;
+            border-color: var(--glow-color);
+        }
+
+        /* Fixed Bottom Action Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(26, 29, 36, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        .btn-action.active, .btn-action:hover {
+            color: var(--glow-color);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #bdc3c7 0%, #7f8c8d 100%);
+            color: #0f1115;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px rgba(189, 195, 199, 0.4);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-scan:hover {
+            box-shadow: 0 0 25px rgba(189, 195, 199, 0.6);
+            transform: translateY(-7px) scale(1.05);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 480px) {
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+            <div class="header-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Media Pembelajaran ArCubo
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="planet-frame">
+                <img src="../assets/web/web_bulan.webp" alt="Bulan Objek AR" class="object-visual" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg'">
+            </div>
+            <h1>Bulan</h1>
+            <p>Bulan</p>
+        </section>
+
+        <!-- Kartu 1: Detail Astrofisika -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-circle-info"></i> Detail Astrofisika
+            </div>
+            <p class="info-text">
+                Bulan merupakan satu-satunya satelit alami Bumi sekaligus satelit terbesar kelima di Tata Surya. Berdasarkan hipotesis tabrakan masif (Giant Impact Hypothesis), Bulan terbentuk sekitar 4,5 miliar tahun lalu dari puing-puing paska benturan antara Bumi muda dan protoplanet seukuran Mars yang dinamai Theia. Bulan mengorbit Bumi dalam kondisi penguncian pasang surut (synchronous rotation/tidal locking), sehingga periode rotasinya persis sama dengan periode revolusinya (27,3 hari Bumi). Hal ini menyebabkan Bulan selalu memperlihatkan sisi yang sama (sisi dekat) ke arah Bumi. Bulan hampir tidak memiliki atmosfer nyata melainkan eksosfer yang sangat tipis, yang mengakibatkan fluktuasi suhu permukaan yang ekstrem serta pembentukan kawah-kawah dampak meteorit yang bertahan selama berbilang miliar tahun tanpa tererosi oleh cuaca.
+            </p>
+        </div>
+
+        <!-- Kartu 2: Karakteristik Fisik -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-chart-simple"></i> Karakteristik Fisik
+            </div>
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <div class="spec-label">Jenis</div>
+                    <div class="spec-value">Satelit Alami Berbatu (Satelit Terestrial)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ukuran</div>
+                    <div class="spec-value">1.737,4 km (Jari-jari Rata-rata)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Komposisi Utama</div>
+                    <div class="spec-value">Oksigen (43%), Silikon (21%), Besi (13%), Kalsium (9%), Aluminium (7%), Magnesium (5%)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu (Iklim)</div>
+                    <div class="spec-value">Hampa Udara Ekstrem (Tanpa Atmosfer Signifikan)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Rotasi</div>
+                    <div class="spec-value">27,3 Hari Bumi (Sinkron dengan Revolusi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Gravitasi</div>
+                    <div class="spec-value">1,62 m/s² (~0,166× Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Induk Orbit</div>
+                    <div class="spec-value">Bumi (Jarak Rata-rata: ~384.400 km)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Jarak Tempuh Cahaya</div>
+                    <div class="spec-value">~1,28 Detik Cahaya dari Bumi</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Permukaan</div>
+                    <div class="spec-value">-130 °C hingga 120 °C (Kutub Ekstrem: -246 °C)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Inti</div>
+                    <div class="spec-value">~1.300 °C - 1.500 °C</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu 3: Lapisan Penyusun -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-layer-group"></i> Lapisan Penyusun
+            </div>
+            <ul class="structure-list">
+                <li class="structure-item">
+                    <div class="structure-name">1. Inti Kecil Kaya Besi (Small Iron-Rich Core)</div>
+                    <div class="structure-desc">Inti relatif kecil berdiameter sekitar 480–600 km (~20% dari ukuran Bulan). Terdiri dari inti dalam padat kaya besi bersuhu sedang serta cangkang inti luar berupa logam cair tipis. Inti ini tidak menghasilkan medan magnet global yang kuat saat ini.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">2. Mantel Mantel Silikat (Partial Melt & Rigid Mantle)</div>
+                    <div class="structure-desc">Lapisan mantel tebal yang didominasi oleh mineral olivin dan piroksen. Terbagi menjadi mantel dalam yang sebagian meleleh (partial melt) serta mantel luar padat yang kaku hingga kedalaman ~1.000 km.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">3. Kerak Anortositis & Basaltik (Crust)</div>
+                    <div class="structure-desc">Lapisan permukaan padat dengan ketebalan rata-rata 50 km (lebih tebal di sisi jauh dibandingkan sisi dekat). Terdiri atas dataran tinggi anortosit yang terang (highlands) serta dataran basal vulkanik gelap (maria) yang terbentuk dari aliran lava kuno.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">4. Regolit & Lapisan Lapukan Kosmik (Lunar Regolith)</div>
+                    <div class="structure-desc">Lapisan debu halus, fragmen batuan, dan kaca mikroskopis setebal 3–20 meter yang menutupi seluruh permukaan Bulan. Lapisan ini merupakan hasil tumbukan meteorit dan bombardir angin surya secara terus-menerus selama puluhan miliar tahun.</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Kartu 4: Live Object 3D Viewer -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-cube"></i> Simulasi 3D Interaktif
+            </div>
+            <div class="pv-container">
+                <div class="pv-tag">SIMULASI 3D</div>
+                <model-viewer 
+                    id="bulan-viewer"
+                    src="../assets/object/glb_bulan/bulan.glb" 
+                    alt="Model 3D Bulan" 
+                    auto-rotate 
+                    camera-controls 
+                    shadow-intensity="1"
+                    exposure="1"
+                    loading="lazy">
+                </model-viewer>
+            </div>
+            <div class="pov-controls">
+                <button class="pov-btn" onclick="setPOV('0deg 75deg 105%')">Sisi Dekat</button>
+                <button class="pov-btn" onclick="setPOV('180deg 75deg 105%')">Sisi Jauh</button>
+                <button class="pov-btn" onclick="setPOV('0deg 0deg 105%')">Kutub Utara</button>
+                <button class="pov-btn" onclick="setPOV('45deg 60deg 70%')">Close-up Kawah</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="btn-action active">
+            <i class="fa-solid fa-house"></i>
+            <span>Menu</span>
+        </a>
+        
+        <a href="camera.html?object=bulan" class="btn-scan" title="Scan AR Marker">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </a>
+
+        <a href="quiz.html?object=bulan" class="btn-action">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Kuis</span>
+        </a>
+    </nav>
+
+    <!-- Script Kontrol POV 3D Viewer -->
+    <script>
+        function setPOV(orbit) {
+            const viewer = document.getElementById('bulan-viewer');
+            if (viewer) {
+                viewer.cameraOrbit = orbit;
+            }
+        }
+    </script>
+</body>
+</html>

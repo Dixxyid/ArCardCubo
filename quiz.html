@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Kuis | AR Navigation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS VARIABLE KONSISTEN DENGAN DASHBOARD.HTML */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #020510 0%, #080f26 50%, #010206 100%);
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --text-primary: #ffffff;
+            --text-secondary: #a4b0be;
+            --glow-cyan: #00d2d3;
+            --glow-blue: #00a8ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Container Glassmorphism serupa Dashboard */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px 30px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        /* HEADER TITLE - GRADIENT CYAN TO BLUE */
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, var(--glow-cyan), var(--glow-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 12px rgba(0, 168, 255, 0.4));
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* BASE STYLE TOMBOL (Tanpa shadow/glow awal) */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: white;
+            border-radius: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: none; /* Menghapus bersinar secara default */
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+        }
+
+        /* TOMBOL QUIZ - HIJAU EMERALD (Bersinar HANYA PAS DIKLIK) */
+        .btn-quiz {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .btn-quiz:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.8); /* Glow muncul saat diklik */
+        }
+
+        /* TOMBOL CHALLENGE - ORANGE / AMBER (Bersinar HANYA PAS DIKLIK) */
+        .btn-challenge {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .btn-challenge:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.8); /* Glow muncul saat diklik */
+        }
+
+        /* TOMBOL DASHBOARD - BIRU (Bersinar HANYA PAS DIKLIK) */
+        .btn-dashboard {
+            background: linear-gradient(135deg, #0056b3 0%, #00a8ff 100%);
+        }
+
+        .btn-dashboard:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.8); /* Glow muncul saat diklik */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Pilih Mode Penilaian</h1>
+        <div class="button-group">
+            <a href="rekap/opsiquiz.html" class="btn btn-quiz">Quiz</a>
+            <a href="rekap/challenge.html" class="btn btn-challenge">Challenge</a>
+            <a href="dashboard.html" class="btn btn-dashboard">Dashboard</a>
+        </div>
+    </div>
+
+</body>
+</html>

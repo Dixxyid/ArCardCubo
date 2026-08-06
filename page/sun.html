@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objek Astronomi: Matahari (Sun)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Script untuk menyertakan Model-Viewer Google (Object 3D POV) -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --glow-color: #ff9f43; /* Warna oranye pijar khas Matahari */
+            --bg-gradient: linear-gradient(135deg, #0f0c20 0%, #15102a 50%, #06040a 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b3b0c2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Background Dekoratif */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,159,67,0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        /* Header Area */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 159, 67, 0.1);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(255, 159, 67, 0.2);
+        }
+
+        /* Main Content Grid */
+        .container {
+            max-width: 800px;
+            margin: 0 auto 100px auto; /* Margin bottom space untuk navbar */
+        }
+
+        /* Hero Image & Title */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+/* Bingkai Luar tanpa celah/garis hitam */
+        .planet-frame {
+            width: 140px;           
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            border: 3px solid rgba(255, 159, 67, 0.6); 
+            background: transparent;
+            overflow: hidden; /* Memotong gambar secara presisi mengikuti bentuk lingkaran */
+            box-shadow: 0 0 35px rgba(255, 159, 67, 0.4);
+            animation: framePulse 4s ease-in-out infinite alternate;
+        }
+
+        /* Gambar mengisi penuh bingkai */
+        .object-visual {
+            width: 100%;             
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+        
+        @keyframes framePulse {
+            0% { 
+                box-shadow: 0 0 25px rgba(255, 159, 67, 0.3); 
+                transform: scale(0.98); 
+            }
+            100% { 
+                box-shadow: 0 0 45px rgba(255, 159, 67, 0.6); 
+                transform: scale(1.02); 
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #ff9f43);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .hero-section p {
+            color: var(--glow-color);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Glassmorphism Card Base */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .card-title i {
+            color: var(--glow-color);
+        }
+
+        /* Data Spesifikasi Grid */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Struktur List */
+        .structure-list {
+            list-style: none;
+        }
+
+        .structure-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-color);
+        }
+
+        .structure-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        .structure-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Styling 3D POV Viewer & Interactive Controls */
+        .pv-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: #000000;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 159, 67, 0.2);
+            overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        .pov-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pov-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .pov-btn:hover, .pov-btn.active {
+            background: rgba(255, 159, 67, 0.2);
+            border-color: var(--glow-color);
+            color: var(--glow-color);
+        }
+
+        .live-status-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 159, 67, 0.4);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff5252;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ff5252;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Info Ilmiah / Copyright */
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .doi-reference {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: rgba(255, 159, 67, 0.6);
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Fixed Bottom Action Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(21, 16, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        .btn-action.active, .btn-action:hover {
+            color: var(--glow-color);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #ff9f43 0%, #ff5252 100%);
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px rgba(255, 159, 67, 0.4);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-scan:hover {
+            box-shadow: 0 0 25px rgba(255, 159, 67, 0.7);
+            transform: translateY(-7px) scale(1.05);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 480px) {
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            .pv-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+            <div class="doi-reference" style="margin-top: 0;">
+                <i class="fa-solid fa-copyright"></i> 2026 ArCubo • All rights reserved.
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="planet-frame">
+                <img src="../assets/web/web_sun.webp" alt="Matahari Objek AR" class="object-visual">
+            </div>
+            <h1>Matahari</h1>
+            <p>The Sun / Sol</p>
+        </section>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-circle-info"></i> Detail Astrofisika
+            </div>
+            <p class="info-text">
+                Matahari adalah bintang deret utama tipe G (G2V) berumur sekitar 4.6 miliar tahun yang terletak di pusat Tata Surya. Komponen massanya mendominasi sistem dengan mencakup sekitar 99.86% dari total massa keseluruhan sistem tata surya. Sebagai bintang populasi I yang kaya akan logam, energi masif Matahari dihasilkan secara konstan melalui rantai reaksi fusi nuklir proton-proton di dalam intinya. Proses ini mengubah sekitar 600 juta ton hidrogen menjadi helium setiap detiknya, memancarkan radiasi elektromagnetik serta neutrino yang menjadi jangkar penggerak utama bagi iklim dan kelangsungan hidup di Bumi. Sebagai bola plasma dinamis, Matahari diatur oleh medan magnet kompleks yang berosilasi dalam siklus aktivitas periodik 11 tahunan, memengaruhi cuaca antariksa di seluruh heliosfer.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-chart-simple"></i> Karakteristik
+            </div>
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <div class="spec-label">Jenis</div>
+                    <div class="spec-value">Bintang (Katai Kuning G2V)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ukuran</div>
+                    <div class="spec-value">~1.392.700 km (~109x Diameter Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Komposisi</div>
+                    <div class="spec-value">73,4% Hidrogen, 24,8% Helium, 0,77% Oksigen, dll.</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu (Iklim)</div>
+                    <div class="spec-value">Sangat Panas (Aktivitas Plasma & Angin Matahari)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Periode Rotasi</div>
+                    <div class="spec-value">~25 Hari (Ekuator) – ~35 Hari (Kutub)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Gravitasi</div>
+                    <div class="spec-value">274 m/s² (~28x Gravitasi Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Satelit</div>
+                    <div class="spec-value">Tidak Ada (Mengorbit Pusat Galaksi Bima Sakti)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Jarak Tempuh</div>
+                    <div class="spec-value">1 AU (~0,00001581 Tahun Cahaya ke Bumi)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Permukaan</div>
+                    <div class="spec-value">~5.500 °C (Fotosfer)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Suhu Inti</div>
+                    <div class="spec-value">~15,7 Juta °C</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-layer-group"></i> Lapisan Penyusun
+            </div>
+            <ul class="structure-list">
+                <li class="structure-item">
+                    <div class="structure-name">1. Inti Surya (The Core)</div>
+                    <div class="structure-desc">Lapisan interior paling pusat yang membentang dari pusat hingga sekitar 20-25% dari radius total Matahari. Densitasnya mencapai 150 g/cm³ dengan suhu ekstrem ~15,7 juta °C, menjadikannya satu-satunya tempat berlangsungnya fusi termonuklir yang mengubah Hidrogen menjadi Helium melalui rantai proton-proton ($p\text{-}p\text{ chain}$).</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">2. Zona Radiatif (Radiative Zone)</div>
+                    <div class="structure-desc">Lapisan interior tengah yang meliputi sekitar 45% radius Matahari. Energi hasil fusi dari inti dihantarkan keluar dalam bentuk radiasi termal plasma. Foton-foton cahaya mengalami benturan konstan (fenomena *random walk*) di lapisan padat ini, membutuhkan waktu sekitar 100.000 hingga 200.000 tahun hanya untuk bergerak melintasi zona ini.</div>
+                </li>
+                <li class="structure-item" style="border-left-color: #ff5252;">
+                    <div class="structure-name">※ Batas Tachocline (Zona Geser Magnetik)</div>
+                    <div class="structure-desc">Lapisan transisi super tipis antara Zona Radiatif (yang berotasi seragam layaknya benda padat) dan Zona Konvektif (yang mengalami rotasi diferensial). Gesekan mekanis plasma yang sangat kontras di lapisan ini dipercaya menjadi tempat terbentuknya medan magnet utama Matahari melalui mekanisme dinamo surya.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">3. Zona Konvektif (Convective Zone)</div>
+                    <div class="structure-desc">Lapisan interior terluar yang menyelimuti sisa 30% radius dalam Matahari. Plasma di zona ini tidak cukup padat untuk meneruskan radiasi foton secara langsung, sehingga energi dihantarkan melalui arus konveksi masif. Plasma panas bergerak naik ke permukaan, mendingin, lalu tenggelam kembali ke dalam.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">4. Fotosfer (Photosphere - Permukaan Tampak)</div>
+                    <div class="structure-desc">Lapisan luar setebal ~500 km yang dianggap sebagai "permukaan" optik Matahari karena dari lapisan inilah foton cahaya terlepas secara bebas ke luar angkasa. Bersuhu sekitar 5.500 °C, lapisan ini memiliki struktur granular akibat sel konveksi dan menjadi tempat munculnya bintik matahari (*sunspots*).</div>
+                </li>
+                <li class="structure-item" style="border-left-color: #ff5252;">
+                    <div class="structure-name">※ Zona Minimum Temperatur (Temperature Minimum Area)</div>
+                    <div class="structure-desc">Batas atmosfer bawah setebal beberapa ratus kilometer di atas fotosfer di mana suhu turun ke titik terdingin Matahari, yaitu sekitar 4.100 °C (4.380 K), sebelum melonjak drastis kembali di lapisan atmosfer atas.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">5. Kromosfer (Chromosphere)</div>
+                    <div class="structure-desc">Lapisan atmosfer tengah setebal ~2.000 km yang didominasi oleh spektrum emisi gas hidrogen berwarna kemerahan. Keunikan lapisan ini adalah suhunya justru melonjak naik seiring bertambahnya ketinggian, bergerak dari 4.500 °C hingga mencapai sekitar 20.000 °C pada bagian atas.</div>
+                </li>
+                <li class="structure-item">
+                    <div class="structure-name">6. Korona Surya (Corona)</div>
+                    <div class="structure-desc">Lapisan atmosfer terluar yang sangat renggang namun mencuat hingga jutaan kilometer ke ruang angkasa. Suhu plasma korona mengalami anomali pemanasan ekstrem hingga menembus 1 hingga 3 juta °C. Korona terus berekspansi ke ruang antarplanet membentuk angin surya (*solar wind*) dan hanya dapat dilihat langsung dari Bumi dengan mata telanjang saat terjadi Gerhana Matahari Total.</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-eye"></i> Live Object 3D
+            </div>
+            
+            <p class="structure-desc" style="margin-bottom: 15px;">
+                Eksplorasi simulasi visual 3D Matahari secara interaktif dari berbagai sudut pandang. Anda dapat memutar, memperbesar, serta mengubah preset fokus pengamatan plasma dan dinamika.
+            </p>
+
+            <div class="pv-container">
+                <div class="live-status-tag">
+                    <div class="live-dot"></div> SIMULASI 3D
+                </div>
+                
+                <!-- Model 3D Interaktif Matahari -->
+                <model-viewer 
+                    id="sunViewer"
+                    src="../assets/object/glb_sun/sun.glb" 
+                    alt="Model 3D Objek Matahari Interaktif"
+                    auto-rotate 
+                    auto-rotate-delay="0"
+                    rotation-per-second="10deg"
+                    camera-controls 
+                    touch-action="pan-y"
+                    shadow-intensity="1"
+                    exposure="1.2"
+                    camera-orbit="0deg 75deg 2.5m"
+                    field-of-view="30deg">
+                </model-viewer>
+            </div>
+
+            <!-- Kontrol Sudut Pandang Kamera (POV) -->
+            <div class="pov-controls">
+                <button class="pov-btn active" onclick="setPOV('0deg 75deg 2.5m', this)">
+                    <i class="fa-solid fa-globe"></i> Ekuator
+                </button>
+                <button class="pov-btn" onclick="setPOV('0deg 10deg 2.5m', this)">
+                    <i class="fa-solid fa-arrows-to-dot"></i> Kutub Utara
+                </button>
+                <button class="pov-btn" onclick="setPOV('180deg 170deg 2.5m', this)">
+                    <i class="fa-solid fa-arrows-to-dot"></i> Kutub Selatan
+                </button>
+                <button class="pov-btn" onclick="setPOV('45deg 45deg 1.5m', this)">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i> Close-up Surface
+                </button>
+            </div>
+
+            <div class="doi-reference" style="margin-top: 15px;">
+                <i class="fa-solid fa-satellite"></i> Visualisasi Render 3D / Observational Data.
+            </div>
+        </div>
+        
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="btn-action active">
+            <i class="fa-solid fa-house"></i>
+            <span>Menu</span>
+        </a>
+        
+        <a href="camera.html?object=sun" class="btn-scan" title="Scan AR Marker">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </a>
+
+        <a href="quiz.html?object=sun" class="btn-action">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Kuis</span>
+        </a>
+    </nav>
+
+    <script>
+        // Fungsi untuk Mengubah Objek POV / Orbit Kamera 3D
+        function setPOV(orbit, btn) {
+            const viewer = document.getElementById('sunViewer');
+            if (viewer) {
+                viewer.cameraOrbit = orbit;
+            }
+            
+            // Toggle State Tombol Active
+            const buttons = document.querySelectorAll('.pov-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

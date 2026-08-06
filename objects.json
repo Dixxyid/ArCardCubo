@@ -1,0 +1,252 @@
+[
+  {
+    "id": "sunModel",
+    "targetIndex": 0,
+    "category": "star",
+    "color": "#f59e0b",
+    "assetId": "modelSun",
+    "src": "assets/object/glb_sun/sun.glb",
+    "scale": "0.2 0.2 0.2", 
+    "position": "0 0 0"
+  },
+  {
+    "id": "mercuryModel",
+    "targetIndex": 1,
+    "category": "planet",
+    "color": "#94a3b8",
+    "assetId": "modelMercury",
+    "src": "assets/object/glb_merkurius/mercury.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "venusModel",
+    "targetIndex": 2,
+    "category": "planet",
+    "color": "#eab308",
+    "assetId": "modelVenus",
+    "src": "assets/object/glb_venus/venus.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "earthModel",
+    "targetIndex": 3,
+    "category": "planet",
+    "color": "#3b82f6",
+    "assetId": "modelEarth",
+    "src": "assets/object/glb_bumi/earth.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "marsModel",
+    "targetIndex": 4,
+    "category": "planet",
+    "color": "#ef4444",
+    "assetId": "modelMars",
+    "src": "assets/object/glb_mars/mars.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "jupiterModel",
+    "targetIndex": 5,
+    "category": "planet",
+    "color": "#b45309",
+    "assetId": "modelJupiter",
+    "src": "assets/object/glb_jupiter/jupiter.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "saturnModel",
+    "targetIndex": 6,
+    "category": "planet",
+    "color": "#f59e0b",
+    "assetId": "modelSaturn",
+    "src": "assets/object/glb_saturnus/saturn.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "uranusModel",
+    "targetIndex": 7,
+    "category": "planet",
+    "color": "#22d3ee",
+    "assetId": "modelUranus",
+    "src": "assets/object/glb_uranus/uranus.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "neptuneModel",
+    "targetIndex": 8,
+    "category": "planet",
+    "color": "#2563eb",
+    "assetId": "modelNeptune",
+    "src": "assets/object/glb_neptunus/neptune.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "moonModel",
+    "targetIndex": 9,
+    "category": "moon",
+    "color": "#cbd5e1",
+    "assetId": "modelMoon",
+    "src": "assets/object/glb_bulan/moon.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "phobosModel",
+    "targetIndex": 10,
+    "category": "moon",
+    "color": "#78716c",
+    "assetId": "modelPhobos",
+    "src": "assets/object/glb_phobos/phobos.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "europaModel",
+    "targetIndex": 11,
+    "category": "moon",
+    "color": "#a5f3fc",
+    "assetId": "modelEuropa",
+    "src": "assets/object/glb_europa/europa.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "titanModel",
+    "targetIndex": 12,
+    "category": "moon",
+    "color": "#8c9c64",
+    "assetId": "modelTitan",
+    "src": "assets/object/glb_titan/titan.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "enceladusModel",
+    "targetIndex": 13,
+    "category": "moon",
+    "color": "#00d2d3",
+    "assetId": "modelEnceladus",
+    "src": "assets/object/glb_enceladus/enceladus.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "oberonModel",
+    "targetIndex": 14,
+    "category": "moon",
+    "color": "#475569",
+    "assetId": "modelOberon",
+    "src": "assets/object/glb_oberon/oberon.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "tritonModel",
+    "targetIndex": 15,
+    "category": "moon",
+    "color": "#93c5fd",
+    "assetId": "modelTriton",
+    "src": "assets/object/glb_triton/triton.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "asteroidModel",
+    "targetIndex": 16,
+    "category": "small-body",
+    "color": "#64748b",
+    "assetId": "modelAsteroid",
+    "src": "assets/object/glb_asteroid/asteroid.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "ceresModel",
+    "targetIndex": 17,
+    "category": "dwarf-planet",
+    "color": "#78716c",
+    "assetId": "modelCeres",
+    "src": "assets/object/glb_ceres/ceres.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "plutoModel",
+    "targetIndex": 18,
+    "category": "dwarf-planet",
+    "color": "#f59e0b",
+    "assetId": "modelPluto",
+    "src": "assets/object/glb_pluto/pluto.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "haumeaModel",
+    "targetIndex": 19,
+    "category": "dwarf-planet",
+    "color": "#e2e8f0",
+    "assetId": "modelHaumea",
+    "src": "assets/object/glb_haumea/haumea.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "makemakeModel",
+    "targetIndex": 20,
+    "category": "dwarf-planet",
+    "color": "#ea580c",
+    "assetId": "modelMakemake",
+    "src": "assets/object/glb_makemake/makemake.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "erisModel",
+    "targetIndex": 21,
+    "category": "dwarf-planet",
+    "color": "#cbd5e1",
+    "assetId": "modelEris",
+    "src": "assets/object/glb_eris/eris.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "cancrieModel",
+    "targetIndex": 22,
+    "category": "exoplanet",
+    "color": "#ff5e00",
+    "assetId": "modelCancrie",
+    "src": "assets/object/glb_cancrie/cancrie.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "cometModel",
+    "targetIndex": 23,
+    "category": "small-body",
+    "color": "#94a3b8",
+    "assetId": "modelComet",
+    "src": "assets/object/glb_komet/comet.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  },
+  {
+    "id": "bimasaktiModel",
+    "targetIndex": 24,
+    "category": "galaxy",
+    "color": "#00a8ff",
+    "assetId": "modelBimasakti",
+    "src": "assets/object/glb_bimasakti/bimasakti.glb",
+    "scale": "1 1 1",
+    "position": "0 0 0"
+  }
+]

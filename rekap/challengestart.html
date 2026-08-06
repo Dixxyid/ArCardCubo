@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting Room - Master Panel | Firebase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        @keyframes bounce-short {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        .animate-bounce-short { animation: bounce-short 0.4s ease-out; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; font-style: normal; }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4 modal-backdrop">
+        <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-bounce-short">
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Konfirmasi Selesai</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">
+                    Data akan didownload dan <span class="font-bold text-red-600">dihapus permanen</span> dari database penyimpanan. Lanjutkan?
+                </p>
+            </div>
+            <div class="flex border-t border-gray-100">
+                <button onclick="closeModal()" class="flex-1 px-4 py-4 text-gray-500 font-bold hover:bg-gray-50 transition-colors border-r border-gray-100">
+                    BATAL
+                </button>
+                <button onclick="prosesDownloadDanHapus()" class="flex-1 px-4 py-4 text-red-600 font-bold hover:bg-red-50 transition-colors">
+                    YA, SELESAIKAN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContent" class="flex items-center justify-center min-h-screen p-6">
+        <div class="text-center animate-pulse text-gray-500 font-medium">
+            Menghubungkan ke server...
+        </div>
+    </div>
+
+    <!-- Integrasi Firebase Modular SDK v10+ (Terbuka & Stabil) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { 
+            getFirestore, doc, getDoc, getDocs, collection, query, where, orderBy, onSnapshot, writeBatch 
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // Konfigurasi Resmi Proyek arcubo-5ed55
+        const firebaseConfig = {
+            apiKey: "AIzaSyCY_j7-nitUEtMI4-Xk9vPj4UmSWvh1TVM",
+            authDomain: "arcubo-5ed55.firebaseapp.com",
+            projectId: "arcubo-5ed55",
+            storageBucket: "arcubo-5ed55.firebasestorage.app",
+            messagingSenderId: "788282131772",
+            appId: "1:788282131772:web:bc13320122f8bb62544a39"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const role = localStorage.getItem('role');
+        const roomId = localStorage.getItem('room_id');
+        let masterNameFromDB = ""; 
+        let currentSort = 'score'; 
+        let unsubscribeRealtime = null;
+
+        if (!role || !roomId) { window.location.href = 'index.html'; }
+
+        function getScoreStyle(score) {
+            if (score <= 20) return "bg-pink-100 text-pink-600 border-pink-200";
+            if (score <= 40) return "bg-red-100 text-red-600 border-red-200";
+            if (score <= 60) return "bg-orange-100 text-orange-600 border-orange-200";
+            if (score <= 70) return "bg-yellow-100 text-yellow-600 border-yellow-200";
+            if (score <= 80) return "bg-green-100 text-green-600 border-green-200";
+            if (score <= 90) return "bg-sky-100 text-sky-600 border-sky-200";
+            return "bg-blue-600 text-white border-blue-700";
+        }
+
+        // Fungsi Manajemen Modal UI
+        window.showModal = function() { document.getElementById('customModal').classList.remove('hidden'); }
+        window.closeModal = function() { document.getElementById('customModal').classList.add('hidden'); }
+
+        window.onload = async function() {
+            const container = document.getElementById('mainContent');
+
+            if (role === 'master') {
+                try {
+                    const roomRef = doc(db, "rooms", roomId);
+                    const roomSnap = await getDoc(roomRef);
+
+                    if (!roomSnap.exists()) {
+                        alert("Room tidak ditemukan di database.");
+                        window.location.href = 'index.html';
+                        return;
+                    }
+
+                    masterNameFromDB = roomSnap.data().master_name.toUpperCase();
+
+                    container.innerHTML = `
+                        <div class="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-xl">
+                            <div class="mb-6">
+                                <h1 class="text-3xl font-extrabold text-gray-800 uppercase tracking-tight mb-4 text-center">Master Panel</h1>
+                                
+                                <div class="flex flex-wrap items-center justify-between bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 gap-y-2">
+                                    <div class="flex items-center space-x-4">
+                                        <p class="text-gray-500 font-medium text-xs sm:text-sm">ROOM ID: <span class="text-green-600 font-mono font-bold ml-1">${roomId}</span></p>
+                                        <span class="text-gray-300">|</span>
+                                        <p class="text-gray-500 font-medium text-xs sm:text-sm">MASTER: <span class="text-blue-600 font-bold ml-1">${masterNameFromDB}</span></p>
+                                    </div>
+                                    <div class="flex items-center text-green-500 font-bold text-[10px] uppercase tracking-wider">
+                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-ping"></span> Live
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 text-center sm:text-left">Indikator Penilaian:</p>
+                                    <div class="grid grid-cols-4 sm:grid-cols-7 gap-1 text-[8px] font-bold uppercase">
+                                        <div class="py-1.5 text-center bg-pink-100 text-pink-600 rounded-md border border-pink-200">0-20</div>
+                                        <div class="py-1.5 text-center bg-red-100 text-red-600 rounded-md border border-red-200">21-40</div>
+                                        <div class="py-1.5 text-center bg-orange-100 text-orange-600 rounded-md border border-orange-200">41-60</div>
+                                        <div class="py-1.5 text-center bg-yellow-100 text-yellow-600 rounded-md border border-yellow-200">61-70</div>
+                                        <div class="py-1.5 text-center bg-green-100 text-green-600 rounded-md border border-green-200">71-80</div>
+                                        <div class="py-1.5 text-center bg-sky-100 text-sky-600 rounded-md border border-sky-200">81-90</div>
+                                        <div class="py-1.5 text-center bg-blue-600 text-white rounded-md border border-blue-700">91-100</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="mb-6 border-gray-100">
+                            
+                            <div class="text-left">
+                                <div class="flex justify-between items-center mb-3">
+                                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center">
+                                        Peserta Terhubung (<span id="participantCount" class="mx-1 text-gray-800">0</span>)
+                                    </h2>
+                                    <select id="sortOption" onchange="window.changeSort(this.value)" class="text-[10px] font-bold border rounded-md px-2 py-1 bg-gray-50 text-gray-600 outline-none">
+                                        <option value="score">SORT BY: Skor Penilaian</option>
+                                        <option value="name">SORT BY: Nama A-Z</option>
+                                    </select>
+                                </div>
+                                <div id="playerList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-h-[150px] border-2 border-dashed border-gray-100 p-4 rounded-xl bg-gray-50/50"></div>
+                            </div>
+
+                            <button onclick="showModal()" class="w-full mt-8 bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-green-100 transition-all active:scale-95 uppercase tracking-widest">
+                                Selesaikan & Download Rekap
+                            </button>
+                        </div>
+                    `;
+                    
+                    initRealtime();
+
+                } catch (err) {
+                    console.error(err);
+                    alert("Gagal memuat data Master.");
+                }
+            } else {
+                window.location.href = 'formpenilaian.html';
+            }
+        }
+
+        // Perbaikan Scope: Hubungkan fungsi changeSort ke objek global window
+        window.changeSort = function(val) {
+            currentSort = val;
+            initRealtime();
+        }
+
+        function initRealtime() {
+            if (unsubscribeRealtime) unsubscribeRealtime();
+
+            const participantsRef = collection(db, "participants");
+            let q;
+
+            if (currentSort === 'score') {
+                q = query(participantsRef, where("room_id", "==", roomId), orderBy("score", "desc"));
+            } else {
+                q = query(participantsRef, where("room_id", "==", roomId), orderBy("student_name", "asc"));
+            }
+
+            unsubscribeRealtime = onSnapshot(q, (snapshot) => {
+                const list = [];
+                snapshot.forEach((doc) => {
+                    list.push(doc.data());
+                });
+                
+                document.getElementById('participantCount').innerText = list.length;
+                renderPlayerList(list);
+            }, (error) => {
+                // Jika indeks belum selesai dibuat di Firebase Console, link pembuatannya akan muncul di sini
+                console.error("Kesalahan sinkronisasi real-time: ", error);
+            });
+        }
+
+        function renderPlayerList(list) {
+            const listDiv = document.getElementById('playerList');
+            if (!listDiv) return;
+            if (list.length === 0) {
+                listDiv.innerHTML = `<p class="text-gray-400 col-span-2 text-center py-10 italic text-xs">Menunggu peserta bergabung...</p>`;
+            } else {
+                listDiv.innerHTML = list.map(p => `
+                    <div class="bg-white border border-gray-200 px-4 py-3 rounded-xl shadow-sm flex items-center justify-between animate-bounce-short">
+                        <div class="flex items-center space-x-3 overflow-hidden">
+                            <div class="w-8 h-8 bg-gray-800 text-white rounded-full flex-shrink-0 flex items-center justify-center font-bold text-[10px]">${p.student_name ? p.student_name.charAt(0).toUpperCase() : '?'}</div>
+                            <span class="font-bold text-gray-700 truncate text-sm">${p.student_name || 'Tanpa Nama'}</span>
+                        </div>
+                        <div class="${getScoreStyle(p.score || 0)} px-3 py-1 rounded-lg text-xs font-black border flex flex-col items-center min-w-[50px]">
+                            <span class="text-[7px] opacity-70 leading-none mb-0.5">SCORE</span>
+                            <span>${p.score || 0}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        window.prosesDownloadDanHapus = async function() {
+            closeModal();
+            const container = document.getElementById('mainContent');
+            container.innerHTML = `<div class="text-center font-bold text-gray-500 animate-pulse">Memproses & Membersihkan Database...</div>`;
+
+            try {
+                if (unsubscribeRealtime) unsubscribeRealtime();
+
+                const q = query(collection(db, "participants"), where("room_id", "==", roomId), orderBy("score", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    alert("Data tidak ditemukan atau sudah dihapus.");
+                    location.reload();
+                    return;
+                }
+
+                let csvContent = "\ufeff"; 
+                csvContent += `INFO REKAP NILAI\n`;
+                csvContent += `NAMA MASTER ROOM,${masterNameFromDB}\n`;
+                csvContent += `ROOM ID,${roomId}\n`;
+                csvContent += `TANGGAL DOWNLOAD,${new Date().toLocaleString('id-ID')}\n\n`;
+                csvContent += `PERINGKAT,NAMA PESERTA,SKOR\n`;
+                
+                let index = 1;
+                querySnapshot.forEach((doc) => {
+                    const p = doc.data();
+                    const cleanName = p.student_name ? p.student_name.toUpperCase().replace(/,/g, '') : 'TANPA NAMA';
+                    csvContent += `${index},${cleanName},${p.score || 0}\n`;
+                    index++;
+                });
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                const safeFileName = masterNameFromDB.replace(/\s+/g, '_');
+                a.download = `Rekap_${safeFileName}_${roomId}.csv`;
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                const batch = writeBatch(db);
+                querySnapshot.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+
+                const roomRef = doc(db, "rooms", roomId);
+                batch.delete(roomRef);
+
+                await batch.commit();
+
+                alert("Selesai! Data berhasil diunduh dan dibersihkan.");
+                localStorage.clear();
+                window.location.href = 'index.html';
+
+            } catch (err) {
+                console.error(err);
+                alert("Terjadi kesalahan sistem: " + err.message);
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

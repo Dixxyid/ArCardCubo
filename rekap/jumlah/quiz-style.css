@@ -1,0 +1,335 @@
+:root {
+    --glow-color: #f39c12;
+    --bg-gradient: linear-gradient(135deg, #11091c 0%, #1a0c2e 50%, #08030f 100%);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: #e1d5eb;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: -10%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(243, 156, 18, 0.15) 0%, transparent 70%);
+    z-index: -1;
+    filter: blur(30px);
+}
+
+/* Container Utama Terpusat Vertikal & Horisontal */
+.container {
+    width: 100%;
+    max-width: 540px;
+    min-height: 100vh;
+    padding: 20px 16px 30px 16px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.header-tag {
+    font-size: 0.78rem;
+    color: var(--glow-color);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(243, 156, 18, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(243, 156, 18, 0.2);
+}
+
+.quiz-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.quiz-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #ffffff, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+}
+
+.quiz-header p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+/* Card Kuis & Hasil */
+.card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 24px 20px;
+    margin-bottom: 0;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Kuis Progress Bar */
+.progress-container {
+    margin-bottom: 20px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, #f39c12, #e67e22);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.question-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.option-btn:hover:not(:disabled) {
+    background: rgba(243, 156, 18, 0.15);
+    border-color: var(--glow-color);
+}
+
+.option-btn.correct {
+    background: rgba(46, 204, 113, 0.2) !important;
+    border-color: var(--success-color) !important;
+    color: #ffffff;
+}
+
+.option-btn.incorrect {
+    background: rgba(231, 76, 60, 0.2) !important;
+    border-color: var(--error-color) !important;
+    color: #ffffff;
+}
+
+.option-btn:disabled {
+    cursor: default;
+}
+
+.explanation-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(243, 156, 18, 0.08);
+    border-left: 3px solid var(--glow-color);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    display: none;
+}
+
+.explanation-box strong {
+    color: var(--glow-color);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.actions-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-next {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    border: none;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 15px rgba(243, 156, 18, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-next:hover {
+    box-shadow: 0 0 25px rgba(243, 156, 18, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Layar Hasil Kuis */
+.result-box {
+    text-align: center;
+    padding: 28px 16px;
+}
+
+.result-icon {
+    font-size: 3.2rem;
+    color: var(--glow-color);
+    margin-bottom: 8px;
+}
+
+.result-score {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 6px 0 10px 0;
+    letter-spacing: -1px;
+}
+
+.result-message {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+/* Container Aksi Hasil */
+.result-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Base style untuk semua tombol di layar hasil */
+.btn-restart, 
+.btn-primary, 
+.btn-dashboard,
+.btn-quiz-act {
+    width: 100%;
+    max-width: 240px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-restart {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+    color: #ffffff;
+}
+
+.btn-restart:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.25);
+}
+
+.btn-dashboard {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    backdrop-filter: blur(10px);
+}
+
+.btn-dashboard:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+/* Responsif Layar Desktop / Tablet */
+@media (min-width: 520px) {
+    .result-actions {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 8px; /* Mengurangi gap agar tidak memicu overflow */
+    }
+    
+    .btn-restart, 
+    .btn-primary, 
+    .btn-dashboard,
+    .btn-quiz-act {
+        flex: 1 1 0; /* Semua tombol mendapat porsi lebar yang sama persis */
+        width: 100%;
+        max-width: none;
+        min-width: 0; /* Mencegah batas minimal bawaan browser */
+    }
+}
