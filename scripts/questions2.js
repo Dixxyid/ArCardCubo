@@ -4,7 +4,7 @@
 // Total: 50 Soal
 // ============================================================
 
-const soalPaketB = [
+const PAKET_2 = [
   {
     kategori: "Matahari & Planet Utama",
     objek: "Matahari",
