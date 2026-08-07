@@ -5,13 +5,10 @@ body {
                 url('../materials/bg_learning.webp') center/cover no-repeat;
     color: #fff;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center; /* Mengetengahkan seluruh konten secara vertikal */
-    gap: 16px;              /* Jarak presisi antara judul dan slider */
-    height: 100dvh;         /* Memakai dvh agar pas di browser mobile */
-    padding: 16px 0;
-    box-sizing: border-box;
+    justify-content: center;
+    height: 100dvh;
+    width: 100vw;
     overflow: hidden;
     user-select: none;
     -webkit-user-select: none;
@@ -27,16 +24,26 @@ body {
     z-index: 0;
 }
 
+/* Container utama yang menyatukan Judul + Slider persis di tengah layar */
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 10;
+    gap: 8px; /* Jarak dekat & presisi antara judul dan kartu */
+}
+
 /* Header Section */
 .header-section {
     text-align: center;
-    z-index: 10;
 }
 
 .title {
     letter-spacing: 6px;
     font-weight: 800;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     text-transform: uppercase;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     margin: 0;
@@ -44,10 +51,10 @@ body {
 
 .swipe-hint {
     display: block;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     color: #94a3b8;
     letter-spacing: 1px;
-    margin-top: 4px;
+    margin-top: 3px;
     text-transform: uppercase;
     opacity: 0.8;
 }
@@ -56,15 +63,14 @@ body {
 .swiper {
     width: 100%;
     padding-top: 10px;
-    padding-bottom: 35px; /* Memberikan ruang untuk pagination counter */
-    z-index: 10;
+    padding-bottom: 30px;
 }
 
-/* Ukuran Kartu Mobile Proorsional */
+/* Ukuran Kartu Ringkas & Pas di HP */
 .swiper-slide {
-    width: 220px; 
-    height: 380px; 
-    border-radius: 28px;
+    width: 210px; 
+    height: 360px; 
+    border-radius: 26px;
     background: rgba(15, 23, 42, 0.82);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -74,7 +80,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 24px 16px;
+    padding: 20px 14px;
     box-sizing: border-box;
     will-change: transform;
     transform: translateZ(0);
@@ -87,9 +93,9 @@ body {
 }
 
 .icon {
-    font-size: 3.8rem;
+    font-size: 3.5rem;
     line-height: 1;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .info-section { 
@@ -100,16 +106,16 @@ body {
 
 .label {
     display: block;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 800;
     letter-spacing: 3px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-transform: uppercase;
 }
 
 .description {
-    font-size: 0.78rem;
-    line-height: 1.35;
+    font-size: 0.75rem;
+    line-height: 1.3;
     color: #cbd5e1;
     margin: 0;
     opacity: 0;
@@ -125,13 +131,13 @@ body {
 }
 
 .btn-ar {
-    padding: 10px 24px;
+    padding: 9px 22px;
     background: #ffffff;
     color: #0f172a;
-    border-radius: 24px;
+    border-radius: 22px;
     text-decoration: none;
     font-weight: 800;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
@@ -142,45 +148,45 @@ body {
     transform: scale(0.94);
 }
 
-/* Custom Swiper Pagination Counter */
+/* Swiper Counter Position */
 .swiper-pagination-fraction {
     color: #94a3b8;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 2px;
-    bottom: 5px !important;
+    bottom: 2px !important;
 }
 
 .swiper-pagination-current {
     color: #ffffff;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
 }
 
-/* Tampilan Tablet & Laptop */
+/* Penyesuaian Layar Besar (Tablet / Laptop) */
 @media (min-width: 768px) {
-    body {
-        gap: 24px;
+    .main-layout {
+        gap: 16px;
     }
     .title {
-        font-size: 1.7rem;
+        font-size: 1.6rem;
         letter-spacing: 8px;
     }
     .swipe-hint {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
     .swiper-slide {
-        width: 250px;
-        height: 420px;
-        padding: 32px 20px;
-        border-radius: 36px;
+        width: 240px;
+        height: 400px;
+        padding: 28px 18px;
+        border-radius: 32px;
     }
     .icon {
-        font-size: 4.8rem;
+        font-size: 4.5rem;
     }
     .label {
-        font-size: 1.35rem;
+        font-size: 1.3rem;
     }
     .description {
-        font-size: 0.85rem;
+        font-size: 0.82rem;
     }
 }
