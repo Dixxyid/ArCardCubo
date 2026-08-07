@@ -3,11 +3,10 @@
 }
 
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
     height: 100vh;
     height: 100dvh;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
 }
 
@@ -18,8 +17,9 @@ body {
     color: #fff;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    gap: 16px;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -34,22 +34,10 @@ body {
     z-index: 0;
 }
 
-/* Pembungkus Utama Konten */
-.main-layout {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
 /* Header Section */
 .header-section {
     text-align: center;
+    z-index: 10;
 }
 
 .title {
@@ -71,23 +59,17 @@ body {
     opacity: 0.8;
 }
 
-/* Swiper Container Fix */
+/* Swiper Container */
 .swiper {
     width: 100%;
-    max-width: 100vw;
-    height: auto !important;
-    padding-top: 15px;
+    padding-top: 10px;
     padding-bottom: 35px;
-    overflow: hidden; /* Mengunci slider agar tidak meluber horizontal */
+    z-index: 10;
 }
 
-.swiper-wrapper {
-    align-items: center;
-}
-
-/* Ukuran & Formasi Kartu */
+/* Ukuran Kartu Slider */
 .swiper-slide {
-    width: 220px !important; /* Mengunci lebar slide agar kalkulasi posisi Swiper tidak salah */
+    width: 220px; 
     height: 370px; 
     border-radius: 28px;
     background: rgba(15, 23, 42, 0.82);
@@ -178,31 +160,16 @@ body {
     font-size: 0.9rem;
 }
 
-/* Penyesuaian Tablet / PC */
+/* Penyesuaian Tablet/Laptop */
 @media (min-width: 768px) {
-    .main-layout {
-        gap: 20px;
+    body {
+        gap: 24px;
     }
     .title {
         font-size: 1.6rem;
-        letter-spacing: 8px;
-    }
-    .swipe-hint {
-        font-size: 0.7rem;
     }
     .swiper-slide {
-        width: 250px !important;
+        width: 250px;
         height: 410px;
-        padding: 28px 18px;
-        border-radius: 32px;
-    }
-    .icon {
-        font-size: 4.5rem;
-    }
-    .label {
-        font-size: 1.3rem;
-    }
-    .description {
-        font-size: 0.82rem;
     }
 }
