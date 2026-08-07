@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "SUN", icon: "☀️", color: "#f59e0b", desc: "Bintang raksasa pusat tata surya yang menyinari seluruh kehidupan.", url: "page/sun.html" },
         { name: "MERCURY", icon: "🔘", color: "#94a3b8", desc: "Planet terkecil dan terdekat dengan Matahari. Permukaannya penuh kawah.", url: "page/mercury.html" },
         { name: "VENUS", icon: "🟠", color: "#eab308", desc: "Planet terpanas dengan atmosfer sangat tebal yang memerangkap panas.", url: "page/venus.html" },
-        { name: "EARTH", icon: "🌍", color: "#3b82f6", desc: "Satu-satunya rumah yang kita kenal dengan air cair dan kehidupan melimpah.", url: "page/bumi.html" },
+        { name: "EARTH", icon: "🌍", color: "#3b82f6", desc: "Satu-satunya rumah yang kita kenal dengan sebagai air cair dan kehidupan melimpah.", url: "page/bumi.html" },
         { name: "MOON", icon: "🌙", color: "#cbd5e1", desc: "Satelit alami Bumi yang memengaruhi pasang surut air laut.", url: "page/moon.html" },
         { name: "MARS", icon: "🔴", color: "#ef4444", desc: "Dikenal sebagai planet merah karena oksida besi yang menutupi permukaannya.", url: "page/mars.html" },
         { name: "PHOBOS", icon: "🥔", color: "#78716c", desc: "Satelit alami terbesar Mars berbentuk tidak beraturan.", url: "page/phobos.html" },
