@@ -28,9 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "BIMASAKTI", icon: "🌌", color: "#00a8ff", desc: "Sistem galaksi spiral berpagar kosmik tempat bernaungnya tata surya.", url: "page/bimasakti.html" }
     ];
 
-    // Render slide ke DOM
+    // 1. Render slide ke DOM
     const swiperWrapper = document.querySelector(".swiper-wrapper");
     if (swiperWrapper) {
+        swiperWrapper.innerHTML = "";
         solarData.forEach(slide => {
             const slideHTML = `
                 <div class="swiper-slide" style="--c: ${slide.color}">
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Penanganan interaksi pengguna untuk mencegah error console navigator.vibrate
+    // 2. Registrasi interaksi pertama pengguna untuk izin getar (Vibration API)
     let userHasInteracted = false;
     const registerInteraction = () => {
         userHasInteracted = true;
@@ -56,37 +57,43 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("pointerdown", registerInteraction);
     window.addEventListener("touchstart", registerInteraction);
 
-    // Inisialisasi Swiper
-    new Swiper(".mySwiper", {
-        effect: "coverflow",
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: "auto",
-        speed: 300,
-        loop: true,
-        coverflowEffect: {
-            rotate: 0,
-            stretch: -12,
-            depth: 90,
-            modifier: 1,
-            slideShadows: false
-        },
-        pagination: {
-            el: ".swiper-pagination",
-            type: "fraction",
-        },
-        on: {
-            slideChange: () => {
-                if (userHasInteracted && "vibrate" in navigator) {
-                    try {
-                        navigator.vibrate(8);
-                    } catch (e) {}
+    // 3. Inisialisasi Swiper
+    if (document.querySelector(".mySwiper")) {
+        new Swiper(".mySwiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            speed: 300,
+            loop: true,
+            observer: true,
+            observeParents: true,
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 0, // Mengubah dari nilai negatif (-12) ke 0 agar kartu tidak saling menimpa
+                depth: 80,
+                modifier: 1,
+                slideShadows: false
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                type: "fraction",
+            },
+            on: {
+                slideChange: () => {
+                    if (userHasInteracted && "vibrate" in navigator) {
+                        try {
+                            navigator.vibrate(8);
+                        } catch (e) {
+                            // Mencegah crash jika fitur getar diblokir browser
+                        }
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
-    // Render Bintang Background
+    // 4. Render Bintang Background (Dengan pengecekan elemen canvas)
     const canvas = document.getElementById("starCanvas");
     if (canvas) {
         const ctx = canvas.getContext("2d");
