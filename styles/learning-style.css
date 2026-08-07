@@ -1,15 +1,23 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+}
+
 body {
     font-family: system-ui, -apple-system, sans-serif;
-    margin: 0;
     background: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.85)), 
                 url('../materials/bg_learning.webp') center/cover no-repeat;
     color: #fff;
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 100dvh;
-    width: 100vw;
-    overflow: hidden;
+    align-items: center;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -24,27 +32,29 @@ body {
     z-index: 0;
 }
 
-/* Container utama */
+/* Pembungkus Utama: Mengunci tinggi 100dvh agar Judul + Kartu + Nomor Slide sempurna di tengah layar */
 .main-layout {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    z-index: 10;
-    gap: 6px;
+    justify-content: center; /* Membagi ruang kosong atas dan bawah secara presisi seimbang */
+    gap: 16px; /* Jarak proporsional antara Judul dan Kartu */
 }
 
-/* Header Section (Judul diturunkan sedikit) */
+/* Header Section */
 .header-section {
     text-align: center;
-    margin-top: 18px; /* Menurunkan posisi judul agar lebih tengah */
+    margin: 0;
 }
 
 .title {
     letter-spacing: 6px;
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     text-transform: uppercase;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     margin: 0;
@@ -52,25 +62,25 @@ body {
 
 .swipe-hint {
     display: block;
-    font-size: 0.6rem;
+    font-size: 0.62rem;
     color: #94a3b8;
     letter-spacing: 1px;
-    margin-top: 3px;
+    margin-top: 4px;
     text-transform: uppercase;
     opacity: 0.8;
 }
 
-/* Swiper Container (Kartu dinaikkan sedikit) */
+/* Swiper Container */
 .swiper {
     width: 100%;
-    padding-top: 4px;
-    padding-bottom: 18px; /* Dikurangi dari 30px agar kartu terangkat ke atas */
-    margin-top: -6px;      /* Menarik slider sedikit lebih ke atas */
+    padding-top: 10px;
+    padding-bottom: 42px; /* Memberikan ruang lega untuk teks indikator 4 / 25 di bawah kartu */
+    margin: 0;
 }
 
-/* Ukuran Kartu */
+/* Ukuran Kartu Slider */
 .swiper-slide {
-    width: 210px; 
+    width: 215px; 
     height: 360px; 
     border-radius: 26px;
     background: rgba(15, 23, 42, 0.82);
@@ -83,9 +93,6 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 20px 14px;
-    box-sizing: border-box;
-    will-change: transform;
-    transform: translateZ(0);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -150,27 +157,24 @@ body {
     transform: scale(0.94);
 }
 
-/* Swiper Counter Position */
+/* Posisi Indikator Nomor (4 / 25) */
 .swiper-pagination-fraction {
     color: #94a3b8;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 2px;
-    bottom: 0px !important;
+    bottom: 8px !important;
 }
 
 .swiper-pagination-current {
     color: #ffffff;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
 }
 
-/* Penyesuaian Layar Besar (Tablet / Laptop) */
+/* Layar Besar (Tablet / Laptop) */
 @media (min-width: 768px) {
     .main-layout {
-        gap: 12px;
-    }
-    .header-section {
-        margin-top: 24px;
+        gap: 24px;
     }
     .title {
         font-size: 1.6rem;
@@ -180,7 +184,7 @@ body {
         font-size: 0.7rem;
     }
     .swiper-slide {
-        width: 240px;
+        width: 250px;
         height: 400px;
         padding: 28px 18px;
         border-radius: 32px;
