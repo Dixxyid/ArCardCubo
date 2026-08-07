@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 1. Data Objek Tata Surya
     const solarData = [
         { name: "SUN", icon: "☀️", color: "#f59e0b", desc: "Bintang raksasa pusat tata surya yang menyinari seluruh kehidupan.", url: "page/sun.html" },
         { name: "MERCURY", icon: "🔘", color: "#94a3b8", desc: "Planet terkecil dan terdekat dengan Matahari. Permukaannya penuh kawah.", url: "page/mercury.html" },
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "BIMASAKTI", icon: "🌌", color: "#00a8ff", desc: "Sistem galaksi spiral berpagar kosmik tempat bernaungnya tata surya.", url: "page/bimasakti.html" }
     ];
 
-    // Render HTML slide ke dalam .swiper-wrapper
+    // Render slide ke DOM
     const swiperWrapper = document.querySelector(".swiper-wrapper");
     if (swiperWrapper) {
         solarData.forEach(slide => {
@@ -47,26 +46,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2. Inisialisasi Swiper
+    // Inisialisasi Swiper dengan Haptic Feedback & Pagination
     new Swiper(".mySwiper", {
         effect: "coverflow",
         grabCursor: true,
         centeredSlides: true,
         slidesPerView: "auto",
-        speed: 350,
+        speed: 300,
         loop: true,
         coverflowEffect: {
             rotate: 0,
-            stretch: -25,
-            depth: 130,
+            stretch: -12,
+            depth: 90,
             modifier: 1,
             slideShadows: false
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            type: "fraction", // Menampilkan format 1 / 25
+        },
+        on: {
+            slideChange: () => {
+                // Micro-vibration saat berpindah slide di perangkat mobile
+                if ("vibrate" in navigator) {
+                    navigator.vibrate(8);
+                }
+            }
         }
     });
 
-    // 3. Render Bintang Menggunakan Canvas 2D Native
+    // Render Bintang + Optimasi Hemat Daya (Pause saat tab mati)
     const canvas = document.getElementById("starCanvas");
     const ctx = canvas.getContext("2d");
+    let isTabActive = true;
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -84,6 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }));
 
     function drawStars() {
+        if (!isTabActive) return;
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stars.forEach(star => {
             star.alpha += star.speed;
@@ -96,5 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         requestAnimationFrame(drawStars);
     }
+
+    // Hentikan loop animasi jika tab tidak aktif
+    document.addEventListener("visibilitychange", () => {
+        isTabActive = !document.hidden;
+        if (isTabActive) drawStars();
+    });
+
     drawStars();
 });
