@@ -5,24 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Solar System - Learning Mode</title>
     
-    <!-- Preconnect ke CDN CDN agar jabat tangan TLS lebih cepat -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="styles/learning-style.css" />
 
-    <!-- defer memastikan JS dieksekusi setelah HTML selesai di-parse -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
     <script src="scripts/learning-engine.js" defer></script>
 </head>
 <body>
 
-    <!-- Canvas Native untuk Bintang (0 elemen DOM dinamis) -->
     <canvas id="starCanvas"></canvas>
 
-    <h2 class="title">Solar System</h2>
+    <div class="header-section">
+        <h2 class="title">Solar System</h2>
+        <span class="swipe-hint">◄ Geser untuk menjelajah ►</span>
+    </div>
 
     <div class="swiper mySwiper">
         <div class="swiper-wrapper"></div>
+        <!-- Indikator angka posisi slide -->
+        <div class="swiper-pagination"></div>
     </div>
 
 </body>
