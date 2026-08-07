@@ -12,18 +12,42 @@ const explanationBox = document.getElementById('explanation-box');
 const explanationText = document.getElementById('explanation-text');
 const btnNext = document.getElementById('btn-next');
 
+// Fungsi untuk mengumpulkan seluruh soal dari PAKET_1 hingga PAKET_5
+function getAllQuestions() {
+    let combined = [];
+    if (typeof PAKET_1 !== "undefined") combined.push(...PAKET_1);
+    if (typeof PAKET_2 !== "undefined") combined.push(...PAKET_2);
+    if (typeof PAKET_3 !== "undefined") combined.push(...PAKET_3);
+    if (typeof PAKET_4 !== "undefined") combined.push(...PAKET_4);
+    if (typeof PAKET_5 !== "undefined") combined.push(...PAKET_5);
+    return combined;
+}
+
+// Fungsi Algoritma Acak (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 function initQuiz() {
-    // Membaca limit soal dari tag <body data-limit="...">
     const limit = parseInt(document.body.dataset.limit) || 10;
     
-    // Ambil sejumlah soal sesuai limit yang ditentukan
-    activeQuestions = ALL_QUESTIONS.slice(0, limit);
+    // 1. Ambil seluruh gabungan soal paket
+    const allQuestions = getAllQuestions();
     
-    // Tampilkan total soal di UI header jika ada elemennya
+    // 2. Acak seluruh soal
+    const shuffledQuestions = shuffleArray(allQuestions);
+    
+    // 3. Ambil 10 soal teratas hasil acakan
+    activeQuestions = shuffledQuestions.slice(0, limit);
+    
     const totalElem = document.getElementById('total-limit');
     if (totalElem) totalElem.innerText = limit;
 
-    // SEMBUNYIKAN tombol Dashboard saat awal kuis dimuat
     const dashWrapper = document.getElementById('dashboard-wrapper');
     if (dashWrapper) {
         dashWrapper.style.display = 'none';
@@ -34,7 +58,11 @@ function initQuiz() {
 
 function loadQuestion() {
     const q = activeQuestions[currentQuestion];
-    questionText.innerText = q.question;
+    
+    // Bersihkan nomor keras bawaan di file (seperti "1. ", "2. ")
+    const cleanQuestionText = q.question.replace(/^\d+\.\s*/, '');
+    questionText.innerText = `${currentQuestion + 1}. ${cleanQuestionText}`;
+
     questionCount.innerText = `Soal ${currentQuestion + 1} dari ${activeQuestions.length}`;
     progressFill.style.width = `${((currentQuestion + 1) / activeQuestions.length) * 100}%`;
     
@@ -68,7 +96,6 @@ function selectOption(index, btnElement) {
     });
 
     if (index === q.answer) {
-        // Kalkulasi skor otomatis agar total poin selalu bernilai 100
         const pointsPerQuestion = 100 / activeQuestions.length;
         score += pointsPerQuestion;
         scoreLive.innerText = `Skor: ${Math.round(score)}`;
@@ -105,7 +132,6 @@ function showResult() {
     const resultCard = document.getElementById('result-card');
     resultCard.style.display = 'block';
 
-    // MUNCULKAN tombol Dashboard di bawah card kuis saat hasil selesai ditampilkan
     const dashWrapper = document.getElementById('dashboard-wrapper');
     if (dashWrapper) {
         dashWrapper.style.display = 'flex';
@@ -131,18 +157,16 @@ function restartQuiz() {
     score = 0;
     scoreLive.innerText = 'Skor: 0';
     
-    // Sembunyikan kartu hasil & tampilkan kembali kartu kuis
     document.getElementById('result-card').style.display = 'none';
     document.getElementById('quiz-card').style.display = 'block';
 
-    // SEMBUNYIKAN KEMBALI tombol Dashboard saat kuis diulang
     const dashWrapper = document.getElementById('dashboard-wrapper');
     if (dashWrapper) {
         dashWrapper.style.display = 'none';
     }
 
-    loadQuestion();
+    // Mengacak ulang soal dan memulai dari nomor 1 kembali
+    initQuiz();
 }
 
-// Jalankan kuis saat DOM siap
 document.addEventListener("DOMContentLoaded", initQuiz);
