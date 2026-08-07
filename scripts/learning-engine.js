@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "SUN", icon: "☀️", color: "#f59e0b", desc: "Bintang raksasa pusat tata surya yang menyinari seluruh kehidupan.", url: "page/sun.html" },
         { name: "MERCURY", icon: "🔘", color: "#94a3b8", desc: "Planet terkecil dan terdekat dengan Matahari. Permukaannya penuh kawah.", url: "page/mercury.html" },
         { name: "VENUS", icon: "🟠", color: "#eab308", desc: "Planet terpanas dengan atmosfer sangat tebal yang memerangkap panas.", url: "page/venus.html" },
-        { name: "EARTH", icon: "🌍", color: "#3b82f6", desc: "Satu-satunya rumah yang kita kenal dengan air cair dan kehidupan melimpah.", url: "page/bumi.html" },
+        { name: "EARTH", icon: "🌍", color: "#3b82f6", desc: "Satu-satunya rumah yang kita kenal dengan sebagai air cair dan kehidupan melimpah.", url: "page/bumi.html" },
         { name: "MOON", icon: "🌙", color: "#cbd5e1", desc: "Satelit alami Bumi yang memengaruhi pasang surut air laut.", url: "page/moon.html" },
         { name: "MARS", icon: "🔴", color: "#ef4444", desc: "Dikenal sebagai planet merah karena oksida besi yang menutupi permukaannya.", url: "page/mars.html" },
         { name: "PHOBOS", icon: "🥔", color: "#78716c", desc: "Satelit alami terbesar Mars berbentuk tidak beraturan.", url: "page/phobos.html" },
@@ -46,17 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Pendeteksi interaksi pengguna untuk fitur getar (Vibration API)
+    // Penanganan interaksi pengguna untuk mencegah error console navigator.vibrate
     let userHasInteracted = false;
-    const enableVibration = () => {
+    const registerInteraction = () => {
         userHasInteracted = true;
-        window.removeEventListener("pointerdown", enableVibration);
-        window.removeEventListener("touchstart", enableVibration);
+        window.removeEventListener("pointerdown", registerInteraction);
+        window.removeEventListener("touchstart", registerInteraction);
     };
-    window.addEventListener("pointerdown", enableVibration);
-    window.addEventListener("touchstart", enableVibration);
+    window.addEventListener("pointerdown", registerInteraction);
+    window.addEventListener("touchstart", registerInteraction);
 
-    // Inisialisasi Swiper dengan Haptic Feedback & Pagination
+    // Inisialisasi Swiper
     new Swiper(".mySwiper", {
         effect: "coverflow",
         grabCursor: true,
@@ -64,34 +64,29 @@ document.addEventListener("DOMContentLoaded", () => {
         slidesPerView: "auto",
         speed: 300,
         loop: true,
-        observer: true,
-        observeParents: true,
         coverflowEffect: {
             rotate: 0,
-            stretch: 0,
+            stretch: -12,
             depth: 90,
             modifier: 1,
             slideShadows: false
         },
         pagination: {
             el: ".swiper-pagination",
-            type: "fraction", // Format counter 1 / 25
+            type: "fraction",
         },
         on: {
             slideChange: () => {
-                // Getar hanya dipanggil jika pengguna sudah pernah menyentuh layar
                 if (userHasInteracted && "vibrate" in navigator) {
                     try {
                         navigator.vibrate(8);
-                    } catch (e) {
-                        // Abaikan error jika dikunci browser
-                    }
+                    } catch (e) {}
                 }
             }
         }
     });
 
-    // Render Bintang + Optimasi Hemat Daya
+    // Render Bintang Background
     const canvas = document.getElementById("starCanvas");
     if (canvas) {
         const ctx = canvas.getContext("2d");
