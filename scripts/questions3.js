@@ -1,10 +1,10 @@
 // ============================================================
 // BANK SOAL SISTEM TATA SURYA
 // Media Pembelajaran Berbasis Web dengan Augmented Reality
-// Total: 50 Soal
+// Total: 50 Soal Paket C
 // ============================================================
 
-const soalPaketC = [
+const PAKET_3 = [
   {
     kategori: "Matahari & Planet Utama",
     objek: "Matahari",
