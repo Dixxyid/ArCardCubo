@@ -29,17 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "BIMASAKTI", icon: "🌌", color: "#00a8ff", desc: "Sistem galaksi spiral berpagar kosmik tempat bernaungnya tata surya.", url: "page/bimasakti.html" }
     ];
 
-    // 2. Inisialisasi Swiper dengan Virtual Slides
-    new Swiper(".mySwiper", {
-        effect: "coverflow",
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: "auto",
-        speed: 350,
-        loop: true,
-        virtual: {
-            slides: solarData,
-            renderSlide: (slide) => `
+    // Render HTML slide ke dalam .swiper-wrapper
+    const swiperWrapper = document.querySelector(".swiper-wrapper");
+    if (swiperWrapper) {
+        solarData.forEach(slide => {
+            const slideHTML = `
                 <div class="swiper-slide" style="--c: ${slide.color}">
                     <span class="icon">${slide.icon}</span>
                     <div class="info-section">
@@ -48,8 +42,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <a href="${slide.url}" class="btn-ar">View AR</a>
                 </div>
-            `
-        },
+            `;
+            swiperWrapper.insertAdjacentHTML("beforeend", slideHTML);
+        });
+    }
+
+    // 2. Inisialisasi Swiper
+    new Swiper(".mySwiper", {
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        speed: 350,
+        loop: true,
         coverflowEffect: {
             rotate: 0,
             stretch: -25,
@@ -59,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 3. Render Bintang Menggunakan Canvas 2D Native (Sangat Ringan)
+    // 3. Render Bintang Menggunakan Canvas 2D Native
     const canvas = document.getElementById("starCanvas");
     const ctx = canvas.getContext("2d");
 
