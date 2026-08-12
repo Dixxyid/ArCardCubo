@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Astronomi - 50 Soal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="quiz-style.css">
+</head>
+<body data-limit="50">
+
+    <div class="container">
+        <header style="display: flex; justify-content: center; margin-bottom: 15px;">
+            <div class="header-tag">
+                <i class="fa-solid fa-graduation-cap"></i> Media Pembelajaran ArCubo
+            </div>
+        </header>
+
+        <section class="quiz-header">
+            <h1>Kuis Astronomi (50 Soal)</h1>
+            <p>Uji pemahaman dasar materi Astrofisika & Tata Surya</p>
+        </section>
+
+        <!-- Quiz Card Container -->
+        <div class="card" id="quiz-card">
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span id="question-count">Soal 1 dari 50</span>
+                    <span id="score-live">Skor: 0</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="question-title" id="question-text">Loading...</div>
+
+            <div class="options-list" id="options-container"></div>
+
+            <div class="explanation-box" id="explanation-box">
+                <strong><i class="fa-solid fa-circle-info"></i> Pembahasan:</strong>
+                <span id="explanation-text"></span>
+            </div>
+
+            <div class="actions-area">
+                <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+                    Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Screen Card -->
+        <div class="card result-box" id="result-card" style="display: none;">
+            <div class="result-icon">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2>Kuis Selesai!</h2>
+            <div class="result-score" id="final-score">0 / 100</div>
+            <p class="result-message" id="result-message"></p>
+
+            <div class="result-actions">
+                <button class="btn-quiz-act btn-restart" onclick="restartQuiz()">
+                    <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                </button>
+                <a href="../opsiquiz.html" class="btn-quiz-act btn-primary">
+                    Pilih Level Soal <i class="fa-solid fa-layer-group"></i>
+                </a>
+                <a href="../../dashboard.html" class="btn-quiz-act btn-dashboard">
+                    <i class="fa-solid fa-house"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script 5 Paket Soal -->
+    <script src="../../scripts/questions1.js"></script>
+    <script src="../../scripts/questions2.js"></script>
+    <script src="../../scripts/questions3.js"></script>
+    <script src="../../scripts/questions4.js"></script>
+    <script src="../../scripts/questions5.js"></script>
+
+    <!-- Script Engine Kuis -->
+    <script src="../../scripts/quiz-engine.js"></script>
+</body>
+</html>
