@@ -1,0 +1,11 @@
+Model Information:
+* title:	Titan
+* source:	https://sketchfab.com/3d-models/titan-f5f5989b3ebf4d7a96e52a49ab6966ef
+* author:	uperesito (https://sketchfab.com/uperesito)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Titan" (https://sketchfab.com/3d-models/titan-f5f5989b3ebf4d7a96e52a49ab6966ef) by uperesito (https://sketchfab.com/uperesito) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
