@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Objek Astronomi: Ceres</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Model Viewer CDN untuk Interaktif 3D -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
         :root {
-            --glow-color: #8da3b5; /* Warna khas Ceres (Sian Perak / Es Batuan) */
+            --glow-color: #8da3b5;
+            /* Warna khas Ceres (Sian Perak / Es Batuan) */
             --bg-gradient: linear-gradient(135deg, #0e1217 0%, #171c24 50%, #080a0e 100%);
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
@@ -93,37 +96,38 @@
         }
 
         .planet-frame {
-            width: 140px;           
+            width: 140px;
             height: 140px;
             border-radius: 50%;
             margin: 0 auto 20px auto;
-            display: flex; 
+            display: flex;
             justify-content: center;
             align-items: center;
-            border: 3px solid rgba(141, 163, 181, 0.5); 
-            background-color: #000000; 
-            box-shadow: 0 0 35px rgba(141, 163, 181, 0.4), 
-                        inset 0 0 25px rgba(141, 163, 181, 0.2);
+            border: 3px solid rgba(141, 163, 181, 0.5);
+            background-color: #000000;
+            box-shadow: 0 0 35px rgba(141, 163, 181, 0.4),
+                inset 0 0 25px rgba(141, 163, 181, 0.2);
             animation: framePulse 4s ease-in-out infinite alternate;
         }
 
         .object-visual {
-            width: 100px;             
+            width: 100px;
             height: 100px;
             object-fit: cover;
             border-radius: 50%;
             display: block;
             margin: 0 auto;
         }
-        
+
         @keyframes framePulse {
-            0% { 
-                box-shadow: 0 0 25px rgba(141, 163, 181, 0.3); 
-                transform: scale(0.98); 
+            0% {
+                box-shadow: 0 0 25px rgba(141, 163, 181, 0.3);
+                transform: scale(0.98);
             }
-            100% { 
-                box-shadow: 0 0 45px rgba(141, 163, 181, 0.6); 
-                transform: scale(1.02); 
+
+            100% {
+                box-shadow: 0 0 45px rgba(141, 163, 181, 0.6);
+                transform: scale(1.02);
             }
         }
 
@@ -319,7 +323,7 @@
             align-items: center;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             z-index: 100;
         }
 
@@ -343,7 +347,8 @@
             font-size: 1.2rem;
         }
 
-        .btn-action.active, .btn-action:hover {
+        .btn-action.active,
+        .btn-action:hover {
             color: var(--glow-color);
         }
 
@@ -372,17 +377,19 @@
             .spec-grid {
                 grid-template-columns: 1fr;
             }
+
             .hero-section h1 {
                 font-size: 2rem;
             }
         }
     </style>
 </head>
+
 <body>
 
     <div class="container">
         <header>
-            <a href="index.html" class="btn-back">
+            <a href="../learning.html" class="btn-back">
                 <i class="fa-solid fa-arrow-left"></i> Kembali
             </a>
             <div class="header-tag">
@@ -392,7 +399,8 @@
 
         <section class="hero-section">
             <div class="planet-frame">
-                <img src="../assets/web/web_ceres.webp" alt="Ceres Objek AR" class="object-visual" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/76/Ceres_-_RC3_-_Main_Belt_Dwarf_Planet_%28cropped%29.jpg'">
+                <img src="../assets/web/web_ceres.webp" alt="Ceres Objek AR" class="object-visual"
+                    onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/76/Ceres_-_RC3_-_Main_Belt_Dwarf_Planet_%28cropped%29.jpg'">
             </div>
             <h1>Ceres</h1>
             <p>1 Ceres (Planet Katai)</p>
@@ -404,7 +412,14 @@
                 <i class="fa-solid fa-circle-info"></i> Detail Astrofisika
             </div>
             <p class="info-text">
-                Ceres (1 Ceres) adalah planet katai terbesar sekaligus objek tunggal terbesar di dalam Sabuk Utama asteroid yang terletak di antara orbit Mars dan Yupiter. Ditemukan oleh Giuseppe Piazzi pada tahun 1801, Ceres awalnya diklasifikasikan sebagai planet, kemudian asteroid selama lebih dari satu abad, hingga akhirnya ditetapkan sebagai planet katai oleh International Astronomical Union (IAU) pada tahun 2006. Ceres adalah satu-satunya planet katai di Tata Surya bagian dalam. Karena massanya menyumbang sekitar sepertiga (30%) dari total massa Sabuk Utama, Ceres memiliki gravitasi yang cukup untuk mencapai kesetimbangan hidrostatik, menjadikannya berbentuk spheroid terkompresi. Ceres kaya akan kandungan es air dan mineral terhidrasi, bahkan diduga memiliki lautan air asin di bawah permukaannya.
+                Ceres (1 Ceres) adalah planet katai terbesar sekaligus objek tunggal terbesar di dalam Sabuk Utama
+                asteroid yang terletak di antara orbit Mars dan Yupiter. Ditemukan oleh Giuseppe Piazzi pada tahun 1801,
+                Ceres awalnya diklasifikasikan sebagai planet, kemudian asteroid selama lebih dari satu abad, hingga
+                akhirnya ditetapkan sebagai planet katai oleh International Astronomical Union (IAU) pada tahun 2006.
+                Ceres adalah satu-satunya planet katai di Tata Surya bagian dalam. Karena massanya menyumbang sekitar
+                sepertiga (30%) dari total massa Sabuk Utama, Ceres memiliki gravitasi yang cukup untuk mencapai
+                kesetimbangan hidrostatik, menjadikannya berbentuk spheroid terkompresi. Ceres kaya akan kandungan es
+                air dan mineral terhidrasi, bahkan diduga memiliki lautan air asin di bawah permukaannya.
             </p>
         </div>
 
@@ -465,19 +480,26 @@
             <ul class="structure-list">
                 <li class="structure-item">
                     <div class="structure-name">1. Kerak Luar (Crust)</div>
-                    <div class="structure-desc">Lapisan tipis setebal ~40 km yang terdiri dari campuran es air, garam natrium karbonat, tanah liat kaya amonium, dan silikat terhidrasi. Permukaannya memiliki albedo rendah (gelap) namun memiliki banyak titik terang (faculae).</div>
+                    <div class="structure-desc">Lapisan tipis setebal ~40 km yang terdiri dari campuran es air, garam
+                        natrium karbonat, tanah liat kaya amonium, dan silikat terhidrasi. Permukaannya memiliki albedo
+                        rendah (gelap) namun memiliki banyak titik terang (faculae).</div>
                 </li>
                 <li class="structure-item">
                     <div class="structure-name">2. Mantel Kaya Es & Air (Ice-Rich Mantle)</div>
-                    <div class="structure-desc">Lapisan tebal yang kaya akan es air, lumpur mineral, dan larutan air asin (brine). Diduga menyimpan lautan air asin purba di bawah kerak yang masih tersisa dalam bentuk saku-saku cairan terperangkap.</div>
+                    <div class="structure-desc">Lapisan tebal yang kaya akan es air, lumpur mineral, dan larutan air
+                        asin (brine). Diduga menyimpan lautan air asin purba di bawah kerak yang masih tersisa dalam
+                        bentuk saku-saku cairan terperangkap.</div>
                 </li>
                 <li class="structure-item">
                     <div class="structure-name">3. Inti Berbatu (Rocky Core)</div>
-                    <div class="structure-desc">Inti dalam berbentuk bulat yang padat dan kaya akan batuan silikat terdehidrasi serta besi-magnesium. Massanya mencakup porsi terbesar dari interior Ceres.</div>
+                    <div class="structure-desc">Inti dalam berbentuk bulat yang padat dan kaya akan batuan silikat
+                        terdehidrasi serta besi-magnesium. Massanya mencakup porsi terbesar dari interior Ceres.</div>
                 </li>
                 <li class="structure-item">
                     <div class="structure-name">4. Kawah Occator & Ahuna Mons (Fitur Unik)</div>
-                    <div class="structure-desc">Kawah Occator terkenal dengan deposit natrium karbonat terang (Cerealia Facula) yang diendapkan oleh aktivitas kriovolkanisme (gunung berapi es). Ahuna Mons adalah gunung dom kriovolkanik setinggi 4 km yang terbentuk dari ekstrusi lumpur asin.</div>
+                    <div class="structure-desc">Kawah Occator terkenal dengan deposit natrium karbonat terang (Cerealia
+                        Facula) yang diendapkan oleh aktivitas kriovolkanisme (gunung berapi es). Ahuna Mons adalah
+                        gunung dom kriovolkanik setinggi 4 km yang terbentuk dari ekstrusi lumpur asin.</div>
                 </li>
             </ul>
         </div>
@@ -489,15 +511,8 @@
             </div>
             <div class="pv-container">
                 <div class="pv-tag">SIMULASI 3D</div>
-                <model-viewer 
-                    id="ceres-viewer"
-                    src="../assets/object/glb_ceres/ceres.glb" 
-                    alt="Model 3D Ceres" 
-                    auto-rotate 
-                    camera-controls 
-                    shadow-intensity="1"
-                    exposure="1"
-                    loading="lazy">
+                <model-viewer id="ceres-viewer" src="../assets/object/glb_ceres/ceres.glb" alt="Model 3D Ceres"
+                    auto-rotate camera-controls shadow-intensity="1" exposure="1" loading="lazy">
                 </model-viewer>
             </div>
             <div class="pov-controls">
@@ -507,21 +522,21 @@
                 <button class="pov-btn" onclick="setPOV('45deg 60deg 70%')">Kawah Occator</button>
             </div>
         </div>
-        
+
     </div>
 
     <!-- Fixed Bottom Navigation -->
     <nav class="bottom-nav">
-        <a href="index.html" class="btn-action active">
+        <a href="../dasboard.html" class="btn-action active">
             <i class="fa-solid fa-house"></i>
             <span>Menu</span>
         </a>
-        
-        <a href="camera.html?object=ceres" class="btn-scan" title="Scan AR Marker">
+
+        <a href="../camera.html" class="btn-scan" title="Scan AR Marker">
             <i class="fa-solid fa-camera-rotate"></i>
         </a>
 
-        <a href="quiz.html?object=ceres" class="btn-action">
+        <a href="../quiz.html" class="btn-action">
             <i class="fa-solid fa-lightbulb"></i>
             <span>Kuis</span>
         </a>
@@ -537,4 +552,5 @@
         }
     </script>
 </body>
+
 </html>
